@@ -1,35 +1,14 @@
-body{
-    font-family:Verdana, Geneva, Tahoma, sans-serif;
+body{    
+    font-family: 'Trebuchet MS', 'Lucida Sans Unicode', 'Lucida Grande', 'Lucida Sans', Arial, sans-serif;
     padding: 0;
     margin: 0;
 }
-.title em{
-    font-size: larger;
-    font-weight: 800;
-}
-/*fin body*/
-
-
-nav ul{
+nav{
     display: flex;
-    text-decoration: none;
-    list-style-type:none;
-    justify-content: space-between;
-    color: whitesmoke;
-    padding: 0;
+    justify-content: space-around;
+    background-color: rgb(221, 217, 217) ;
+    padding: 5px;
     margin: 0;
-    padding: 0px;
-    background-color: black;
-    font-size: 14px;
-}
-nav li{
-    display: flex;
-    justify-content: space-around
-
-}
-nav li:hover{
-    background-color: rgb(43, 43, 43);
-
 }
 /*Fin de la premiere navbar*/
 
@@ -44,57 +23,114 @@ nav li:hover{
     list-style-type:none;
     justify-content: space-between;
     background-color: whitesmoke;
-    color: rgb(53, 52, 52);
+    color: rgb(78, 78, 78);
     padding: 0;
     margin: 0;
-    padding: 5px;
+    padding: 15px;
+    position: sticky;
 }
 
 .secondeNav li:hover{
+    font-weight: 400;
     color: black;
+    border-width: 100px;
 }
 /*Fin de la seconde navbar*/
+/*
+film et series = intro*/
 
-.zone{
-    padding: 70px;
-    overflow-x: hidden;
-    width: 600px;
-    height:1000px;
-    background-color: whitesmoke;
-    border-color: rgb(201, 201, 201);
+.intro{
+    background: rgb(25,25,25);
+    background: radial-gradient(circle, rgba(25,25,25,1) 17%, rgba(0,0,0,1) 83%, rgba(0,0,0,1) 94%);
+    padding: 25px;
 }
-/*fin zone de rexte*/
+.intro .section{
+  margin-bottom: 55px;
+
+}
+.intro .section h2{
+  color: #fff;
+}
+.intro .section .list{
+  display:flex;
+  overflow-y:hidden;
+  overflow-x:auto;
+} 
+
+.intro .section a{
+  padding-left: 50px;
+  transition: transform 0.25s;
+  color: #fff;
+  text-decoration: none;
+  list-style-type:none;
+  font-size: 20px;
+
+}
+.intro .section a:hover{
+  transform:scale(1.05);
+}
+.intro .section a img{
+  height: 550px;
+  border-radius: 10px;
+
+}
+/* Fin des films et séries */
 
 ::-webkit-scrollbar {
     width: 5px;
+    height: 5px;
   }
   
   ::-webkit-scrollbar-track {
-    background: whitesmoke;
+    background: radial-gradient(circle, rgba(25,25,25,1) 17%, rgba(0,0,0,1) 83%, rgba(0,0,0,1) 94%);
     width: 10px;
 
   }
   
   ::-webkit-scrollbar-thumb {
-    background: grey ;
-    height: 1px;
-
+    background: none ;
   }
   
   ::-webkit-scrollbar-thumb:hover {
-    background: black;
+    background: whitesmoke;
 
   }
+    /* Fin scrollbar */
 
-  /*fin scrollbar*/
+.topics h2{
+    font-size: 0px;
+}
 
-  .both{
-      display: flex;
-      list-style-type:none;
-      text-decoration: none;
-  }
+.topicList{
+    display: flex;
+    font-size: 40px;
+    justify-content:space-around;
+    margin: 25px;
+    box-shadow: 6px 6px 0px black;
 
-  .topicsTable{
+}
+
+.ul_Left li{
+    text-decoration: none;
+    list-style-type:none;
+    padding: 18px;
+}
+.ul_Right li{
+    text-decoration: none;
+    list-style-type:none;
+    padding: 18px;
+}
+
+.ul_Right li:hover{
+    font-weight: 900;
+}
+.ul_Left li:hover{
+    font-weight: 900;
+}
+
+    /* Fin de liste sujet populaire */
+
+.topicsTable{
     margin-left: 75px;
     margin-right: 75px;
 }
