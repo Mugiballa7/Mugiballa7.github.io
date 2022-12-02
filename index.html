@@ -1,0 +1,117 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    <link rel="stylesheet" href="style.css">
+    <link href="https://fonts.googleapis.com/icon?family=Material+Icons"rel="stylesheet">
+</head>
+<body>
+    <section id="faq">
+        <h2>Here’s how Apple <br>stands up for change.</h2>
+        
+        <button class="question">We’re taking action for education, economic empowerment, and criminal justice reform.<span class="material-icons">expand_more</span></button>
+        <div class="panel">
+        <p>Apple’s Racial Equity and Justice Initiative (REJI) is an effort to address systemic racism and expand opportunities for communities of color across the country. REJI programs make an impact in three key areas:
+
+            Education. Greater access and greater opportunity.
+            Everyone deserves access to learn the skills needed for the workforce of today and tomorrow. We partner with institutions to make that real.
+            
+            Criminal justice. An unfair system is unfit for everyone.
+            The criminal justice system disproportionately fails communities of color. We support organizations working to end mass incarceration and defend civil rights.
+            
+            Economic empowerment. For today’s entrepreneurs.
+            Black and Brown business owners deserve a fair shot and a fair share. Through mentorship and financial investments, we back founders who have historically been cut out of funding opportunities.</p>
+        </div>
+
+        <button class="question">A new engine for opportunity in Detroit. The Apple Developer Academy.<span class="drag">></span></button>
+        <div class="panel">
+        <p>Detroit is the home of automotive engineering, and now a growing class of entrepreneurs are pioneering a new future of digital innovation. The Apple Developer Academy, which has opened more than a dozen locations around the world, now brings its program to Michigan State University, its first-ever U.S. location, to help entrepreneurs, creators, and coders hone their skills and their iOS apps. In collaboration with the university, the academy is expected to reach nearly 1,000 participants each year from in and outside of MSU with both short-term and long-term programs that teach the fundamentals of coding, design, and marketing. With its wealth of minority-owned businesses, bringing the Developer Academy to the Detroit area was an easy choice.</p>
+        </div>
+
+        <button class="question">Black, Latinx, and Indigenous founders redefine business as usual at our Impact Accelerator.<span class="drag">></span></button>
+        <div class="panel">
+        <p>Our Impact Accelerator is a capacity-building program designed for Black-, Latinx-, and Indigenous-owned businesses that share our focus on innovation and our commitment to the environment. With customized training and access to Apple experts, the Impact Accelerator will help environmental product and service providers achieve their next stage of development. <br><a href="#">Learn more about the Impact Accelerator program (PDF)</a></p>
+        </div>
+
+        <button class="question">Minority-serving institutions open doors to education. We help them open even more.<span class="drag">></span></button>
+        <div class="panel">
+        <p>Historically Black Colleges and Universities (HBCUs), Hispanic-Serving Institutions (HSIs), and Tribal Colleges and Universities (TCUs) are critical leaders in expanding educational access, as are community colleges and other centers of learning. To support their continued leadership, Apple is collaborating with minority-serving institutions across the country on programs designed to build a more inclusive workforce. We are a founding partner working with a range of community stakeholders to support the launch of the Propel Center, a first-of-its-kind global innovation and learning hub in Atlanta’s historic Atlanta University Center. The Propel Center will offer tech-related learning programs, career opportunities, and fellowships. In addition, we are establishing two innovation grants to support HBCU engineering programs, creating a Faculty Fellows Program for HBCU educators, and offering 100 scholarships to students of color. Also, in partnership with Apple, California State University Northridge’s HSI Equity Innovation Hub will work to transform Hispanic-Serving Institutions throughout the CSU system and nation in order to increase student success and equip Latinx students and other students from historically underserved groups with skills for high-demand careers in STEM.<br><a href="#">Learn more about the Propel Center</a></p>
+        </div>
+
+        <script>
+        let acc = document.getElementsByClassName("question");
+        let i;
+
+        for (i = 0; i < acc.length; i++) {
+        acc[i].addEventListener("click", function() {
+            this.classList.toggle("active");
+            let panel = this.nextElementSibling;
+            if (panel.style.display === "block") {
+            panel.style.display = "none";
+            } else {
+            panel.style.display = "block";
+            }
+        });
+        }
+        </script>
+    </section>
+
+    <section id="features">
+        <h2>Meet a few of the makers<br>behind the change.</h2>
+        
+        <div class="features_impair">
+            <div class="features_text">
+                <!--<h3>Entrepreneur Camp took us from fighting with sticks to fighting with Excalibur.</h3>-->
+                <p>Lorem, ipsum dolor sit amet consectetur adipisicing elit. Blanditiis obcaecati repudiandae omnis veritatis? Hic earum amet facilis necessitatibus velit. Tempora, deserunt delectus, impedit distinctio modi a ex voluptatum itaque unde, qui possimus numquam placeat? Maxime eum aut, tempore fugit nam incidunt et, quos saepe assumenda vitae minima. Aut, aliquid quod.</p>
+            </div>
+            <div class="features_img">
+                <img src="https://www.apple.com/v/racial-equity-justice-initiative/b/images/overview/kickstroid__05wmwr80q36i_large.jpg" alt="">
+            </div>
+        </div>
+
+        <div class="features_pair">
+            <div class="features_text">
+                <!--<h3>Entrepreneur Camp took us from fighting with sticks to fighting with Excalibur.</h3>-->
+                <p>Lorem, ipsum dolor sit amet consectetur adipisicing elit. Blanditiis obcaecati repudiandae omnis veritatis? Hic earum amet facilis necessitatibus velit. Tempora, deserunt delectus, impedit distinctio modi a ex voluptatum itaque unde, qui possimus numquam placeat? Maxime eum aut, tempore fugit nam incidunt et, quos saepe assumenda vitae minima. Aut, aliquid quod.</p>
+            </div>
+            <div class="features_img">
+                <img src="https://www.apple.com/v/racial-equity-justice-initiative/b/images/overview/sweetbio__b2b0lxd1wqgi_large.jpg" alt="">
+            </div>
+        </div>
+
+        <div class="features_impair">
+            <div class="features_text">
+                <!--<h3>Entrepreneur Camp took us from fighting with sticks to fighting with Excalibur.</h3>-->
+                <p>Lorem, ipsum dolor sit amet consectetur adipisicing elit. Blanditiis obcaecati repudiandae omnis veritatis? Hic earum amet facilis necessitatibus velit. Tempora, deserunt delectus, impedit distinctio modi a ex voluptatum itaque unde, qui possimus numquam placeat? Maxime eum aut, tempore fugit nam incidunt et, quos saepe assumenda vitae minima. Aut, aliquid quod.</p>
+            </div>
+            <div class="features_img">
+                <img src="https://www.apple.com/v/racial-equity-justice-initiative/b/images/overview/everyonechicago__bjsrflxatifm_large.jpg" alt="">
+            </div>
+        </div>
+
+        <div class="features_pair">
+            <div class="features_text">
+                <!--<h3>Entrepreneur Camp took us from fighting with sticks to fighting with Excalibur.</h3>-->
+                <p>Lorem, ipsum dolor sit amet consectetur adipisicing elit. Blanditiis obcaecati repudiandae omnis veritatis? Hic earum amet facilis necessitatibus velit. Tempora, deserunt delectus, impedit distinctio modi a ex voluptatum itaque unde, qui possimus numquam placeat? Maxime eum aut, tempore fugit nam incidunt et, quos saepe assumenda vitae minima. Aut, aliquid quod.</p>
+            </div>
+            <div class="features_img">
+                <img src="https://www.apple.com/v/racial-equity-justice-initiative/b/images/overview/blackapp__xd1bdy7qa0iy_large.jpg" alt="">
+            </div>
+        </div>
+    </section>
+
+        <section id="quote">
+            <section id="quote_content">
+                <h2>”Inequality can’t be ignored. We’re committed to helping create the positive outcomes communities of color deserve.”</h2>
+                <span id="name_quote">Lisa Jackson</span><br>
+                <span id="under_quote">Vice President, Environment, Policy and Social Initiatives</span> 
+        </section>
+
+        <footer>
+            
+        </footer>
+</body>
+</html>
