@@ -2,99 +2,112 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Document</title>
+    <title>Hacknation - The Free Hackathon</title>
     <link rel="stylesheet" href="style.css">
+    <script src="script.js" defer></script>
     <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inconsolata:wght@200..900&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/icon?family=Material+Icons"rel="stylesheet">
 </head>
 
 <body>
 
+    <nav>
+        <div class="nav_content">
+            <div class="nav_left">
+                <p>Hacknation</p>
+            </div>
+            <div class="nav_right">
+                <a href="https://docs.google.com/forms/d/e/1FAIpQLSfiaFnvyjxLzQhKUZ2P1KONIGK4VKfIz7Guu5nhOhQvvgs1hQ/viewform?usp=sf_link" class="cta">register on the waitlist</a>
+            </div>
+        </div>
+    </nav>
+
     <header>
-        <nav>
-            <ul>
-                <li><a href="#a">LOGO</a></li>
-                <li><a href="#b">Get Update</a></li>
-            </ul>
-        </nav>
+        <div class="header_content">
+            <button onclick="myFunction()" class="theme">Dark/Light</button>
+            <h1>The Free Hackathon</h1>
+            <p>Hacknation is a massively collaborative hackathon where participants constantly share and debate ideas with the group to develop an innovative project. There are no teams, no prizes and no judges. Our existence stems from our experience that traditional hackathons often promote flashy but infeasible solutions, plagiarism and unhealthy working environments.</p>
+        </div>
     </header>
+    <div class="sub_header_img"></div>
 
-    <main>
-        <section class="banner">
-            <div class="banner_content">
-                <h1>IMAGINE UN ENDROIT...</h1>
-                <P>…où tu pourrais faire partie d'un club scolaire, d'un groupe de gamers ou d'une communauté d'art internationale. Un endroit où toi et ta bande d'amis pouvez simplement passer du temps ensemble. Un endroit qui permettrait plus facilement de discuter tous les jours et de se retrouver plus souvent.</P>
-                <ul class="button">
-                    <li>
-                        <span class="get_update_button">
-                            <a href="#">Get Update</a>
-                        <span>
-                    </li>
-                    <li>
-                        <span class="contact_button">
-                            <a href="#">Contact</a>
-                        </span>
-                    </li>
-                </ul> 
-            </div>            
-        </section>
-        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1920 92" style="enable-background:new 0 0 1920 92" xml:space="preserve"><path d="M.1.1c0-.1 0-.1 0 0H0V76c240.6-3.6 261-71.8 530.2-38.8 290.1 35.6 408.1 45 563.5 11.9 155.4-33.1 222.6-43.2 378.5-9.6C1610.3 69.3 1807.3 76.6 1920 76V.1H.1z" fill="currentColor" class="svg"></path></svg>
-
-        <section class="first_features_section">
-            <div class="first_feature">
-                <div class="first_feature_left">
-                        <h2>Crée un espace accessible uniquement sur invitation où tu te sens bien</h2>
-                        <p>Les serveurs Discord sont organisés en salons axés sur des sujets où vous pouvez collaborer, partager et simplement discuter de votre journée sans encombrer un groupe de discussion.</p>
+    <div class="container">
+        <div class="reveal">
+            <span>Join a worldwide hacker community <em id="first_value_prop">building open-source projects.</em></span>
+        </div>
+        <div class="reveal">
+            <span><em id="second_value_prop">Work on feasible project</em> that can really make the world more beautiful, more fun, or just better</span>
+        </div>
+        <div class="reveal">
+            <span><em id="third_value_prop">Learn by building</em> with your peers.</span>
+        </div>
+        <div class="reveal">
+            <span>An unbiased environment with <em id="fourth_value_prop">realistic deadlines and a healthy mindset.</em></span>
+        </div>
+        <div class="reveal">
+            <span>Be part of a <em id="fith_value_prop">collective intelligence</em> for innovative projects, while having the time to do proper research.</span>
+        </div>
+        <!-- Ajoutez autant de paragraphes que nécessaire -->
+    </div>
+    
+    <section class="text_area">
+        <div class="text_area_content">
+            <div class="text_area_content_topic">
+                <div class="text_area_icon">
+                    <span class="material-icons md-48">shuffle</span>
                 </div>
-                <div class="first_feature_right">
-                    <img src="https://raw.githubusercontent.com/Mugiballa7/Mugiballa7.github.io/3f189dd92f76934048f97435f6cde6155cb85474/media/image/46b2132c01604c9493d558de444929f4.svg" alt="">
-                </div>
+                <h2>Problem Statements</h2>
+                <P>Problem statements take the form of introductions, offering a more in-depth explanation of the challenge. Each participant is free to design their own introductions and share them to collectively improve them, or to contribute directly to problems already proposed by other hackers.</P>
             </div>
-        </section>
 
-        <section class="second_features_section">
-            <div class="second_feature">
-                <div class="second_feature_left">
-                        <h2>Là où il est facile de passer du temps ensemble</h2>
-                        <p>Les serveurs Discord sont organisés en salons axés sur des sujets où vous pouvez collaborer, partager et simplement discuter de votre journée sans encombrer un groupe de discussion.</p>
+            <div class="text_area_content_topic">
+                <div class="text_area_icon">
+                    <span class="material-icons md-48">build</span>
                 </div>
-                <div class="second_feature_right">
-                    <img src="https://raw.githubusercontent.com/Mugiballa7/Mugiballa7.github.io/3f189dd92f76934048f97435f6cde6155cb85474/media/image/575a0322f3b36ca2fecb23ad2c6dd5ad.svg" alt="">
-                </div>
+                <h2>Build solutions</h2>
+                <P>During the remaining time, the community can use the previous introductions to develop solutions that can solve them. Again, each participant has the freedom to design their own solutions and share them to improve them collectively, or to contribute directly to solutions already proposed by other hackers. The same introduction may have different solutions.</P>
             </div>
-        </section>
 
-        <section class="third_feature_section">
-            <div class="third_feature">
-                <div class="third_feature_left">
-                        <h2>De quelques personnes à toute une communauté</h2>
-                        <p>Gère n'importe quelle communauté, grâce à des outils de modération et des permissions personnalisées pour les membres. Accorde des pouvoirs spéciaux aux membres, crée des salons privés, et plus encore.
-                        </p>
+            <div class="text_area_content_topic">
+                <div class="text_area_icon">
+                    <span class="material-icons md-48">checklist_rtl</span>
                 </div>
-                <div class="third_feature_right">
-                    <img src="https://raw.githubusercontent.com/Mugiballa7/Mugiballa7.github.io/3f189dd92f76934048f97435f6cde6155cb85474/media/image/921b1ae33edca174b6ebe787bb8b6c3b.svg" alt="">
-                </div>
+                <h2>At the end</h2>
+                <P>By the end of the event, we should have several white papers, all of which we'll publish on our site. We'll rank them according to the number of hackers who have contributed to the white paper. All contributors will be cited, there will be no prizes or judging, and everything will be open source.</P>
             </div>
-        </section>
+        </div>
+    </section>
 
-        <section class="call_to_action">
-            <div class="call_to_action_content">
-                <h2>UNE TECHNOLOGIE FIABLE POUR GARDER LE LIEN</h2>
-                <P>Grâce aux chats vocaux et vidéo à faible latence, les interlocuteurs ont l'impression d'être dans la même pièce. Fais un petit coucou par vidéo, regarde tes amis streamer leurs jeux, ou profitez du partage d'écran pour faire une session de dessin ensemble.</P>
-                <img src="https://raw.githubusercontent.com/Mugiballa7/Mugiballa7.github.io/3f189dd92f76934048f97435f6cde6155cb85474/media/image/98ea5b9e92e304c7d352ac462996adc5.svg" alt="">
-                <h3>On se lance dans l'aventure ?</h3>
+    <div class="modal-container" id="modalContainer">
+        <div class="modal" id="modal">
+        <div class="modal-content">
+            <div class="modal_header">
+                <span class="close" id="closeModalBtn">&times;</span>
             </div>
-            <span class="cta_button">Get update</span>
-        </section>
+            <div class="modal_form_content">
+                <form method="post" action="" name="contact-form">
+                    <h4>Contact Us</h4>
+                    <input type="text" name="your-email" placeholder="Email">
+                    <textarea name="message" rows="7" placeholder="Your Message"></textarea>
+                    
+                </form>
+            </div>
+        </div>
+        </div>
+    </div>
+    
+    </div>
 
     <footer>
-        <section class="footer_form">
-            
-        </section>
+        <div class="footer_content">
+            <p><em>This project relies on the involvement of many individuals to become a reality. Show your support by joining our waitlist; we won't send you any emails until we're ready to begin.</em></p>
+            <a href="https://docs.google.com/forms/d/e/1FAIpQLSfiaFnvyjxLzQhKUZ2P1KONIGK4VKfIz7Guu5nhOhQvvgs1hQ/viewform?usp=sf_link" class="cta">Join the waitlist</a>
+        </div>
     </footer>
 
-    </main>            
-        
 </body>
+
 </html>
