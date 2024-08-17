@@ -3,113 +3,115 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Tall Balla</title>
+    <title>Hackly</title>
     <link rel="stylesheet" href="style.css">
     <script src="script.js" defer></script>
-    <link rel="icon" href="logo.png" type="image/x-icon">
+    <link href="https://fonts.googleapis.com/icon?family=Material+Icons"rel="stylesheet">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Lora:ital,wght@0,400..700;1,400..700&display=swap" rel="stylesheet">
 </head>
-<body>
-    <body id="body">
+    <nav>
+        <div class="nav_content">
+            <p><strong class="logo">Hackly</strong></p>
+            <span class="nav_right">
+                <ul>
+                    <a href="#sponsor_tag" class="sponsor_button"><li>Sponsors</li></a>
+                    <button class="openModalBtn"><li class="cta">Get In</li></button>
+                    <button onclick="myFunction()" class="theme"><li class="theme_button"><span class="material-icons md-48">contrast</span></li></button>
+                </ul>
+            </span>
+        </div>
+    </nav>
 
-        <nav>
-            <div class="nav_left">
-                <p>Tall Balla</p>
-            </div>
-            <!--<div class="nav_middle">
-                <img src="logo.png" alt="" height="44px">
-            </div>-->
-            <div class="nav_right">
-                <button onclick="myFunction()" class="theme">Dark/Light</button>
-            </div>
-        </nav>
-    
-        <header>
-            <div class="header_content">
-                <div class="seconde_nav">
-                    <p class="subtext">Welcome to my personal website! Feel free to contact me at tallballa50@gmail.com. <a href="#first_anchor" class="link_text">Browse around!</a></p>
-                </div>
-                <div class="header_content_hero_container">
-                    <div class="header_content_hero_img">
-                        <div class="header_content_hero_text">
-                            <h1>Balla P. Tall</h1>
-                            <br>
-                            <br>
-                            <div class="activity_cta">
-                                <div class="avatar">
-                                    <img src="https://raw.githubusercontent.com/Mugiballa7/Mugiballa7.github.io/main/DSC_0369%20(1)%20(1).jpg" alt="">
-                                </div>
-                        
-                                <div id="countdown">
-                                    <div id='tiles'> 
-                                    <span id="hour"></span> 
-                                    <span>:</span>
-                                    <span id="min"></span>
-                                    <span id="sec" width="0" ></span>
-                                    <span id="ampm"></span>
-                                    </div>
-                                </div>
-                        
-                                <div class="dynamic_text">
-                                    🤔 Not Sure...
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-            </div>
-            <div class="header_sub_content" id="first_anchor">
-                <div class="introduction_text reveal">
-                    <p><em>Curious and eager to learn, I enjoy turning challenges into learning opportunities. I have constantly pushed myself out of my comfort zone to explore new opportunities and broaden my horizons. This quest for excellence and personal growth has led me to undertake various projects, acquire diverse skills, and seek out stimulating environments where I can fully thrive.</em></p>
-                    <a href="Resume_Balla.pdf" download>Download my Resume (pdf)</a>
-                </div>    
-            </div>
-        </header>
+    <header>
+        <div class="content">
+            <ul>
+                <li class="introtext">Crowdsourcing</li>
+                <li><h1>The Wiki Style Hackathon</h1></li>
+                <li class="smalltext">Rewarding online collaboration for problem solving</li>
+                <button class="openModalBtn"><li class="header_cta">Get in</li></a>
+            </ul>
+        </div>
+    </header>
 
-        <section class="main_parent">
-            <main>
-                <div class="main_title">
-                    <h2>Five Ws and one H.</h2>
-                    <hr>
-                </div>
-                <div class="main_content">
-                    <div class="main_left">
-                        <div class="main_item">
-                            <p><strong>When did I Start ?</strong></p>
-                            <p>My trigger came during my last year of high school, during the Covid-19 lockdown. My goal was to get into prestigious schools after high school. As I filled out long applications and wrote essays, I reflected deeply on my life, learned a lot and was incredibly productive. I then realized that I had no plan...</p>
-                        </div>
-                        <div class="main_item">
-                            <p><strong>Who Am I ?</strong></p>
-                            <p>I was born and raised in France by Senegalese parents in a small town near Paris called Troyes. I'm currently finishing my bachelor's degree in economics this spring. I have an entrepreneurial background that led me to join an incubator and get a scholarship for a mentoring program in New York.</p>
-                        </div>
-                        <div class="main_item" id="last2">
-                            <p><strong>What are my skills ?</strong></p>
-                            <p>I've developed a versatile profile. In a nutshell, my incubator and mentoring experiences have given me solid project management skills, particularly in writing clear and impactful content. My degree in economics has enabled me to acquire math skills and to understand my role, that of my company and that of stakeholders at different scales. I also taught myself web development (this site is an example).</p>
-                        </div>
-                    </div>
-                    <div class="main_right">
-                        <div class="main_item">
-                            <p><strong>Why I'm motivated ? ?</strong></p>
-                            <p>I didn't know what profession to choose, so I explored my interests through various initiatives parallel to my studies. That's when I discovered I enjoy pushing myself out of my comfort zone. This inspires me to keep seeking new and rewarding learning experiences. I know it has to be worth it and that's why I'm constantly committed to giving 100% in everything I do.</p>
-                        </div>
-                        <div class="main_item">
-                            <p><strong>How Do I Add Value ?</strong></p>
-                            <p>My experience and skills, combined with my (geeky) youthful tech savviness, allow me to quickly understand new concepts and practices autonomously. This enables me to adapt quickly to company standards and offload work to your team.</p>
-                        </div>
-                        <div class="main_item" id="last1">
-                            <p><strong>Where Am I Based ?</strong></p>
-                            <p>I'm currently based in Paris. However, after working in New York City, I was seduced by the American culture and the opportunities for growth it offers. It was such a rewarding experience that I missed going back to university this year. Today, I'm looking for new opportunities to keep growing.</p>
-                        </div>
-                    </div>
-                </div>
-            </main>
-        </section>
-        <footer>
-            <p>E-mail: tallballa50@gmail.com</p>
-            <a href="https://www.linkedin.com/in/balla-tall/" target="_blank">Linkedin: linkedin.com/in/balla-tall/</a>
-            <p>© 2024 Balla Penda Tall. All Rights Reserved.</p>
-            <img src="logo.png" alt="">
-        </footer>
-    </body>
+    <main>
+        <div class="content">
+            <video controls poster="https://www.apple.com/newsroom/videos/the-lost-voice/Video/posters/Apple-accessibility-The-Lost-Voice_571x321.jpg.large.jpg">
+                <source src="https://imdb-video.media-imdb.com/vi1423230745/1434659607842-pgv4ql-1695659135101.mp4?Expires=1723998476&Signature=Mhd74l~xdeNUXx1NM90uB0Sdg-sLNQxTgGtUfUwhXlao9vwFYaVoygs-5LoNk~q9vin8Ins3t3WN2ZSPCVvygYzJsrWEKeyrMha17A8~LVuO8PyuiebMcAOZMga3JemT~qkhENPj97IQF3uaRr3Qfcg6fubSppqYPIDduEWir6XWEPOJK2Nfwoywo~1D2M4JuKWBnEwbdIKFv0l90sZgj1tPGlnpBdRvx9X7jEoJz1fF2oahLyNzVU2kY-Ezo~HM-~StoaLrmO4yr-5cucsLzhrXqrJHDx8f973IT-RstFdajcxyx-Zb-X4rb-IeTBEUuS-jCYsKy8IJdLZ~zCvEow__&Key-Pair-Id=APKAIFLZBVQZ24NQH3KA">
+            </video>
+        </div>
+    </main>
 
+    <section class="explanation">
+        <div class="content">
+            <div class="main_space_container"></div>
+            <div class="main_text_container">
+                <p>Hackathons are growing but have flaws at every stage. Beforehand, finding teammates is often difficult. During the event, cheating and plagiarism are widespread. By the end, many projects lack substance, with 95% of solutions proving unrealistic. </p>
+            </div>
+        </div>
+    </section>
+
+    <section class="faq_section">
+        <div class="content">
+            <p class="introtext">80+ already register</p>
+            <h2>Our Hackthon at a glance</h2>
+            <div class="faq_container">
+                <button class="accordion">What is Hackly ?</button>
+                <div class="panel">
+                    <p>Hackly is a week-long event where participants from around the globe work together to build innovative technology projects. There are no teams, everyone is free to share, improve, and build on each other's ideas. The best contributors earn rewards.<br><br>Inspired by Wikipedia, The Polymath Project and open source software, it aims to give the crowd the space and incentives to create better solutions through collective intelligence.</p>
+                </div>
+                <button class="accordion">How do we evaluate and select the best contributors ?</button>
+                <div class="panel">
+                    <p>We believe that the most impactful contributions are those that spark discussion and encourage collaborative development. To support this, we will implement a leaderboard that ranks contributors based on the interactions they generate. The reward money will be distributed to the top 10% of contributors, rather than to specific individual projects.</p>
+                </div>
+                <button class="accordion">How does collaboration work without teams ?</button>
+                <div class="panel">
+                    <p>Similar to how Wikipedia compiles encyclopedic articles or open-source projects manage code files, centralizing community ideas is key. To simplify collaborative management and updates, each project on Hackly has a wiki page that everyone can access and edit, consolidating the community's collective knowledge from problem statements to proposed solutions.<br><br>Each project also includes a forum where members can brainstorm, discuss strategies, ask questions, etc. Participants have complete freedom to define the problems they want to solve and determine their solutions.</p>
+                </div>
+                <button class="accordion">What skills do I need to participate ?</button>
+                <div class="panel">
+                    <p>Unlike traditional crowdsourcing, you don’t need to come up with complete solutions on your own. In particular, questions and partially formed ideas are encouraged and valued as contributions, as they stimulate discussion and help refine the final solution.</p>
+                </div>
+                <button class="accordion">What about IP Rights ?</button>
+                <div class="panel">
+                    <p>All solutions will be open source and freely accessible. This transparency ensures that everyone can benefit from and build upon the shared knowledge.</p>
+                </div>
+                <button class="accordion">I still have a question !</button>
+                <div class="panel">
+                    <p>Email us at hellohackly@gmail.com</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <footer>
+        <div class="content">
+            <button class="openModalBtn"><span class="footer_cta">Join the Waitlist</span></button>
+        </div>
+    </footer>
+
+    <section class="sponsor">
+        <div class="content">
+            <h2 id="sponsor_tag">Sponsors</h2>
+            <p>If interested in Sponsoring, please reach out via hellohackly@gmail.io</p>
+        </div>
+    </section>
+
+    <div id="modal" class="modal">
+        <div class="modal-content">
+            <span class="closeModalBtn">&times;</span>
+            <h2>Modal Form</h2>
+            <form>
+                <label for="name">Name:</label>
+                <input type="text" id="name" name="name" required>
+
+                <label for="email">Email:</label>
+                <input type="email" id="email" name="email" required>
+
+                <button type="submit">Submit</button>
+            </form>
+        </div>
+    </div>
 </body>
 </html>
