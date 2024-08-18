@@ -28,8 +28,8 @@
     --black: #f0f7f4;
     --white: #140700;
     --blur: #110400b9;
-    --accone: #04471C;
-    --acctwo: #33658A;
+    --accone: #004FFF;
+    --acctwo: #1D7874;
 }
 
 /* Body */
@@ -337,7 +337,6 @@ footer .content{
     border: dashed 1px var(--black);
     width: 80%;
     max-width: 400px;
-    border-radius: 5px;
 }
 
 /* Bouton de fermeture */
@@ -363,17 +362,36 @@ form label {
     margin-top: 10px;
 }
 
-form input {
+form input, #country, #level, #skills {
     width: 100%;
     padding: 8px;
     margin-top: 5px;
     margin-bottom: 15px;
     box-sizing: border-box;
+    background-color: var(--blur);
+    border: 1px dotted var(--black);
+    color: var(--black);
+}
+
+*::placeholder {
+    color: var(--black);
+    opacity: 0.8;
 }
 
 form button {
     font-size: 16px;
     cursor: pointer;
+}
+
+.modal .cta{
+    padding: 3px 6px;
+    border: dashed 1px;
+    font-weight: 600;
+}
+
+.modal .cta:hover{
+    background-color: var(--acctwo);
+    transition: 0.5s;
 }
 /* Media Queries */
 @media only screen and (max-width: 768px) {
