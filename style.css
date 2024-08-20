@@ -362,7 +362,7 @@ form label {
     margin-top: 10px;
 }
 
-form input, #country, #level, #skills {
+form input, #country, #level, #skill{
     width: 100%;
     padding: 8px;
     margin-top: 5px;
