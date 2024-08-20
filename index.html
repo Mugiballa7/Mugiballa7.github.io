@@ -102,19 +102,20 @@
         <div class="modal-content">
             <span class="closeModalBtn">&times;</span>
             <h2>Modal Form</h2>
-            <form>
-                <input type="text" id="name" name="name" placeholder="Email" required>
+            <form action="connect.php" method="post">
+                
+                <input type="email" id="email" name="email" placeholder="Email" required>
 
-                <select id="skills" name="skill_drop" required>
+                <select id="skill" name="skill" required>
                     <option value="" disabled selected>Sector</option>
                     <option value="fiat">Designer</option>
                     <option value="audi">Product manager</option>
                     <option value="audi">Programmers</option>
-                    <option value="saab">web developer</option>
+                    <option value="saab">Web developer</option>
                     <option value="audi">Other</option>
                 </select>
 
-                <select id="level" name="level_drop" required>
+                <select id="level" name="level" required>
                     <option value="" disabled selected>Your Level</option>
                     <option value="saab">Beginner</option>
                     <option value="fiat">Intermediate</option>
