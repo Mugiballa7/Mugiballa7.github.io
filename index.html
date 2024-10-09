@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Hackly</title>
+    <title>Fullproto</title>
     <link rel="stylesheet" href="style.css">
     <script src="script.js" defer></script>
     <link href="https://fonts.googleapis.com/icon?family=Material+Icons"rel="stylesheet">
@@ -11,13 +11,15 @@
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Lora:ital,wght@0,400..700;1,400..700&display=swap" rel="stylesheet">
 </head>
+<body>
     <nav>
         <div class="nav_content">
-            <p><strong class="logo"><a href="#header">Hackly</a></strong></p>
+            <p><strong class="logo"><a href="index.html">Hackly</a></strong></p>
             <span class="nav_right">
                 <ul>
-                    <a href="#sponsor_tag" class="sponsor_button"><li>Sponsors</li></a>
-                    <button class="openModalBtn"><li class="cta">Get In</li></button>
+                    <a href="index.html" class="sponsor_button"><li>Home</li></a>
+                    <a href="index.html" class="sponsor_button"><li>About</li></a>
+                    <a href="index.html" class="sponsor_button"><li>Sponsors</li></a>
                     <button onclick="myFunction()" class="theme"><li class="theme_button"><span class="material-icons md-48">contrast</span></li></button>
                 </ul>
             </span>
@@ -27,57 +29,66 @@
     <header id="header">
         <div class="content">
             <ul>
-                <li class="introtext">Crowdsourcing</li>
-                <li><h1>The Wiki Style Hackathon</h1></li>
-                <li class="smalltext">Rewarding online collaboration for problem solving</li>
-                <button class="openModalBtn"><li class="header_cta">Get in</li></a>
+                <li class="introtext">Artificial Intelligence</li>
+                <li><h1>Google AI Hackathon</h1></li>
+                <li class="smalltext">Build a creative app that uses Google’s Generative AI tools. Push the boundaries of what Gen AI apps can do with Gemini!</li>
+                <li>
+                    <div class="infos">
+                        <p>Deadline : May 3, 2024</p>
+                        <p>Prize : $50,000</p>
+                        <p>Participants : 15 562</p>
+                    </div>
+                </li>
+                <button class="openModalBtn"><li class="header_cta">Join hackathon</li></a>
             </ul>
         </div>
     </header>
 
     <main>
         <div class="content">
-            <video controls poster="https://www.apple.com/newsroom/videos/the-lost-voice/Video/posters/Apple-accessibility-The-Lost-Voice_571x321.jpg.large.jpg">
-                <source src="https://imdb-video.media-imdb.com/vi1423230745/1434659607842-pgv4ql-1695659135101.mp4?Expires=1723998476&Signature=Mhd74l~xdeNUXx1NM90uB0Sdg-sLNQxTgGtUfUwhXlao9vwFYaVoygs-5LoNk~q9vin8Ins3t3WN2ZSPCVvygYzJsrWEKeyrMha17A8~LVuO8PyuiebMcAOZMga3JemT~qkhENPj97IQF3uaRr3Qfcg6fubSppqYPIDduEWir6XWEPOJK2Nfwoywo~1D2M4JuKWBnEwbdIKFv0l90sZgj1tPGlnpBdRvx9X7jEoJz1fF2oahLyNzVU2kY-Ezo~HM-~StoaLrmO4yr-5cucsLzhrXqrJHDx8f973IT-RstFdajcxyx-Zb-X4rb-IeTBEUuS-jCYsKy8IJdLZ~zCvEow__&Key-Pair-Id=APKAIFLZBVQZ24NQH3KA">
-            </video>
+            <img src="https://d112y698adiu2z.cloudfront.net/photos/production/challenge_photos/002/812/512/datas/original.png" alt="">
         </div>
     </main>
-
-    <section class="explanation">
+    
+    <section class="tab_section">
         <div class="content">
-            <div class="main_space_container"></div>
-            <div class="main_text_container">
-                <p>Hackathons are growing but have flaws at every stage. Beforehand, finding teammates is often difficult. During the event, cheating and plagiarism are widespread. By the end, many projects lack substance, with 95% of solutions proving unrealistic. </p>
+            <div class="tab_top">
+                <ul>
+                    <li class="active_tab" id="first_tab_top"><a href="index.html">Overview</a></li>
+                    <li><a href="solution.html">Solutions</a></li>
+                    <li><a href="leader.html">Leaderboard</a></li>
+                    <li><a href="rules.html">Rules</a></li>
+                </ul>
             </div>
         </div>
     </section>
 
     <section class="faq_section">
         <div class="content">
-            <p class="introtext">80+ already register</p>
-            <h2>Our Hackthon at a glance</h2>
+            <p class="introtext">limitless creativity with the Google AI Hackathon! </p>
+            <h2>Requirements</h2>
             <div class="faq_container">
-                <button class="accordion">What is Hackly ?</button>
+                <button class="accordion">What to Build ?</button>
                 <div class="panel">
-                    <p>Hackly is a week-long event where participants from around the globe work together to build innovative technology projects. There are no teams, everyone is free to share, improve, and build on each other's ideas. The best contributors earn rewards.<br><br>Inspired by Wikipedia, The Polymath Project and open source software, it aims to give the crowd the space and incentives to create better solutions through collective intelligence.</p>
+                    <p>Build a creative app that uses Google’s Generative AI tools with Gemini!</p>
                 </div>
-                <button class="accordion">How do we evaluate and select the best contributors ?</button>
+                <button class="accordion">What to Submit</button>
                 <div class="panel">
-                    <p>We believe that the most impactful contributions are those that spark discussion and encourage collaborative development. To support this, we will implement a leaderboard that ranks contributors based on the interactions they generate. The reward money will be distributed to the top 10% of contributors, rather than to specific individual projects.</p>
+                    <p>Provide a URL to your code repository for judging and testing. Include a video (about 3 minutes) that demonstrates your submission. Videos must be uploaded to YouTube, Vimeo, or Facebook Video and made public. Google Cloud Project ID. Identify which Gemini API you are using (Google AI or Vertex AI).  Low-Code Prize. The Most Impressive Low-Code submission prize will be judged based on the efficiency, creativity, and accessibility of the creation process. Video submissions of workflows showing uses of low-code tools should aim to demonstrate how such tools can speed up workflows, improve the uniqueness or creativity of a project, expand the ability of individuals with limited LLM development experience to build with generative AI, or otherwise demonstrate benefits of using low-code tools in development workflows. Feedback Prize. The Feedback submission prize will be judged based on completeness, viability, and potential impact of the feedback. All Feedback Submissions must be completed by 11:59 PM PT on May 2, 2024.</p>
                 </div>
-                <button class="accordion">How does collaboration work without teams ?</button>
+                <button class="accordion">What are the prizes?</button>
                 <div class="panel">
-                    <p>Similar to how Wikipedia compiles encyclopedic articles or open-source projects manage code files, centralizing community ideas is key. To simplify collaborative management and updates, each project on Hackly has a wiki page that everyone can access and edit, consolidating the community's collective knowledge from problem statements to proposed solutions.<br><br>Each project also includes a forum where members can brainstorm, discuss strategies, ask questions, etc. Participants have complete freedom to define the problems they want to solve and determine their solutions.</p>
+                    <p>$50,000 in prizes First Place Overall * $10,000 USD * Social recognition by Google * Meetings with Google Labs team Second Place Overall * $7,000 USD * Social recognition by Google * Meetings with Google Labs team Most Creative & Original * $5,000 USD * Social recognition by Google * Meetings with Google Labs team Most Valuable to Business * $5,000 USD * Social recognition by Google * Meetings with Google Labs team Most Impressive Technical Implementation * $5,000 USD * Social recognition by Google * Meetings with Google Labs team Most Potential for Community Impact * $5,000 USD * Social recognition by Google * Meetings with Google Labs team Best Use of Responsible AI * $5,000 USD * Social recognition by Google * Meetings with Google Labs team Most Impressive Low-Code Implementation * $5,000 USD * Social recognition by Google * Meetings with Google Labs team Most Valuable Feedback Bonus Prize (3) * $1,000 USD for feedback submissions * Social recognition by Google * Meetings with Google Labs team</p>
                 </div>
-                <button class="accordion">What skills do I need to participate ?</button>
+                <button class="accordion">Who are the judges</button>
                 <div class="panel">
-                    <p>Unlike traditional crowdsourcing, you don’t need to come up with complete solutions on your own. In particular, questions and partially formed ideas are encouraged and valued as contributions, as they stimulate discussion and help refine the final solution.</p>
+                    <p>Liam Bolling, Product Manager, Google Labs, Jaclyn Konzelmann, Director, Product Management, Google Labs, Simon Tokumine, Director, Product Management, Google Labs, Barnaby James, Sr. Director, Engineering, Google Labs, Wiktor Gworek, Software Engineer, Google Labs, Nikhil Khadke, Engineering Leader, Google Research, Wenlei Zhou, Software Engineer, Google Research.</p>
                 </div>
-                <button class="accordion">What about IP Rights ?</button>
+                <button class="accordion">What are the judging criteria</button>
                 <div class="panel">
-                    <p>All solutions will be open source and freely accessible. This transparency ensures that everyone can benefit from and build upon the shared knowledge.</p>
+                    <p>Quality of the Idea, Includes creativity and originality of the idea, Implementation of the Idea, Includes how well the idea was executed by the developer, Potential Value to Businesses, Includes the extent to which the app can help businesses grow, Potential Community Impact, Includes how impactful the app will be as a driver for positive change within the community.</p>
                 </div>
-                <button class="accordion">I still have a question !</button>
+                <button class="accordion" id="last_accordion">I still have a question !</button>
                 <div class="panel">
                     <p>Email us at hellohackly@gmail.com</p>
                 </div>
@@ -85,294 +96,5 @@
         </div>
     </section>
 
-    <footer>
-        <div class="content">
-            <button class="openModalBtn"><span class="footer_cta">Join the Waitlist</span></button>
-        </div>
-    </footer>
-
-    <section class="sponsor">
-        <div class="content">
-            <h2 id="sponsor_tag">Sponsors</h2>
-            <p>If interested in Sponsoring, please reach out via hellohackly@gmail.io</p>
-        </div>
-    </section>
-
-    <div id="modal" class="modal">
-        <div class="modal-content">
-            <span class="closeModalBtn">&times;</span>
-            <h2>Modal Form</h2>
-            <form action="connect.php" method="POST">
-                
-                <input type="email" id="email" name="email" placeholder="Email" required>
-
-                <select id="skill" name="skill" required>
-                    <option value="" disabled selected>Sector</option>
-                    <option value="fiat">Designer</option>
-                    <option value="audi">Product manager</option>
-                    <option value="audi">Programmers</option>
-                    <option value="saab">Web developer</option>
-                    <option value="audi">Other</option>
-                </select>
-
-                <select id="level" name="level" required>
-                    <option value="" disabled selected>Your Level</option>
-                    <option value="saab">Beginner</option>
-                    <option value="fiat">Intermediate</option>
-                    <option value="audi">Advanced</option>
-                </select>
-
-                <select id="country" name="country" class="form_control">
-                    <option value="" disabled selected>Country</option>
-                    <option value="Afghanistan">Afghanistan</option>
-                    <option value="Åland Islands">Åland Islands</option>
-                    <option value="Albania">Albania</option>
-                    <option value="Algeria">Algeria</option>
-                    <option value="American Samoa">American Samoa</option>
-                    <option value="Andorra">Andorra</option>
-                    <option value="Angola">Angola</option>
-                    <option value="Anguilla">Anguilla</option>
-                    <option value="Antarctica">Antarctica</option>
-                    <option value="Antigua and Barbuda">Antigua and Barbuda</option>
-                    <option value="Argentina">Argentina</option>
-                    <option value="Armenia">Armenia</option>
-                    <option value="Aruba">Aruba</option>
-                    <option value="Australia">Australia</option>
-                    <option value="Austria">Austria</option>
-                    <option value="Azerbaijan">Azerbaijan</option>
-                    <option value="Bahamas">Bahamas</option>
-                    <option value="Bahrain">Bahrain</option>
-                    <option value="Bangladesh">Bangladesh</option>
-                    <option value="Barbados">Barbados</option>
-                    <option value="Belarus">Belarus</option>
-                    <option value="Belgium">Belgium</option>
-                    <option value="Belize">Belize</option>
-                    <option value="Benin">Benin</option>
-                    <option value="Bermuda">Bermuda</option>
-                    <option value="Bhutan">Bhutan</option>
-                    <option value="Bolivia">Bolivia</option>
-                    <option value="Bosnia and Herzegovina">Bosnia and Herzegovina</option>
-                    <option value="Botswana">Botswana</option>
-                    <option value="Bouvet Island">Bouvet Island</option>
-                    <option value="Brazil">Brazil</option>
-                    <option value="British Indian Ocean Territory">British Indian Ocean Territory</option>
-                    <option value="Brunei Darussalam">Brunei Darussalam</option>
-                    <option value="Bulgaria">Bulgaria</option>
-                    <option value="Burkina Faso">Burkina Faso</option>
-                    <option value="Burundi">Burundi</option>
-                    <option value="Cambodia">Cambodia</option>
-                    <option value="Cameroon">Cameroon</option>
-                    <option value="Canada">Canada</option>
-                    <option value="Cape Verde">Cape Verde</option>
-                    <option value="Cayman Islands">Cayman Islands</option>
-                    <option value="Central African Republic">Central African Republic</option>
-                    <option value="Chad">Chad</option>
-                    <option value="Chile">Chile</option>
-                    <option value="China">China</option>
-                    <option value="Christmas Island">Christmas Island</option>
-                    <option value="Cocos (Keeling) Islands">Cocos (Keeling) Islands</option>
-                    <option value="Colombia">Colombia</option>
-                    <option value="Comoros">Comoros</option>
-                    <option value="Congo">Congo</option>
-                    <option value="Congo, The Democratic Republic of The">Congo, The Democratic Republic of The</option>
-                    <option value="Cook Islands">Cook Islands</option>
-                    <option value="Costa Rica">Costa Rica</option>
-                    <option value="Cote D'ivoire">Cote D'ivoire</option>
-                    <option value="Croatia">Croatia</option>
-                    <option value="Cuba">Cuba</option>
-                    <option value="Cyprus">Cyprus</option>
-                    <option value="Czech Republic">Czech Republic</option>
-                    <option value="Denmark">Denmark</option>
-                    <option value="Djibouti">Djibouti</option>
-                    <option value="Dominica">Dominica</option>
-                    <option value="Dominican Republic">Dominican Republic</option>
-                    <option value="Ecuador">Ecuador</option>
-                    <option value="Egypt">Egypt</option>
-                    <option value="El Salvador">El Salvador</option>
-                    <option value="Equatorial Guinea">Equatorial Guinea</option>
-                    <option value="Eritrea">Eritrea</option>
-                    <option value="Estonia">Estonia</option>
-                    <option value="Ethiopia">Ethiopia</option>
-                    <option value="Falkland Islands (Malvinas)">Falkland Islands (Malvinas)</option>
-                    <option value="Faroe Islands">Faroe Islands</option>
-                    <option value="Fiji">Fiji</option>
-                    <option value="Finland">Finland</option>
-                    <option value="France">France</option>
-                    <option value="French Guiana">French Guiana</option>
-                    <option value="French Polynesia">French Polynesia</option>
-                    <option value="French Southern Territories">French Southern Territories</option>
-                    <option value="Gabon">Gabon</option>
-                    <option value="Gambia">Gambia</option>
-                    <option value="Georgia">Georgia</option>
-                    <option value="Germany">Germany</option>
-                    <option value="Ghana">Ghana</option>
-                    <option value="Gibraltar">Gibraltar</option>
-                    <option value="Greece">Greece</option>
-                    <option value="Greenland">Greenland</option>
-                    <option value="Grenada">Grenada</option>
-                    <option value="Guadeloupe">Guadeloupe</option>
-                    <option value="Guam">Guam</option>
-                    <option value="Guatemala">Guatemala</option>
-                    <option value="Guernsey">Guernsey</option>
-                    <option value="Guinea">Guinea</option>
-                    <option value="Guinea-bissau">Guinea-bissau</option>
-                    <option value="Guyana">Guyana</option>
-                    <option value="Haiti">Haiti</option>
-                    <option value="Heard Island and Mcdonald Islands">Heard Island and Mcdonald Islands</option>
-                    <option value="Holy See (Vatican City State)">Holy See (Vatican City State)</option>
-                    <option value="Honduras">Honduras</option>
-                    <option value="Hong Kong">Hong Kong</option>
-                    <option value="Hungary">Hungary</option>
-                    <option value="Iceland">Iceland</option>
-                    <option value="India">India</option>
-                    <option value="Indonesia">Indonesia</option>
-                    <option value="Iran, Islamic Republic of">Iran, Islamic Republic of</option>
-                    <option value="Iraq">Iraq</option>
-                    <option value="Ireland">Ireland</option>
-                    <option value="Isle of Man">Isle of Man</option>
-                    <option value="Israel">Israel</option>
-                    <option value="Italy">Italy</option>
-                    <option value="Jamaica">Jamaica</option>
-                    <option value="Japan">Japan</option>
-                    <option value="Jersey">Jersey</option>
-                    <option value="Jordan">Jordan</option>
-                    <option value="Kazakhstan">Kazakhstan</option>
-                    <option value="Kenya">Kenya</option>
-                    <option value="Kiribati">Kiribati</option>
-                    <option value="Korea, Democratic People's Republic of">Korea, Democratic People's Republic of</option>
-                    <option value="Korea, Republic of">Korea, Republic of</option>
-                    <option value="Kuwait">Kuwait</option>
-                    <option value="Kyrgyzstan">Kyrgyzstan</option>
-                    <option value="Lao People's Democratic Republic">Lao People's Democratic Republic</option>
-                    <option value="Latvia">Latvia</option>
-                    <option value="Lebanon">Lebanon</option>
-                    <option value="Lesotho">Lesotho</option>
-                    <option value="Liberia">Liberia</option>
-                    <option value="Libyan Arab Jamahiriya">Libyan Arab Jamahiriya</option>
-                    <option value="Liechtenstein">Liechtenstein</option>
-                    <option value="Lithuania">Lithuania</option>
-                    <option value="Luxembourg">Luxembourg</option>
-                    <option value="Macao">Macao</option>
-                    <option value="Macedonia, The Former Yugoslav Republic of">Macedonia, The Former Yugoslav Republic of</option>
-                    <option value="Madagascar">Madagascar</option>
-                    <option value="Malawi">Malawi</option>
-                    <option value="Malaysia">Malaysia</option>
-                    <option value="Maldives">Maldives</option>
-                    <option value="Mali">Mali</option>
-                    <option value="Malta">Malta</option>
-                    <option value="Marshall Islands">Marshall Islands</option>
-                    <option value="Martinique">Martinique</option>
-                    <option value="Mauritania">Mauritania</option>
-                    <option value="Mauritius">Mauritius</option>
-                    <option value="Mayotte">Mayotte</option>
-                    <option value="Mexico">Mexico</option>
-                    <option value="Micronesia, Federated States of">Micronesia, Federated States of</option>
-                    <option value="Moldova, Republic of">Moldova, Republic of</option>
-                    <option value="Monaco">Monaco</option>
-                    <option value="Mongolia">Mongolia</option>
-                    <option value="Montenegro">Montenegro</option>
-                    <option value="Montserrat">Montserrat</option>
-                    <option value="Morocco">Morocco</option>
-                    <option value="Mozambique">Mozambique</option>
-                    <option value="Myanmar">Myanmar</option>
-                    <option value="Namibia">Namibia</option>
-                    <option value="Nauru">Nauru</option>
-                    <option value="Nepal">Nepal</option>
-                    <option value="Netherlands">Netherlands</option>
-                    <option value="Netherlands Antilles">Netherlands Antilles</option>
-                    <option value="New Caledonia">New Caledonia</option>
-                    <option value="New Zealand">New Zealand</option>
-                    <option value="Nicaragua">Nicaragua</option>
-                    <option value="Niger">Niger</option>
-                    <option value="Nigeria">Nigeria</option>
-                    <option value="Niue">Niue</option>
-                    <option value="Norfolk Island">Norfolk Island</option>
-                    <option value="Northern Mariana Islands">Northern Mariana Islands</option>
-                    <option value="Norway">Norway</option>
-                    <option value="Oman">Oman</option>
-                    <option value="Pakistan">Pakistan</option>
-                    <option value="Palau">Palau</option>
-                    <option value="Palestinian Territory, Occupied">Palestinian Territory, Occupied</option>
-                    <option value="Panama">Panama</option>
-                    <option value="Papua New Guinea">Papua New Guinea</option>
-                    <option value="Paraguay">Paraguay</option>
-                    <option value="Peru">Peru</option>
-                    <option value="Philippines">Philippines</option>
-                    <option value="Pitcairn">Pitcairn</option>
-                    <option value="Poland">Poland</option>
-                    <option value="Portugal">Portugal</option>
-                    <option value="Puerto Rico">Puerto Rico</option>
-                    <option value="Qatar">Qatar</option>
-                    <option value="Reunion">Reunion</option>
-                    <option value="Romania">Romania</option>
-                    <option value="Russian Federation">Russian Federation</option>
-                    <option value="Rwanda">Rwanda</option>
-                    <option value="Saint Helena">Saint Helena</option>
-                    <option value="Saint Kitts and Nevis">Saint Kitts and Nevis</option>
-                    <option value="Saint Lucia">Saint Lucia</option>
-                    <option value="Saint Pierre and Miquelon">Saint Pierre and Miquelon</option>
-                    <option value="Saint Vincent and The Grenadines">Saint Vincent and The Grenadines</option>
-                    <option value="Samoa">Samoa</option>
-                    <option value="San Marino">San Marino</option>
-                    <option value="Sao Tome and Principe">Sao Tome and Principe</option>
-                    <option value="Saudi Arabia">Saudi Arabia</option>
-                    <option value="Senegal">Senegal</option>
-                    <option value="Serbia">Serbia</option>
-                    <option value="Seychelles">Seychelles</option>
-                    <option value="Sierra Leone">Sierra Leone</option>
-                    <option value="Singapore">Singapore</option>
-                    <option value="Slovakia">Slovakia</option>
-                    <option value="Slovenia">Slovenia</option>
-                    <option value="Solomon Islands">Solomon Islands</option>
-                    <option value="Somalia">Somalia</option>
-                    <option value="South Africa">South Africa</option>
-                    <option value="South Georgia and The South Sandwich Islands">South Georgia and The South Sandwich Islands</option>
-                    <option value="Spain">Spain</option>
-                    <option value="Sri Lanka">Sri Lanka</option>
-                    <option value="Sudan">Sudan</option>
-                    <option value="Suriname">Suriname</option>
-                    <option value="Svalbard and Jan Mayen">Svalbard and Jan Mayen</option>
-                    <option value="Swaziland">Swaziland</option>
-                    <option value="Sweden">Sweden</option>
-                    <option value="Switzerland">Switzerland</option>
-                    <option value="Syrian Arab Republic">Syrian Arab Republic</option>
-                    <option value="Taiwan">Taiwan</option>
-                    <option value="Tajikistan">Tajikistan</option>
-                    <option value="Tanzania, United Republic of">Tanzania, United Republic of</option>
-                    <option value="Thailand">Thailand</option>
-                    <option value="Timor-leste">Timor-leste</option>
-                    <option value="Togo">Togo</option>
-                    <option value="Tokelau">Tokelau</option>
-                    <option value="Tonga">Tonga</option>
-                    <option value="Trinidad and Tobago">Trinidad and Tobago</option>
-                    <option value="Tunisia">Tunisia</option>
-                    <option value="Turkey">Turkey</option>
-                    <option value="Turkmenistan">Turkmenistan</option>
-                    <option value="Turks and Caicos Islands">Turks and Caicos Islands</option>
-                    <option value="Tuvalu">Tuvalu</option>
-                    <option value="Uganda">Uganda</option>
-                    <option value="Ukraine">Ukraine</option>
-                    <option value="United Arab Emirates">United Arab Emirates</option>
-                    <option value="United Kingdom">United Kingdom</option>
-                    <option value="United States">United States</option>
-                    <option value="United States Minor Outlying Islands">United States Minor Outlying Islands</option>
-                    <option value="Uruguay">Uruguay</option>
-                    <option value="Uzbekistan">Uzbekistan</option>
-                    <option value="Vanuatu">Vanuatu</option>
-                    <option value="Venezuela">Venezuela</option>
-                    <option value="Viet Nam">Viet Nam</option>
-                    <option value="Virgin Islands, British">Virgin Islands, British</option>
-                    <option value="Virgin Islands, U.S.">Virgin Islands, U.S.</option>
-                    <option value="Wallis and Futuna">Wallis and Futuna</option>
-                    <option value="Western Sahara">Western Sahara</option>
-                    <option value="Yemen">Yemen</option>
-                    <option value="Zambia">Zambia</option>
-                    <option value="Zimbabwe">Zimbabwe</option>
-                </select>
-
-                <button type="submit" class="cta">Submit</button>
-            </form>
-        </div>
-    </div>
 </body>
 </html>
