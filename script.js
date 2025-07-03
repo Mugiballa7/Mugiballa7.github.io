@@ -1,17 +1,6 @@
 // Wait for DOM to be fully loaded
 document.addEventListener('DOMContentLoaded', function() {
     
-    // Smooth scrolling for navigation links
-    const navLinks = document.querySelectorAll('.nav-link');
-    
-    navLinks.forEach(link => {
-        link.addEventListener('click', function(e) {
-            // Prevent default link behavior for demo purposes
-            e.preventDefault();
-        });
-    });
-    
-
     
     // Initialize EmailJS
     emailjs.init("JQUhHZUUuIdFm32sz");
