@@ -27,12 +27,12 @@
             if (theme === 'dark') {
                 this.html.setAttribute('data-theme', 'dark');
                 if (this.themeToggle) {
-                    this.themeToggle.textContent = 'light';
+                    this.themeToggle.textContent = 'clair';
                 }
             } else {
                 this.html.removeAttribute('data-theme');
                 if (this.themeToggle) {
-                    this.themeToggle.textContent = 'dark';
+                    this.themeToggle.textContent = 'sombre';
                 }
             }
             this.currentTheme = theme;

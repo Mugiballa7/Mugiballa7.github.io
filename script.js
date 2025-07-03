@@ -44,7 +44,7 @@ document.addEventListener('DOMContentLoaded', function() {
         
         if (allValid) {
             // Show loading state
-            submitBtn.textContent = 'sending...';
+            submitBtn.textContent = 'envoi...';
             submitBtn.disabled = true;
             submitBtn.style.backgroundColor = '#616161';
             
@@ -59,7 +59,7 @@ document.addEventListener('DOMContentLoaded', function() {
                 console.log('SUCCESS!', response.status, response.text);
                 
                 // Success feedback
-                submitBtn.textContent = 'sent!';
+                submitBtn.textContent = 'envoyé!';
                 submitBtn.style.backgroundColor = '#0099FF';
                 
                 // Reset form
@@ -68,7 +68,7 @@ document.addEventListener('DOMContentLoaded', function() {
                 
                 // Reset button after 3 seconds
                 setTimeout(() => {
-                    submitBtn.textContent = 'leggo';
+                    submitBtn.textContent = 'envoyer';
                     submitBtn.style.backgroundColor = '#111111';
                     submitBtn.disabled = false;
                 }, 3000);
@@ -77,12 +77,12 @@ document.addEventListener('DOMContentLoaded', function() {
                 console.log('FAILED...', error);
                 
                 // Error feedback
-                submitBtn.textContent = 'error - try again';
+                submitBtn.textContent = 'erreur - réessayer';
                 submitBtn.style.backgroundColor = '#FF6666';
                 
                 // Reset button after 3 seconds
                 setTimeout(() => {
-                    submitBtn.textContent = 'leggo';
+                    submitBtn.textContent = 'envoyer';
                     submitBtn.style.backgroundColor = '#111111';
                     submitBtn.disabled = false;
                 }, 3000);
@@ -91,6 +91,6 @@ document.addEventListener('DOMContentLoaded', function() {
     });
     
     // Console message for developers
-    console.log('👋 Hey there! Nice to see you checking out the console. This site was built with love using HTML, CSS, and vanilla JavaScript.');
+    console.log('👋 Salut ! Sympa de voir que tu jettes un œil à la console. Ce site a été construit avec amour en utilisant HTML, CSS et JavaScript vanilla.');
     
 }); 
