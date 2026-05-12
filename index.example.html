@@ -1,0 +1,87 @@
+<!DOCTYPE html>
+<html lang="fr">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Nike Layout Clone</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@24,400,0,0"
+      rel="stylesheet"
+    />
+    <link rel="stylesheet" href="styles.css" />
+    <script src="script.js" defer></script>
+  </head>
+  <body>
+    <header class="site-header">
+      <nav class="navbar" aria-label="Navigation principale">
+        <a class="navbar__brand" href="index.html" aria-label="Accueil Nike">
+          <span class="navbar__logo">NIKE</span>
+        </a>
+
+        <button
+          class="navbar__menu-button"
+          type="button"
+          aria-expanded="false"
+          aria-controls="primary-menu"
+        >
+          <span class="material-symbols-outlined" aria-hidden="true">menu</span>
+          <span class="sr-only">Ouvrir le menu</span>
+        </button>
+
+        <ul class="navbar__links" id="primary-menu">
+          <li><a href="#">Nouveau</a></li>
+          <li><a href="homme.html">Homme</a></li>
+          <li><a href="#">Femme</a></li>
+          <li><a href="#">Enfant</a></li>
+          <li><a href="#">Sport</a></li>
+          <li><a href="#">NikeSKIMS</a></li>
+        </ul>
+
+        <div class="navbar__actions" aria-label="Actions rapides">
+          <button class="icon-button" type="button" aria-label="Rechercher">
+            <span class="material-symbols-outlined" aria-hidden="true">search</span>
+          </button>
+          <button class="icon-button" type="button" aria-label="Favoris">
+            <span class="material-symbols-outlined" aria-hidden="true">favorite</span>
+          </button>
+          <button class="icon-button" type="button" aria-label="Panier">
+            <span class="material-symbols-outlined" aria-hidden="true">shopping_bag</span>
+          </button>
+        </div>
+      </nav>
+    </header>
+
+    <main>
+      <section class="hero" aria-labelledby="hero-title">
+        <div class="hero__media" aria-hidden="true">
+          <iframe
+            class="hero__video"
+            src="https://www.youtube.com/embed/mNAiN-tl7E4?autoplay=1&mute=1&controls=0&loop=1&playlist=mNAiN-tl7E4&playsinline=1&rel=0&modestbranding=1&iv_load_policy=3&fs=0&disablekb=1&cc_load_policy=0"
+            title="Nike background video"
+            allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
+            referrerpolicy="strict-origin-when-cross-origin"
+            tabindex="-1"
+          ></iframe>
+        </div>
+
+        <div class="hero__content">
+          <p class="hero__eyebrow">ACG Zegama Trail</p>
+          <h1 class="hero__title" id="hero-title">Confort monstrueux</h1>
+          <p class="hero__text">Nos chaussures très souples pour les trails très durs.</p>
+          <a class="button" href="#">Acheter</a>
+        </div>
+      </section>
+
+      <section class="mission" aria-labelledby="mission-title">
+        <h2 class="mission__title" id="mission-title">Notre mission</h2>
+        <p class="mission__text">
+          À travers le sport, nous avons le pouvoir de changer des vies, avec des histoires
+          d'athlètes inspirants, des technologies innovantes et des produits qui permettent à
+          chacun de bouger.
+        </p>
+      </section>
+    </main>
+  </body>
+</html>
