@@ -1,0 +1,1143 @@
+const menuButton = document.querySelector(".navbar__menu-button");
+const primaryMenu = document.querySelector("#primary-menu");
+const THEME_STORAGE_KEY = "uninstant-theme";
+const themeButtons = document.querySelectorAll(".theme-toggle");
+
+const readStoredTheme = () => {
+  try {
+    return window.localStorage.getItem(THEME_STORAGE_KEY);
+  } catch {
+    return null;
+  }
+};
+
+const writeStoredTheme = (theme) => {
+  try {
+    window.localStorage.setItem(THEME_STORAGE_KEY, theme);
+  } catch {
+    // Ignore storage failures; the current page can still update.
+  }
+};
+
+const getPreferredTheme = () => {
+  const storedTheme = readStoredTheme();
+
+  if (storedTheme === "light" || storedTheme === "dark") {
+    return storedTheme;
+  }
+
+  return window.matchMedia?.("(prefers-color-scheme: dark)").matches ? "dark" : "light";
+};
+
+const applyTheme = (theme) => {
+  const isDark = theme === "dark";
+
+  document.documentElement.dataset.theme = theme;
+  document.documentElement.style.colorScheme = theme;
+
+  themeButtons.forEach((button) => {
+    button.setAttribute("aria-label", isDark ? "Switch to light mode" : "Switch to dark mode");
+    button.setAttribute("aria-pressed", String(isDark));
+
+    const icon = button.querySelector(".material-symbols-outlined");
+    if (icon) {
+      icon.textContent = isDark ? "light_mode" : "dark_mode";
+    }
+  });
+};
+
+applyTheme(getPreferredTheme());
+
+themeButtons.forEach((button) => {
+  button.addEventListener("click", () => {
+    const nextTheme = document.documentElement.dataset.theme === "dark" ? "light" : "dark";
+
+    applyTheme(nextTheme);
+    writeStoredTheme(nextTheme);
+  });
+});
+
+const stickerGrid = document.querySelector(".stickers-grid");
+const viewButtons = document.querySelectorAll(".view-toggle__button");
+const filterButton = document.querySelector(".filter-button");
+const filterList = document.querySelector(".filters-list");
+const filterChips = document.querySelectorAll(".filter-chip");
+const stickerViews = ["single", "columns", "compact"];
+
+const stickerCategories = {
+  "Le Cercle": { slug: "le-cercle", label: "Le Cercle" },
+  "Le Jardin": { slug: "le-jardin", label: "Le Jardin" },
+  Minuscules: { slug: "minuscules", label: "Minuscules" },
+  Envolées: { slug: "envolees", label: "Envolées" },
+};
+
+const additionalStickerFiles = {
+  "Le Cercle": [
+    "Alba.png",
+    "Amal & Zoé.png",
+    "Amara.png",
+    "Aïna & Reva.png",
+    "Coumba.png",
+    "Eberechi.png",
+    "Imany.png",
+    "Inaya.png",
+    "Iris.png",
+    "Jax.png",
+    "Kaï.png",
+    "Kenzo.png",
+    "Kofi & Luca.png",
+    "Lani.png",
+    "Lena & Safi.png",
+    "Lucie.png",
+    "Malik.png",
+    "Manon.png",
+    "Mariama.png",
+    "Meï.png",
+    "Mila.png",
+    "Mira.png",
+    "Nia & Tom.png",
+    "Ryo & Yuki.png",
+    "Sylia.png",
+    "Theo.png",
+    "Tiago.png",
+    "Yara.png",
+  ],
+  "Le Jardin": [
+    "Bou.png",
+    "DAWA.png",
+    "FIA.png",
+    "Gül.png",
+    "HANA.png",
+    "KEVA.png",
+    "KIBO.png",
+    "LALE.png",
+    "LAncienne.png",
+    "LEphémère.png",
+    "LEtrange.png",
+    "LILA.png",
+    "LUMA.png",
+    "LaBrûlante.png",
+    "LaDouce.png",
+    "LaFière.png",
+    "LaJeûne.png",
+    "LaLumineuse.png",
+    "LaNocturne.png",
+    "LaSimple.png",
+    "LaTimide.png",
+    "LaVoyageuse.png",
+    "LeMurmure.png",
+    "MELO.png",
+    "NILA.png",
+    "ORA.png",
+    "PETI.png",
+    "SENA.png",
+    "SOL.png",
+    "TILI.png",
+    "YUKI.png",
+  ],
+  Minuscules: [
+    "Aura.png",
+    "Bomby.png",
+    "Cali.png",
+    "Cocca.png",
+    "Emera.png",
+    "Jade.png",
+    "Lazuli.png",
+    "Macha.png",
+    "Mona.png",
+    "PAPILLIONmodif.png",
+    "Pink.png",
+    "Rubis.png",
+    "Soli.png",
+    "Spira.png",
+    "Zéphir.png",
+  ],
+  "Envolées": [
+    "Braise.png",
+    "Celo.png",
+    "Ivo.png",
+    "Koda.png",
+    "Liria.png",
+    "Sialia.png",
+    "Vola.png",
+    "Zola.png",
+  ],
+};
+
+const getAssetPath = (folder, filename) =>
+  `asset/${encodeURIComponent(folder)}/${encodeURIComponent(filename)}`;
+
+const setStickerViewUrl = (view) => {
+  const url = new URL(window.location.href);
+
+  url.searchParams.set("view", view);
+  window.history.replaceState(window.history.state, "", url);
+};
+
+const setStickerView = (view, activeButton, shouldUpdateUrl = false) => {
+  if (!stickerGrid || !view) {
+    return;
+  }
+
+  stickerGrid.classList.remove(
+    "stickers-grid--single",
+    "stickers-grid--columns",
+    "stickers-grid--compact",
+  );
+  stickerGrid.classList.add(`stickers-grid--${view}`);
+
+  viewButtons.forEach((viewButton) => {
+    const isActive = viewButton === activeButton;
+
+    viewButton.classList.toggle("is-active", isActive);
+    viewButton.setAttribute("aria-pressed", String(isActive));
+  });
+
+  if (shouldUpdateUrl) {
+    setStickerViewUrl(view);
+  }
+};
+
+viewButtons.forEach((button) => {
+  button.addEventListener("click", () => {
+    const view = button.dataset.view;
+
+    if (!view || button.classList.contains("is-active")) {
+      return;
+    }
+
+    if (document.startViewTransition) {
+      document.startViewTransition(() => setStickerView(view, button, true));
+      return;
+    }
+
+    setStickerView(view, button, true);
+  });
+});
+
+const initialStickerView = new URLSearchParams(window.location.search).get("view");
+
+if (stickerViews.includes(initialStickerView)) {
+  const initialStickerViewButton = Array.from(viewButtons).find(
+    (button) => button.dataset.view === initialStickerView,
+  );
+
+  setStickerView(initialStickerView, initialStickerViewButton);
+}
+
+const getStickerCategoryFromSrc = (src) => {
+  const decodedSrc = decodeURIComponent(src);
+  const folder = Object.keys(stickerCategories).find((categoryFolder) =>
+    decodedSrc.includes(`/asset/${categoryFolder}/`) ||
+    decodedSrc.includes(`asset/${categoryFolder}/`),
+  );
+
+  return folder ? stickerCategories[folder].slug : "";
+};
+
+const normalizeStickerTitle = (filename, label, index) => {
+  const name = filename.replace(/\.[^.]+$/, "");
+  const readableName = name
+    .replace(/([a-z])([A-Z])/g, "$1 $2")
+    .replace(/[-_]+/g, " ")
+    .trim();
+
+  if (/^[A-Z]?\d+$/i.test(readableName)) {
+    return `${label} ${String(index + 1).padStart(2, "0")}`;
+  }
+
+  return readableName
+    .toLowerCase()
+    .replace(/\b\w/g, (letter) => letter.toUpperCase());
+};
+
+const createStickerCard = ({ id, title, price, src, category }) => {
+  const article = document.createElement("article");
+  article.className = "sticker";
+
+  article.innerHTML = `
+    <a
+      class="sticker__link"
+      href="#${id}"
+      data-title="${title}"
+      data-price="${price}"
+      data-category="${category}"
+      aria-label="${title}, $${price}"
+    >
+      <figure class="sticker__media">
+        <img
+          class="sticker__img"
+          src="${src}"
+          alt="${title} sticker"
+          width="900"
+          height="900"
+          loading="lazy"
+          decoding="async"
+        />
+      </figure>
+      <div class="sticker__meta" id="${id}">
+        <h2 class="sticker__title">${title}</h2>
+        <p class="sticker__price">$${price}</p>
+      </div>
+    </a>
+  `;
+
+  return article;
+};
+
+const getMixedStickerItems = () => {
+  const stickerGroups = Object.entries(additionalStickerFiles).map(([folder, files]) => ({
+    folder,
+    category: stickerCategories[folder],
+    files,
+  }));
+  const maxFileCount = Math.max(...stickerGroups.map(({ files }) => files.length));
+  const items = [];
+
+  for (let fileIndex = 0; fileIndex < maxFileCount; fileIndex += 1) {
+    stickerGroups.forEach(({ folder, category, files }) => {
+      const filename = files[fileIndex];
+
+      if (!filename) {
+        return;
+      }
+
+      items.push({
+        folder,
+        filename,
+        category,
+        title: normalizeStickerTitle(filename, category.label, fileIndex),
+      });
+    });
+  }
+
+  return items;
+};
+
+if (stickerGrid) {
+  let stickerIndex = stickerGrid.querySelectorAll(".sticker").length;
+
+  getMixedStickerItems().forEach(({ folder, filename, category, title }) => {
+    stickerIndex += 1;
+
+    stickerGrid.append(
+      createStickerCard({
+        id: `sticker-${String(stickerIndex).padStart(2, "0")}`,
+        title,
+        price: 8,
+        src: getAssetPath(folder, filename),
+        category: category.slug,
+      }),
+    );
+  });
+
+  stickerGrid.querySelectorAll(".sticker__link").forEach((link) => {
+    if (!link.dataset.category) {
+      const imageSrc = link.querySelector("img")?.getAttribute("src") || "";
+      link.dataset.category = getStickerCategoryFromSrc(imageSrc);
+    }
+  });
+}
+
+const setStickerFilter = (filter) => {
+  if (!stickerGrid || !filter) {
+    return;
+  }
+
+  filterChips.forEach((chip) => {
+    const isActive = chip.dataset.filter === filter;
+    chip.classList.toggle("is-active", isActive);
+    chip.setAttribute("aria-pressed", String(isActive));
+  });
+
+  stickerGrid.querySelectorAll(".sticker").forEach((sticker) => {
+    const category = sticker.querySelector(".sticker__link")?.dataset.category;
+    sticker.hidden = filter !== "all" && category !== filter;
+  });
+};
+
+filterButton?.addEventListener("click", () => {
+  const isOpen = filterList?.classList.toggle("is-open");
+  filterButton.setAttribute("aria-expanded", String(Boolean(isOpen)));
+});
+
+filterChips.forEach((chip) => {
+  chip.addEventListener("click", () => {
+    setStickerFilter(chip.dataset.filter);
+  });
+});
+
+const productModalOptionsMarkup = `
+  <form class="product-options">
+    <div class="product-options-sticker">
+      <fieldset class="product-option-group">
+        <legend>Size</legend>
+        <label class="option-card">
+          <input type="radio" name="sticker-size" value="Mini" data-price="0" checked />
+          <span>Mini</span>
+          <small>Base price</small>
+        </label>
+        <label class="option-card">
+          <input type="radio" name="sticker-size" value="Regular" data-price="4" />
+          <span>Regular</span>
+          <small>+$4</small>
+        </label>
+        <label class="option-card">
+          <input type="radio" name="sticker-size" value="Poster" data-price="12" />
+          <span>Poster</span>
+          <small>+$12</small>
+        </label>
+      </fieldset>
+
+      <fieldset class="product-option-group">
+        <legend>Finish</legend>
+        <label class="option-card">
+          <input type="radio" name="sticker-finish" value="Matte" data-price="0" checked />
+          <span>Matte</span>
+          <small>Included</small>
+        </label>
+        <label class="option-card">
+          <input type="radio" name="sticker-finish" value="Gloss" data-price="3" />
+          <span>Gloss</span>
+          <small>+$3</small>
+        </label>
+        <label class="option-card">
+          <input type="radio" name="sticker-finish" value="Holographic" data-price="8" />
+          <span>Holographic</span>
+          <small>+$8</small>
+        </label>
+      </fieldset>
+
+      <fieldset class="product-option-group">
+        <legend>Quantity</legend>
+        <label class="option-card">
+          <input type="radio" name="sticker-quantity" value="Single" data-price="0" checked />
+          <span>Single</span>
+          <small>1 piece</small>
+        </label>
+        <label class="option-card">
+          <input type="radio" name="sticker-quantity" value="Pack" data-price="10" />
+          <span>Pack</span>
+          <small>+$10</small>
+        </label>
+      </fieldset>
+    </div>
+
+    <div class="product-options-scene" hidden>
+      <fieldset class="product-option-group">
+        <legend>Run length</legend>
+        <label class="option-card">
+          <input type="radio" name="scene-run" value="Short" data-price="0" checked />
+          <span>Short</span>
+          <small>Base price</small>
+        </label>
+        <label class="option-card">
+          <input type="radio" name="scene-run" value="Standard" data-price="6" />
+          <span>Standard</span>
+          <small>+$6</small>
+        </label>
+        <label class="option-card">
+          <input type="radio" name="scene-run" value="Extended" data-price="14" />
+          <span>Extended</span>
+          <small>+$14</small>
+        </label>
+      </fieldset>
+
+      <fieldset class="product-option-group">
+        <legend>Look</legend>
+        <label class="option-card">
+          <input type="radio" name="scene-look" value="Clean" data-price="0" checked />
+          <span>Clean</span>
+          <small>Included</small>
+        </label>
+        <label class="option-card">
+          <input type="radio" name="scene-look" value="Film" data-price="5" />
+          <span>Film</span>
+          <small>+$5</small>
+        </label>
+        <label class="option-card">
+          <input type="radio" name="scene-look" value="Grain" data-price="9" />
+          <span>Grain</span>
+          <small>+$9</small>
+        </label>
+      </fieldset>
+
+      <fieldset class="product-option-group">
+        <legend>License</legend>
+        <label class="option-card">
+          <input type="radio" name="scene-license" value="Personal" data-price="0" checked />
+          <span>Personal</span>
+          <small>Non-commercial</small>
+        </label>
+        <label class="option-card">
+          <input type="radio" name="scene-license" value="Creator" data-price="18" />
+          <span>Creator</span>
+          <small>+$18</small>
+        </label>
+      </fieldset>
+    </div>
+  </form>
+`;
+
+const ensureProductModal = () => {
+  if (document.querySelector(".product-modal")) {
+    return;
+  }
+
+  document.body.insertAdjacentHTML(
+    "beforeend",
+    `
+      <dialog class="product-modal" aria-labelledby="product-modal-title">
+        <div class="product-modal__panel">
+          <button class="product-modal__close" type="button" aria-label="Close product modal">
+            <span class="material-symbols-outlined" aria-hidden="true">close</span>
+          </button>
+
+          <section class="product-modal__gallery" aria-label="Product preview">
+            <button
+              class="product-modal__arrow product-modal__arrow--prev"
+              type="button"
+              aria-label="Previous image"
+            >
+              <span class="material-symbols-outlined" aria-hidden="true">chevron_left</span>
+            </button>
+
+            <img
+              class="product-modal__image"
+              src="asset/placeholder-sticker.svg"
+              alt=""
+              width="900"
+              height="900"
+            />
+
+            <button
+              class="product-modal__arrow product-modal__arrow--next"
+              type="button"
+              aria-label="Next image"
+            >
+              <span class="material-symbols-outlined" aria-hidden="true">chevron_right</span>
+            </button>
+
+            <div class="product-modal__dots" aria-label="Image position">
+              <button class="is-active" type="button" aria-label="Show image 1"></button>
+              <button type="button" aria-label="Show image 2"></button>
+              <button type="button" aria-label="Show image 3"></button>
+            </div>
+          </section>
+
+          <section class="product-modal__details">
+            <div class="product-modal__head">
+              <div class="product-modal__sticky-title">
+                <h2 class="product-modal__title" id="product-modal-title">Product</h2>
+                <p class="product-modal__price product-modal__price--header" aria-live="polite">$0</p>
+              </div>
+            </div>
+
+            <div class="product-modal__sheet">
+              <div class="product-modal__scroll">
+                ${productModalOptionsMarkup}
+              </div>
+
+              <div class="product-modal__footer">
+                <p class="product-modal__price product-modal__price--cta">$0</p>
+                <button class="button product-modal__cta" type="button">Add to cart</button>
+              </div>
+            </div>
+          </section>
+        </div>
+      </dialog>
+    `,
+  );
+};
+
+ensureProductModal();
+
+
+const productModal = document.querySelector(".product-modal");
+const productModalClose = document.querySelector(".product-modal__close");
+const productModalTitle = document.querySelector(".product-modal__title");
+const productModalPrices = document.querySelectorAll(".product-modal__price");
+const productModalImage = document.querySelector(".product-modal__image");
+const productModalPrev = document.querySelector(".product-modal__arrow--prev");
+const productModalNext = document.querySelector(".product-modal__arrow--next");
+const productModalDotsContainer = document.querySelector(".product-modal__dots");
+const productModalDots = document.querySelectorAll(".product-modal__dots button");
+const productModalDetailsScroll = document.querySelector(".product-modal__scroll");
+const productOptionsSticker = document.querySelector(".product-options-sticker");
+const productOptionsScene = document.querySelector(".product-options-scene");
+const productOptionsForm = document.querySelector(".product-options");
+
+const getActiveProductOptionsRoot = () => {
+  if (productOptionsSticker && productOptionsScene) {
+    return productOptionsScene.hidden ? productOptionsSticker : productOptionsScene;
+  }
+
+  return productOptionsForm;
+};
+
+const getActiveProductOptionInputs = () =>
+  Array.from(getActiveProductOptionsRoot()?.querySelectorAll("input[type='radio']") || []);
+const stickerImageSlides = [
+  "asset/placeholder-sticker.svg",
+  "asset/scenes/711c49a0-31a9-4a23-935e-ecaa4d996d8a.png",
+  "asset/placeholder-sticker.svg",
+];
+const sceneImageSlides = [
+  "asset/scenes/711c49a0-31a9-4a23-935e-ecaa4d996d8a.png",
+  "asset/placeholder-sticker.svg",
+  "asset/scenes/711c49a0-31a9-4a23-935e-ecaa4d996d8a.png",
+];
+const stickerZoomSlides = [
+  { scale: 1, origin: "50% 50%" },
+  { scale: 2.7, origin: "30% 32%" },
+  { scale: 3.15, origin: "68% 68%" },
+];
+let productImageSlides = stickerImageSlides;
+let productBasePrice = 0;
+let productImageIndex = 0;
+let lastFocusedModalTrigger = null;
+let modalScrollLockY = 0;
+let isClosingModalFromHistory = false;
+
+const lockBodyScroll = () => {
+  if (document.body.classList.contains("modal-scroll-lock")) {
+    return;
+  }
+
+  modalScrollLockY = window.scrollY;
+  document.body.style.position = "fixed";
+  document.body.style.top = `-${modalScrollLockY}px`;
+  document.body.style.left = "0";
+  document.body.style.right = "0";
+  document.body.style.width = "100%";
+  document.body.classList.add("modal-scroll-lock");
+};
+
+const unlockBodyScroll = () => {
+  if (!document.body.classList.contains("modal-scroll-lock")) {
+    return;
+  }
+
+  document.body.classList.remove("modal-scroll-lock");
+  document.body.style.position = "";
+  document.body.style.top = "";
+  document.body.style.left = "";
+  document.body.style.right = "";
+  document.body.style.width = "";
+
+  const root = document.documentElement;
+  const prevRootBehavior = root.style.scrollBehavior;
+  const prevBodyBehavior = document.body.style.scrollBehavior;
+  root.style.scrollBehavior = "auto";
+  document.body.style.scrollBehavior = "auto";
+  window.scrollTo(0, modalScrollLockY);
+  root.style.scrollBehavior = prevRootBehavior;
+  document.body.style.scrollBehavior = prevBodyBehavior;
+};
+
+const setMobileMenuOpen = (isOpen) => {
+  if (!menuButton || !primaryMenu) {
+    return;
+  }
+
+  menuButton.setAttribute("aria-expanded", String(isOpen));
+  primaryMenu.classList.toggle("is-open", isOpen);
+  menuButton.setAttribute("aria-label", isOpen ? "Close menu" : "Open menu");
+
+  const icon = menuButton.querySelector(".material-symbols-outlined");
+  if (icon) {
+    icon.textContent = isOpen ? "close" : "menu";
+  }
+
+  if (isOpen) {
+    lockBodyScroll();
+  } else if (!document.querySelector(".product-modal")?.open) {
+    unlockBodyScroll();
+  }
+};
+
+const closeMobileMenu = () => {
+  setMobileMenuOpen(false);
+};
+
+const toggleMobileMenu = () => {
+  setMobileMenuOpen(menuButton?.getAttribute("aria-expanded") !== "true");
+};
+
+menuButton?.addEventListener("click", toggleMobileMenu);
+
+primaryMenu?.querySelectorAll("a").forEach((link) => {
+  link.addEventListener("click", closeMobileMenu);
+});
+
+document.addEventListener("keydown", (event) => {
+  if (event.key === "Escape" && menuButton?.getAttribute("aria-expanded") === "true") {
+    closeMobileMenu();
+  }
+});
+
+const mobileMenuQuery = window.matchMedia?.("(min-width: 761px)");
+
+mobileMenuQuery?.addEventListener("change", (event) => {
+  if (event.matches) {
+    closeMobileMenu();
+  }
+});
+
+const formatPrice = (price) => `$${price}`;
+
+const CART_STORAGE_KEY = "uninstant-cart";
+const cartButtons = document.querySelectorAll("button[aria-label='Cart']");
+let cartItems = [];
+
+document.body.insertAdjacentHTML(
+  "beforeend",
+  `
+    <div class="cart-shell" aria-hidden="true">
+      <button class="cart-backdrop" type="button" aria-label="Close cart"></button>
+      <aside class="cart-drawer" aria-labelledby="cart-title" role="dialog">
+        <div class="cart-drawer__header">
+          <h2 class="cart-drawer__title" id="cart-title">Cart</h2>
+          <button class="cart-drawer__close" type="button" aria-label="Close cart">
+            <span class="material-symbols-outlined" aria-hidden="true">close</span>
+          </button>
+        </div>
+
+        <div class="cart-drawer__items" aria-live="polite"></div>
+
+        <div class="cart-drawer__footer">
+          <div class="cart-drawer__total">
+            <span>Total</span>
+            <strong class="cart-drawer__total-value">$0</strong>
+          </div>
+          <button class="button cart-drawer__checkout" type="button">Checkout</button>
+          <p class="cart-drawer__hint">Stripe checkout will connect here later.</p>
+        </div>
+      </aside>
+    </div>
+  `,
+);
+
+const cartShell = document.querySelector(".cart-shell");
+const cartItemsContainer = document.querySelector(".cart-drawer__items");
+const cartTotalValue = document.querySelector(".cart-drawer__total-value");
+const cartCloseButtons = document.querySelectorAll(".cart-drawer__close, .cart-backdrop");
+
+const readCart = () => {
+  try {
+    return JSON.parse(window.localStorage.getItem(CART_STORAGE_KEY)) || [];
+  } catch {
+    return [];
+  }
+};
+
+const writeCart = () => {
+  window.localStorage.setItem(CART_STORAGE_KEY, JSON.stringify(cartItems));
+};
+
+const getCartCount = () => cartItems.reduce((total, item) => total + item.quantity, 0);
+
+const getCartTotal = () =>
+  cartItems.reduce((total, item) => total + item.price * item.quantity, 0);
+
+const updateCartButtons = () => {
+  const count = getCartCount();
+
+  cartButtons.forEach((button) => {
+    let badge = button.querySelector(".cart-count");
+
+    if (!badge) {
+      badge = document.createElement("span");
+      badge.className = "cart-count";
+      button.append(badge);
+    }
+
+    badge.textContent = String(count);
+    badge.hidden = count === 0;
+    button.setAttribute("aria-label", count === 0 ? "Cart" : `Cart, ${count} items`);
+  });
+};
+
+const renderCart = () => {
+  if (!cartItemsContainer || !cartTotalValue) {
+    return;
+  }
+
+  if (cartItems.length === 0) {
+    cartItemsContainer.innerHTML = `<p class="cart-drawer__empty">Your cart is empty.</p>`;
+  } else {
+    cartItemsContainer.innerHTML = cartItems
+      .map(
+        (item) => `
+          <article class="cart-item">
+            <div>
+              <h3 class="cart-item__title">${item.title}</h3>
+              <p class="cart-item__meta">${item.options || "Default configuration"}</p>
+              <button class="cart-item__remove" type="button" data-cart-id="${item.id}">
+                Remove
+              </button>
+            </div>
+            <div class="cart-item__side">
+              <p>${formatPrice(item.price)}</p>
+              <p>× ${item.quantity}</p>
+            </div>
+          </article>
+        `,
+      )
+      .join("");
+  }
+
+  cartTotalValue.textContent = formatPrice(getCartTotal());
+  updateCartButtons();
+};
+
+const openCart = () => {
+  cartShell?.classList.add("is-open");
+  cartShell?.setAttribute("aria-hidden", "false");
+};
+
+const closeCart = () => {
+  cartShell?.classList.remove("is-open");
+  cartShell?.setAttribute("aria-hidden", "true");
+};
+
+const syncCart = () => {
+  cartItems = readCart();
+  renderCart();
+};
+
+const getSelectedProductOptions = () =>
+  getActiveProductOptionInputs()
+    .filter((input) => input.checked)
+    .map((input) => input.value)
+    .join(" / ");
+
+const addCurrentProductToCart = () => {
+  if (!productModalTitle || productModalPrices.length === 0) {
+    return;
+  }
+
+  const title = productModalTitle.textContent.trim();
+  const price = Number(productModalPrices[0].textContent.replace(/[^0-9.]/g, ""));
+  const options = getSelectedProductOptions();
+  const existingItem = cartItems.find((item) => item.title === title && item.options === options);
+
+  if (existingItem) {
+    existingItem.quantity += 1;
+  } else {
+    cartItems.push({
+      id: `${Date.now()}-${Math.random().toString(16).slice(2)}`,
+      title,
+      price,
+      options,
+      quantity: 1,
+    });
+  }
+
+  writeCart();
+  renderCart();
+  productModal?.close();
+  openCart();
+};
+
+cartButtons.forEach((button) => {
+  button.addEventListener("click", openCart);
+});
+
+cartCloseButtons.forEach((button) => {
+  button.addEventListener("click", closeCart);
+});
+
+cartItemsContainer?.addEventListener("click", (event) => {
+  const removeButton = event.target.closest("[data-cart-id]");
+
+  if (!removeButton) {
+    return;
+  }
+
+  cartItems = cartItems.filter((item) => item.id !== removeButton.dataset.cartId);
+  writeCart();
+  renderCart();
+});
+
+document.querySelector(".cart-drawer__checkout")?.addEventListener("click", () => {
+  alert("Stripe checkout will be connected later.");
+});
+
+document.querySelector(".product-modal__cta")?.addEventListener("click", addCurrentProductToCart);
+
+window.addEventListener("storage", (event) => {
+  if (event.key === THEME_STORAGE_KEY && (event.newValue === "light" || event.newValue === "dark")) {
+    applyTheme(event.newValue);
+  }
+
+  if (event.key === CART_STORAGE_KEY) {
+    syncCart();
+  }
+});
+
+syncCart();
+
+const updateProductPrice = () => {
+  if (productModalPrices.length === 0) {
+    return;
+  }
+
+  const optionsPrice = getActiveProductOptionInputs().reduce((total, input) => {
+    if (!input.checked) {
+      return total;
+    }
+
+    return total + Number(input.dataset.price || 0);
+  }, 0);
+
+  const text = formatPrice(productBasePrice + optionsPrice);
+  productModalPrices.forEach((node) => {
+    node.textContent = text;
+  });
+};
+
+const setProductImage = (index) => {
+  if (!productModalImage) {
+    return;
+  }
+
+  productImageIndex = (index + productImageSlides.length) % productImageSlides.length;
+  const slide = productImageSlides[productImageIndex];
+  const src = typeof slide === "string" ? slide : slide.src;
+  const scale = typeof slide === "string" ? 1 : slide.scale || 1;
+  const origin = typeof slide === "string" ? "50% 50%" : slide.origin || "50% 50%";
+
+  productModalImage.classList.add("is-changing");
+
+  window.setTimeout(() => {
+    productModalImage.src = src;
+    productModalImage.style.setProperty("--product-image-scale", scale);
+    productModalImage.style.setProperty("--product-image-origin", origin);
+    productModalImage.classList.remove("is-changing");
+  }, 120);
+
+  productModalDots.forEach((dot, dotIndex) => {
+    dot.hidden = dotIndex >= productImageSlides.length;
+    dot.classList.toggle("is-active", dotIndex === productImageIndex);
+  });
+};
+
+const getModalLinkFromHash = () => {
+  if (!window.location.hash) {
+    return null;
+  }
+
+  return Array.from(document.querySelectorAll(".sticker__link, .scene__link")).find(
+    (link) => link.getAttribute("href") === window.location.hash,
+  );
+};
+
+const clearModalHash = () => {
+  if (!getModalLinkFromHash()) {
+    return;
+  }
+
+  const url = new URL(window.location.href);
+  url.hash = "";
+  window.history.pushState(window.history.state, "", url);
+};
+
+const openProductModal = (link, { shouldUpdateUrl = false } = {}) => {
+  if (!productModal || !productModalTitle) {
+    return;
+  }
+
+  lastFocusedModalTrigger = link;
+  productBasePrice = Number(link.dataset.price || 0);
+  const isSceneProduct = link.classList.contains("scene__link");
+  const linkImage = link.querySelector("img")?.getAttribute("src");
+  productModalTitle.textContent =
+    link.dataset.title || (isSceneProduct ? "Scene" : "Sticker");
+  productImageSlides = isSceneProduct
+    ? sceneImageSlides
+    : stickerZoomSlides.map((slide) => ({
+        ...slide,
+        src: linkImage || stickerImageSlides[0],
+      }));
+
+  productModalPrev.hidden = false;
+  productModalNext.hidden = false;
+  productModalDotsContainer.hidden = productImageSlides.length <= 1;
+
+  if (productModalImage) {
+    productModalImage.alt = link.dataset.title ? `${link.dataset.title} preview` : "";
+  }
+
+  if (productOptionsSticker && productOptionsScene) {
+    productOptionsSticker.hidden = isSceneProduct;
+    productOptionsScene.hidden = !isSceneProduct;
+  }
+
+  getActiveProductOptionInputs().forEach((input) => {
+    input.checked = input.defaultChecked;
+  });
+
+  setProductImage(0);
+  updateProductPrice();
+  lockBodyScroll();
+
+  if (productModalDetailsScroll) {
+    productModalDetailsScroll.scrollTop = 0;
+  }
+
+  if (shouldUpdateUrl && link.getAttribute("href") !== window.location.hash) {
+    const url = new URL(window.location.href);
+    url.hash = link.getAttribute("href") || "";
+    window.history.pushState(window.history.state, "", url);
+  }
+
+  if (!productModal.open) {
+    productModal.showModal();
+  }
+};
+
+productModal?.addEventListener("close", () => {
+  unlockBodyScroll();
+
+  if (!isClosingModalFromHistory) {
+    clearModalHash();
+  }
+
+  isClosingModalFromHistory = false;
+  if (lastFocusedModalTrigger && typeof lastFocusedModalTrigger.focus === "function") {
+    try {
+      lastFocusedModalTrigger.focus({ preventScroll: true });
+    } catch {
+      lastFocusedModalTrigger.focus();
+    }
+  }
+});
+
+productModal?.addEventListener(
+  "wheel",
+  (event) => {
+    if (!productModal?.open || !productModalDetailsScroll) {
+      return;
+    }
+
+    if (event.target instanceof Node) {
+      if (event.target.closest(".product-modal__scroll")) {
+        return;
+      }
+
+      if (event.target.closest(".product-modal__gallery")) {
+        event.preventDefault();
+        return;
+      }
+    }
+
+    event.preventDefault();
+    productModalDetailsScroll.scrollTop += event.deltaY;
+  },
+  { passive: false },
+);
+
+document.querySelectorAll(".sticker__link").forEach((link) => {
+  link.addEventListener("click", (event) => {
+    event.preventDefault();
+    openProductModal(link, { shouldUpdateUrl: true });
+  });
+});
+
+document.querySelectorAll(".scene__link").forEach((link) => {
+  link.addEventListener("click", (event) => {
+    event.preventDefault();
+    openProductModal(link, { shouldUpdateUrl: true });
+  });
+});
+
+productOptionsForm?.addEventListener("change", (event) => {
+  if (event.target.matches("input[type='radio']")) {
+    updateProductPrice();
+  }
+});
+
+productModalPrev?.addEventListener("click", () => {
+  setProductImage(productImageIndex - 1);
+});
+
+productModalNext?.addEventListener("click", () => {
+  setProductImage(productImageIndex + 1);
+});
+
+productModalDots.forEach((dot, index) => {
+  dot.addEventListener("click", () => {
+    setProductImage(index);
+  });
+});
+
+const closeProductModal = () => {
+  productModal?.close();
+};
+
+productModalClose?.addEventListener("click", closeProductModal);
+
+productModal?.addEventListener("click", (event) => {
+  if (event.target === productModal) {
+    closeProductModal();
+  }
+});
+
+const openProductModalFromHash = () => {
+  const modalLink = getModalLinkFromHash();
+
+  if (!modalLink) {
+    return false;
+  }
+
+  openProductModal(modalLink);
+  return true;
+};
+
+openProductModalFromHash();
+
+window.addEventListener("popstate", () => {
+  if (openProductModalFromHash()) {
+    return;
+  }
+
+  if (productModal?.open) {
+    isClosingModalFromHistory = true;
+    productModal.close();
+  }
+});
+
+document.querySelectorAll("a[href]").forEach((link) => {
+  link.addEventListener("click", (event) => {
+    if (
+      event.defaultPrevented ||
+      event.button !== 0 ||
+      event.metaKey ||
+      event.ctrlKey ||
+      event.shiftKey ||
+      event.altKey ||
+      link.target ||
+      link.hasAttribute("download")
+    ) {
+      return;
+    }
+
+    const url = new URL(link.href, window.location.href);
+    const isSamePage =
+      url.origin === window.location.origin &&
+      url.pathname === window.location.pathname &&
+      url.search === window.location.search;
+
+    if (url.origin !== window.location.origin || isSamePage) {
+      return;
+    }
+
+    event.preventDefault();
+    document.body.classList.add("page-leaving");
+
+    window.setTimeout(() => {
+      window.location.href = url.href;
+    }, 220);
+  });
+});
