@@ -167,6 +167,54 @@ const additionalStickerFiles = {
 const getAssetPath = (folder, filename) =>
   `asset/${encodeURIComponent(folder)}/${encodeURIComponent(filename)}`;
 
+/** macOS / git can store NFD vs NFC; GitHub Pages is case-sensitive. Try variants on <img> error. */
+const stickerFilenameCaseFallbacks = {
+  "Coumba.png": ["coumba.png"],
+};
+
+const uniqueStickerImageUrls = (folder, filename) => {
+  const folderOpts = [...new Set([folder.normalize("NFC"), folder.normalize("NFD")])];
+  const fileOpts = [...new Set([filename.normalize("NFC"), filename.normalize("NFD")])];
+  const urls = [];
+
+  folderOpts.forEach((fo) => {
+    fileOpts.forEach((fi) => {
+      urls.push(getAssetPath(fo, fi));
+    });
+  });
+
+  const extras = stickerFilenameCaseFallbacks[filename.normalize("NFC")] || [];
+  extras.forEach((alt) => {
+    folderOpts.forEach((fo) => {
+      urls.push(getAssetPath(fo, alt));
+    });
+  });
+
+  return [...new Set(urls)];
+};
+
+const setStickerImageSrcWithFallbacks = (img, folder, filename) => {
+  const urls = uniqueStickerImageUrls(folder, filename);
+  let index = 0;
+  img.src = urls[0];
+
+  if (urls.length <= 1) {
+    return;
+  }
+
+  const onError = () => {
+    index += 1;
+    if (index < urls.length) {
+      img.src = urls[index];
+      return;
+    }
+
+    img.removeEventListener("error", onError);
+  };
+
+  img.addEventListener("error", onError);
+};
+
 const setStickerViewUrl = (view) => {
   const url = new URL(window.location.href);
 
@@ -251,9 +299,11 @@ const normalizeStickerTitle = (filename, label, index) => {
     .replace(/\b\w/g, (letter) => letter.toUpperCase());
 };
 
-const createStickerCard = ({ id, title, price, src, category }) => {
+const createStickerCard = ({ id, title, price, folder, filename, category }) => {
   const article = document.createElement("article");
   article.className = "sticker";
+
+  const primarySrc = uniqueStickerImageUrls(folder, filename)[0];
 
   article.innerHTML = `
     <a
@@ -267,7 +317,7 @@ const createStickerCard = ({ id, title, price, src, category }) => {
       <figure class="sticker__media">
         <img
           class="sticker__img"
-          src="${src}"
+          src="${primarySrc}"
           alt="${title} sticker"
           width="900"
           height="900"
@@ -281,6 +331,11 @@ const createStickerCard = ({ id, title, price, src, category }) => {
       </div>
     </a>
   `;
+
+  const img = article.querySelector(".sticker__img");
+  if (img) {
+    setStickerImageSrcWithFallbacks(img, folder, filename);
+  }
 
   return article;
 };
@@ -325,7 +380,8 @@ if (stickerGrid) {
         id: `sticker-${String(stickerIndex).padStart(2, "0")}`,
         title,
         price: 8,
-        src: getAssetPath(folder, filename),
+        folder,
+        filename,
         category: category.slug,
       }),
     );
@@ -562,6 +618,7 @@ const productModalPrev = document.querySelector(".product-modal__arrow--prev");
 const productModalNext = document.querySelector(".product-modal__arrow--next");
 const productModalDotsContainer = document.querySelector(".product-modal__dots");
 const productModalDots = document.querySelectorAll(".product-modal__dots button");
+const productModalGallery = document.querySelector(".product-modal__gallery");
 const productModalDetailsScroll = document.querySelector(".product-modal__scroll");
 const productOptionsSticker = document.querySelector(".product-options-sticker");
 const productOptionsScene = document.querySelector(".product-options-scene");
@@ -1070,6 +1127,78 @@ productModalDots.forEach((dot, index) => {
   dot.addEventListener("click", () => {
     setProductImage(index);
   });
+});
+
+const PRODUCT_MODAL_SWIPE_THRESHOLD = 42;
+
+let gallerySwipePointerId = null;
+let gallerySwipeStartX = 0;
+let gallerySwipeStartY = 0;
+
+productModalGallery?.addEventListener("pointerdown", (event) => {
+  if (
+    !productModal?.open ||
+    productImageSlides.length <= 1 ||
+    gallerySwipePointerId !== null
+  ) {
+    return;
+  }
+
+  if (event.pointerType === "mouse" && event.button !== 0) {
+    return;
+  }
+
+  const target = event.target;
+  if (target instanceof Element && target.closest("button")) {
+    return;
+  }
+
+  gallerySwipePointerId = event.pointerId;
+  gallerySwipeStartX = event.clientX;
+  gallerySwipeStartY = event.clientY;
+
+  try {
+    productModalGallery.setPointerCapture(event.pointerId);
+  } catch {
+    // ignore (e.g. unsupported)
+  }
+});
+
+productModalGallery?.addEventListener("pointerup", (event) => {
+  if (!productModal?.open || event.pointerId !== gallerySwipePointerId) {
+    return;
+  }
+
+  gallerySwipePointerId = null;
+
+  try {
+    productModalGallery.releasePointerCapture(event.pointerId);
+  } catch {
+    // ignore
+  }
+
+  const dx = event.clientX - gallerySwipeStartX;
+  const dy = event.clientY - gallerySwipeStartY;
+
+  if (Math.abs(dx) < PRODUCT_MODAL_SWIPE_THRESHOLD) {
+    return;
+  }
+
+  if (Math.abs(dx) <= Math.abs(dy)) {
+    return;
+  }
+
+  if (dx > 0) {
+    setProductImage(productImageIndex - 1);
+  } else {
+    setProductImage(productImageIndex + 1);
+  }
+});
+
+productModalGallery?.addEventListener("pointercancel", (event) => {
+  if (event.pointerId === gallerySwipePointerId) {
+    gallerySwipePointerId = null;
+  }
 });
 
 const closeProductModal = () => {
