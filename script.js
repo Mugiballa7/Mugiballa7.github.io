@@ -547,7 +547,7 @@ const ensureProductModal = () => {
       <dialog class="product-modal" aria-labelledby="product-modal-title">
         <div class="product-modal__panel">
           <button class="product-modal__close" type="button" aria-label="Close product modal">
-            <span class="material-symbols-outlined" aria-hidden="true">close</span>
+            <span class="material-symbols-outlined notranslate" translate="no" aria-hidden="true">close</span>
           </button>
 
           <section class="product-modal__gallery" aria-label="Product preview">
@@ -556,7 +556,7 @@ const ensureProductModal = () => {
               type="button"
               aria-label="Previous image"
             >
-              <span class="material-symbols-outlined" aria-hidden="true">chevron_left</span>
+              <span class="material-symbols-outlined notranslate" translate="no" aria-hidden="true">chevron_left</span>
             </button>
 
             <img
@@ -572,7 +572,7 @@ const ensureProductModal = () => {
               type="button"
               aria-label="Next image"
             >
-              <span class="material-symbols-outlined" aria-hidden="true">chevron_right</span>
+              <span class="material-symbols-outlined notranslate" translate="no" aria-hidden="true">chevron_right</span>
             </button>
 
             <div class="product-modal__dots" aria-label="Image position">
@@ -757,7 +757,7 @@ document.body.insertAdjacentHTML(
         <div class="cart-drawer__header">
           <h2 class="cart-drawer__title" id="cart-title">Cart</h2>
           <button class="cart-drawer__close" type="button" aria-label="Close cart">
-            <span class="material-symbols-outlined" aria-hidden="true">close</span>
+            <span class="material-symbols-outlined notranslate" translate="no" aria-hidden="true">close</span>
           </button>
         </div>
 
