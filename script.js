@@ -294,9 +294,10 @@ const normalizeStickerTitle = (filename, label, index) => {
     return `${label} ${String(index + 1).padStart(2, "0")}`;
   }
 
+  // Use \p{L} so letters like ï, é count as word characters (/\b\w/ only matches ASCII \w).
   return readableName
-    .toLowerCase()
-    .replace(/\b\w/g, (letter) => letter.toUpperCase());
+    .toLocaleLowerCase("fr")
+    .replace(/(^|[\s&-]+)(\p{L})/gu, (match, sep, letter) => sep + letter.toLocaleUpperCase("fr"));
 };
 
 const createStickerCard = ({ id, title, price, folder, filename, category }) => {
