@@ -10,6 +10,25 @@
       href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@24,400,0,0"
       rel="stylesheet"
     />
+    <script>
+      (() => {
+        try {
+          const storedTheme = window.localStorage.getItem("uninstant-theme");
+          const theme =
+            storedTheme === "light" || storedTheme === "dark"
+              ? storedTheme
+              : window.matchMedia("(prefers-color-scheme: dark)").matches
+                ? "dark"
+                : "light";
+
+          document.documentElement.dataset.theme = theme;
+          document.documentElement.style.colorScheme = theme;
+        } catch {
+          document.documentElement.dataset.theme = "light";
+          document.documentElement.style.colorScheme = "light";
+        }
+      })();
+    </script>
     <link rel="stylesheet" href="styles.css" />
     <script src="script.js" defer></script>
   </head>
@@ -78,6 +97,9 @@
             <button class="filter-chip" type="button" data-filter="envolees" aria-pressed="false">
               Envolées
             </button>
+            <button class="filter-chip" type="button" data-filter="compagnons" aria-pressed="false">
+              Compagnons
+            </button>
           </div>
         </div>
 
@@ -118,6 +140,22 @@
       </section>
 
       <section class="stickers-grid stickers-grid--columns" aria-label="Sticker catalog"></section>
+
+      <nav class="stickers-pagination" aria-label="Sticker catalog pagination" hidden>
+        <button
+          class="stickers-pagination__button stickers-pagination__button--prev"
+          type="button"
+        >
+          Previous
+        </button>
+        <p class="stickers-pagination__status" aria-live="polite">Page 1 / 1</p>
+        <button
+          class="stickers-pagination__button stickers-pagination__button--next"
+          type="button"
+        >
+          Next
+        </button>
+      </nav>
 
       <dialog class="product-modal" aria-labelledby="product-modal-title">
         <div class="product-modal__panel">
@@ -161,69 +199,23 @@
             <div class="product-modal__head">
               <div class="product-modal__sticky-title">
                 <h2 class="product-modal__title" id="product-modal-title">Sticker</h2>
-                <p class="product-modal__price product-modal__price--header" aria-live="polite">$0</p>
+                <p class="product-modal__price product-modal__price--header" aria-live="polite">0 €</p>
               </div>
             </div>
 
             <div class="product-modal__sheet">
             <div class="product-modal__scroll">
               <form class="product-options">
-              <fieldset class="product-option-group">
-                <legend>Size</legend>
-                <label class="option-card">
-                  <input type="radio" name="sticker-size" value="Mini" data-price="0" checked />
-                  <span>Mini</span>
-                  <small>Base price</small>
-                </label>
-                <label class="option-card">
-                  <input type="radio" name="sticker-size" value="Regular" data-price="4" />
-                  <span>Regular</span>
-                  <small>+$4</small>
-                </label>
-                <label class="option-card">
-                  <input type="radio" name="sticker-size" value="Poster" data-price="12" />
-                  <span>Poster</span>
-                  <small>+$12</small>
-                </label>
-              </fieldset>
-
-              <fieldset class="product-option-group">
-                <legend>Finish</legend>
-                <label class="option-card">
-                  <input type="radio" name="sticker-finish" value="Matte" data-price="0" checked />
-                  <span>Matte</span>
-                  <small>Included</small>
-                </label>
-                <label class="option-card">
-                  <input type="radio" name="sticker-finish" value="Gloss" data-price="3" />
-                  <span>Gloss</span>
-                  <small>+$3</small>
-                </label>
-                <label class="option-card">
-                  <input type="radio" name="sticker-finish" value="Holographic" data-price="8" />
-                  <span>Holographic</span>
-                  <small>+$8</small>
-                </label>
-              </fieldset>
-
-              <fieldset class="product-option-group">
-                <legend>Quantity</legend>
-                <label class="option-card">
-                  <input type="radio" name="sticker-quantity" value="Single" data-price="0" checked />
-                  <span>Single</span>
-                  <small>1 piece</small>
-                </label>
-                <label class="option-card">
-                  <input type="radio" name="sticker-quantity" value="Pack" data-price="10" />
-                  <span>Pack</span>
-                  <small>+$10</small>
-                </label>
-              </fieldset>
+                <div class="product-options-sticker">
+                  <fieldset class="product-option-group" data-sticker-sizes>
+                    <legend>Size</legend>
+                  </fieldset>
+                </div>
               </form>
             </div>
 
             <div class="product-modal__footer">
-              <p class="product-modal__price product-modal__price--cta">$0</p>
+              <p class="product-modal__price product-modal__price--cta">0 €</p>
               <button class="button product-modal__cta" type="button">Add to cart</button>
             </div>
             </div>
