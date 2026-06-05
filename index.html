@@ -10,6 +10,25 @@
       href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@24,400,0,0"
       rel="stylesheet"
     />
+    <script>
+      (() => {
+        try {
+          const storedTheme = window.localStorage.getItem("uninstant-theme");
+          const theme =
+            storedTheme === "light" || storedTheme === "dark"
+              ? storedTheme
+              : window.matchMedia("(prefers-color-scheme: dark)").matches
+                ? "dark"
+                : "light";
+
+          document.documentElement.dataset.theme = theme;
+          document.documentElement.style.colorScheme = theme;
+        } catch {
+          document.documentElement.dataset.theme = "light";
+          document.documentElement.style.colorScheme = "light";
+        }
+      })();
+    </script>
     <link rel="stylesheet" href="styles.css" />
     <script src="script.js" defer></script>
   </head>
@@ -157,9 +176,9 @@
             class="home-preview-card sticker__link"
             href="#sticker-01"
             data-title="Alba"
-            data-price="8"
+            data-price="30"
             data-category="le-cercle"
-            aria-label="Alba, $8"
+            aria-label="Alba, from 30 €"
           >
             <img
               class="home-preview-card__img"
@@ -176,9 +195,9 @@
             class="home-preview-card sticker__link"
             href="#sticker-02"
             data-title="Bou"
-            data-price="8"
+            data-price="20"
             data-category="le-jardin"
-            aria-label="Bou, $8"
+            aria-label="Bou, from 20 €"
           >
             <img
               class="home-preview-card__img"
@@ -195,9 +214,9 @@
             class="home-preview-card sticker__link"
             href="#sticker-23"
             data-title="Jade"
-            data-price="8"
+            data-price="20"
             data-category="minuscules"
-            aria-label="Jade, $8"
+            aria-label="Jade, from 20 €"
           >
             <img
               class="home-preview-card__img"
