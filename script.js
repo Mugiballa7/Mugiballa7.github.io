@@ -2,6 +2,7 @@ const menuButton = document.querySelector(".navbar__menu-button");
 const primaryMenu = document.querySelector("#primary-menu");
 const THEME_STORAGE_KEY = "uninstant-theme";
 const themeButtons = document.querySelectorAll(".theme-toggle");
+const systemThemeQuery = window.matchMedia?.("(prefers-color-scheme: dark)");
 
 const readStoredTheme = () => {
   try {
@@ -26,7 +27,7 @@ const getPreferredTheme = () => {
     return storedTheme;
   }
 
-  return window.matchMedia?.("(prefers-color-scheme: dark)").matches ? "dark" : "light";
+  return systemThemeQuery?.matches ? "dark" : "light";
 };
 
 const applyTheme = (theme) => {
@@ -48,6 +49,16 @@ const applyTheme = (theme) => {
 
 applyTheme(getPreferredTheme());
 
+systemThemeQuery?.addEventListener("change", (event) => {
+  const storedTheme = readStoredTheme();
+
+  if (storedTheme === "light" || storedTheme === "dark") {
+    return;
+  }
+
+  applyTheme(event.matches ? "dark" : "light");
+});
+
 themeButtons.forEach((button) => {
   button.addEventListener("click", () => {
     const nextTheme = document.documentElement.dataset.theme === "dark" ? "light" : "dark";
@@ -68,8 +79,43 @@ const stickerCategories = {
   "Le Cercle": { slug: "le-cercle", label: "Le Cercle" },
   "Le Jardin": { slug: "le-jardin", label: "Le Jardin" },
   Minuscules: { slug: "minuscules", label: "Minuscules" },
-  Envolées: { slug: "envolees", label: "Envolées" },
+  Envolées: { slug: "envolees", label: "Envolées" },
+  Compagnons: { slug: "compagnons", label: "Compagnons" },
 };
+
+/** From Structure_Maquette — Grille Prix & Dimensions.csv */
+const stickerPricingByCategory = {
+  "le-cercle": [
+    { size: "S", label: "Size S", price: 30, dimension: "30 × 21 cm" },
+    { size: "M", label: "Size M", price: 40, dimension: "60 × 50 cm" },
+    { size: "L", label: "Size L", price: 45, dimension: "100 × 80 cm" },
+  ],
+  "le-jardin": [
+    { size: "S", label: "Size S", price: 20, dimension: "30 × 21 cm" },
+    { size: "M", label: "Size M", price: 30, dimension: "60 × 50 cm" },
+    { size: "L", label: "Size L", price: 40, dimension: "100 × 80 cm" },
+  ],
+  minuscules: [
+    { size: "S", label: "Size S", price: 20, dimension: "30 × 21 cm" },
+    { size: "M", label: "Size M", price: 30, dimension: "60 × 50 cm" },
+  ],
+  envolees: [
+    { size: "S", label: "Size S", price: 20, dimension: "30 × 21 cm" },
+    { size: "M", label: "Size M", price: 30, dimension: "60 × 50 cm" },
+  ],
+  compagnons: [
+    { size: "S", label: "Size S", price: 20, dimension: "30 × 21 cm" },
+    { size: "M", label: "Size M", price: 30, dimension: "60 × 50 cm" },
+    { size: "L", label: "Size L", price: 40, dimension: "100 × 80 cm" },
+  ],
+};
+
+const formatPrice = (price) => `${price} €`;
+
+const getStickerPricingTiers = (categorySlug) =>
+  stickerPricingByCategory[categorySlug] || stickerPricingByCategory["le-jardin"];
+
+const getStickerEntryPrice = (categorySlug) => getStickerPricingTiers(categorySlug)[0].price;
 
 const additionalStickerFiles = {
   "Le Cercle": [
@@ -152,7 +198,7 @@ const additionalStickerFiles = {
     "Spira.png",
     "Zéphir.png",
   ],
-  "Envolées": [
+  "Envolées": [
     "Braise.png",
     "Celo.png",
     "Ivo.png",
@@ -161,6 +207,17 @@ const additionalStickerFiles = {
     "Sialia.png",
     "Vola.png",
     "Zola.png",
+  ],
+  Compagnons: [
+    "DUSK.png",
+    "LUNO.png",
+    "MISO.png",
+    "NOISETTE.png",
+    "OMA.png",
+    "ORI.png",
+    "PIKO.png",
+    "SOKO.png",
+    "TAO.png",
   ],
 };
 
@@ -313,7 +370,7 @@ const createStickerCard = ({ id, title, price, folder, filename, category }) => 
       data-title="${title}"
       data-price="${price}"
       data-category="${category}"
-      aria-label="${title}, $${price}"
+      aria-label="${title}, from ${formatPrice(price)}"
     >
       <figure class="sticker__media">
         <img
@@ -328,7 +385,7 @@ const createStickerCard = ({ id, title, price, folder, filename, category }) => 
       </figure>
       <div class="sticker__meta" id="${id}">
         <h2 class="sticker__title">${title}</h2>
-        <p class="sticker__price">$${price}</p>
+        <p class="sticker__price">${formatPrice(price)}</p>
       </div>
     </a>
   `;
@@ -370,30 +427,77 @@ const getMixedStickerItems = () => {
   return items;
 };
 
-if (stickerGrid) {
-  let stickerIndex = stickerGrid.querySelectorAll(".sticker").length;
+const STICKERS_PER_PAGE = 18;
+const stickerPagination = document.querySelector(".stickers-pagination");
+const stickerPaginationStatus = document.querySelector(".stickers-pagination__status");
+const stickerPaginationPrev = document.querySelector(".stickers-pagination__button--prev");
+const stickerPaginationNext = document.querySelector(".stickers-pagination__button--next");
+const stickerCatalogItems = getMixedStickerItems().map((item, index) => ({
+  ...item,
+  id: `sticker-${String(index + 1).padStart(2, "0")}`,
+  price: getStickerEntryPrice(item.category.slug),
+}));
+let activeStickerFilter = "all";
+let activeStickerPage = 1;
 
-  getMixedStickerItems().forEach(({ folder, filename, category, title }) => {
-    stickerIndex += 1;
+const getFilteredStickerItems = () =>
+  stickerCatalogItems.filter(
+    ({ category }) => activeStickerFilter === "all" || category.slug === activeStickerFilter,
+  );
 
-    stickerGrid.append(
+const renderStickerPage = ({ shouldScroll = false } = {}) => {
+  if (!stickerGrid) {
+    return;
+  }
+
+  const filteredItems = getFilteredStickerItems();
+  const pageCount = Math.max(1, Math.ceil(filteredItems.length / STICKERS_PER_PAGE));
+  activeStickerPage = Math.min(Math.max(activeStickerPage, 1), pageCount);
+
+  const start = (activeStickerPage - 1) * STICKERS_PER_PAGE;
+  const pageItems = filteredItems.slice(start, start + STICKERS_PER_PAGE);
+
+  stickerGrid.replaceChildren(
+    ...pageItems.map(({ id, title, price, folder, filename, category }) =>
       createStickerCard({
-        id: `sticker-${String(stickerIndex).padStart(2, "0")}`,
+        id,
         title,
-        price: 8,
+        price,
         folder,
         filename,
         category: category.slug,
       }),
-    );
-  });
+    ),
+  );
 
-  stickerGrid.querySelectorAll(".sticker__link").forEach((link) => {
-    if (!link.dataset.category) {
-      const imageSrc = link.querySelector("img")?.getAttribute("src") || "";
-      link.dataset.category = getStickerCategoryFromSrc(imageSrc);
-    }
-  });
+  if (stickerPagination && stickerPaginationStatus && stickerPaginationPrev && stickerPaginationNext) {
+    stickerPagination.hidden = filteredItems.length <= STICKERS_PER_PAGE;
+    stickerPaginationStatus.textContent = `Page ${activeStickerPage} / ${pageCount}`;
+    stickerPaginationPrev.disabled = activeStickerPage === 1;
+    stickerPaginationNext.disabled = activeStickerPage === pageCount;
+  }
+
+  if (shouldScroll) {
+    stickerGrid.scrollIntoView({ block: "start" });
+  }
+};
+
+const renderStickerPageForHash = (hash) => {
+  if (!stickerGrid || !hash.startsWith("#sticker-")) {
+    return;
+  }
+
+  const stickerIndex = getFilteredStickerItems().findIndex(({ id }) => `#${id}` === hash);
+  if (stickerIndex === -1) {
+    return;
+  }
+
+  activeStickerPage = Math.floor(stickerIndex / STICKERS_PER_PAGE) + 1;
+  renderStickerPage();
+};
+
+if (stickerGrid) {
+  renderStickerPage();
 }
 
 const setStickerFilter = (filter) => {
@@ -407,10 +511,9 @@ const setStickerFilter = (filter) => {
     chip.setAttribute("aria-pressed", String(isActive));
   });
 
-  stickerGrid.querySelectorAll(".sticker").forEach((sticker) => {
-    const category = sticker.querySelector(".sticker__link")?.dataset.category;
-    sticker.hidden = filter !== "all" && category !== filter;
-  });
+  activeStickerFilter = filter;
+  activeStickerPage = 1;
+  renderStickerPage({ shouldScroll: true });
 };
 
 filterButton?.addEventListener("click", () => {
@@ -424,59 +527,21 @@ filterChips.forEach((chip) => {
   });
 });
 
+stickerPaginationPrev?.addEventListener("click", () => {
+  activeStickerPage -= 1;
+  renderStickerPage({ shouldScroll: true });
+});
+
+stickerPaginationNext?.addEventListener("click", () => {
+  activeStickerPage += 1;
+  renderStickerPage({ shouldScroll: true });
+});
+
 const productModalOptionsMarkup = `
   <form class="product-options">
     <div class="product-options-sticker">
-      <fieldset class="product-option-group">
+      <fieldset class="product-option-group" data-sticker-sizes>
         <legend>Size</legend>
-        <label class="option-card">
-          <input type="radio" name="sticker-size" value="Mini" data-price="0" checked />
-          <span>Mini</span>
-          <small>Base price</small>
-        </label>
-        <label class="option-card">
-          <input type="radio" name="sticker-size" value="Regular" data-price="4" />
-          <span>Regular</span>
-          <small>+$4</small>
-        </label>
-        <label class="option-card">
-          <input type="radio" name="sticker-size" value="Poster" data-price="12" />
-          <span>Poster</span>
-          <small>+$12</small>
-        </label>
-      </fieldset>
-
-      <fieldset class="product-option-group">
-        <legend>Finish</legend>
-        <label class="option-card">
-          <input type="radio" name="sticker-finish" value="Matte" data-price="0" checked />
-          <span>Matte</span>
-          <small>Included</small>
-        </label>
-        <label class="option-card">
-          <input type="radio" name="sticker-finish" value="Gloss" data-price="3" />
-          <span>Gloss</span>
-          <small>+$3</small>
-        </label>
-        <label class="option-card">
-          <input type="radio" name="sticker-finish" value="Holographic" data-price="8" />
-          <span>Holographic</span>
-          <small>+$8</small>
-        </label>
-      </fieldset>
-
-      <fieldset class="product-option-group">
-        <legend>Quantity</legend>
-        <label class="option-card">
-          <input type="radio" name="sticker-quantity" value="Single" data-price="0" checked />
-          <span>Single</span>
-          <small>1 piece</small>
-        </label>
-        <label class="option-card">
-          <input type="radio" name="sticker-quantity" value="Pack" data-price="10" />
-          <span>Pack</span>
-          <small>+$10</small>
-        </label>
       </fieldset>
     </div>
 
@@ -586,7 +651,7 @@ const ensureProductModal = () => {
             <div class="product-modal__head">
               <div class="product-modal__sticky-title">
                 <h2 class="product-modal__title" id="product-modal-title">Product</h2>
-                <p class="product-modal__price product-modal__price--header" aria-live="polite">$0</p>
+                <p class="product-modal__price product-modal__price--header" aria-live="polite">0 €</p>
               </div>
             </div>
 
@@ -596,7 +661,7 @@ const ensureProductModal = () => {
               </div>
 
               <div class="product-modal__footer">
-                <p class="product-modal__price product-modal__price--cta">$0</p>
+                <p class="product-modal__price product-modal__price--cta">0 €</p>
                 <button class="button product-modal__cta" type="button">Add to cart</button>
               </div>
             </div>
@@ -742,8 +807,6 @@ mobileMenuQuery?.addEventListener("change", (event) => {
   }
 });
 
-const formatPrice = (price) => `$${price}`;
-
 const CART_STORAGE_KEY = "uninstant-cart";
 const cartButtons = document.querySelectorAll("button[aria-label='Cart']");
 let cartItems = [];
@@ -766,7 +829,7 @@ document.body.insertAdjacentHTML(
         <div class="cart-drawer__footer">
           <div class="cart-drawer__total">
             <span>Total</span>
-            <strong class="cart-drawer__total-value">$0</strong>
+            <strong class="cart-drawer__total-value">0 €</strong>
           </div>
           <button class="button cart-drawer__checkout" type="button">Checkout</button>
           <p class="cart-drawer__hint">Stripe checkout will connect here later.</p>
@@ -864,11 +927,22 @@ const syncCart = () => {
   renderCart();
 };
 
-const getSelectedProductOptions = () =>
-  getActiveProductOptionInputs()
-    .filter((input) => input.checked)
-    .map((input) => input.value)
-    .join(" / ");
+const getSelectedProductOptions = () => {
+  if (productOptionsScene && !productOptionsScene.hidden) {
+    return getActiveProductOptionInputs()
+      .filter((input) => input.checked)
+      .map((input) => input.value)
+      .join(" / ");
+  }
+
+  const sizeInput = productOptionsSticker?.querySelector('input[name="sticker-size"]:checked');
+  if (!sizeInput) {
+    return "";
+  }
+
+  const dimension = sizeInput.dataset.dimension || "";
+  return dimension ? `Size ${sizeInput.value} · ${dimension}` : `Size ${sizeInput.value}`;
+};
 
 const addCurrentProductToCart = () => {
   if (!productModalTitle || productModalPrices.length === 0) {
@@ -929,6 +1003,10 @@ window.addEventListener("storage", (event) => {
     applyTheme(event.newValue);
   }
 
+  if (event.key === THEME_STORAGE_KEY && event.newValue !== "light" && event.newValue !== "dark") {
+    applyTheme(getPreferredTheme());
+  }
+
   if (event.key === CART_STORAGE_KEY) {
     syncCart();
   }
@@ -936,20 +1014,68 @@ window.addEventListener("storage", (event) => {
 
 syncCart();
 
+const renderStickerSizeOptions = (categorySlug) => {
+  const fieldset = document.querySelector("[data-sticker-sizes]");
+  if (!fieldset) {
+    return;
+  }
+
+  const tiers = getStickerPricingTiers(categorySlug);
+
+  fieldset.innerHTML = `
+    <legend>Size</legend>
+    ${tiers
+      .map(
+        (tier, index) => `
+        <label class="option-card">
+          <input
+            type="radio"
+            name="sticker-size"
+            value="${tier.size}"
+            data-price="${tier.price}"
+            data-dimension="${tier.dimension}"
+            ${index === 0 ? "checked" : ""}
+          />
+          <span>${tier.label}</span>
+          <small>${tier.dimension}</small>
+        </label>
+      `,
+      )
+      .join("")}
+  `;
+};
+
+const getStickerSelectedPrice = () => {
+  const sizeInput = productOptionsSticker?.querySelector('input[name="sticker-size"]:checked');
+  if (sizeInput) {
+    return Number(sizeInput.dataset.price || 0);
+  }
+
+  return productBasePrice;
+};
+
 const updateProductPrice = () => {
   if (productModalPrices.length === 0) {
     return;
   }
 
-  const optionsPrice = getActiveProductOptionInputs().reduce((total, input) => {
-    if (!input.checked) {
-      return total;
-    }
+  let totalPrice;
 
-    return total + Number(input.dataset.price || 0);
-  }, 0);
+  if (productOptionsScene && !productOptionsScene.hidden) {
+    const optionsPrice = getActiveProductOptionInputs().reduce((sum, input) => {
+      if (!input.checked) {
+        return sum;
+      }
 
-  const text = formatPrice(productBasePrice + optionsPrice);
+      return sum + Number(input.dataset.price || 0);
+    }, 0);
+
+    totalPrice = productBasePrice + optionsPrice;
+  } else {
+    totalPrice = getStickerSelectedPrice();
+  }
+
+  const text = formatPrice(totalPrice);
   productModalPrices.forEach((node) => {
     node.textContent = text;
   });
@@ -986,6 +1112,16 @@ const getModalLinkFromHash = () => {
     return null;
   }
 
+  const currentLink = Array.from(document.querySelectorAll(".sticker__link, .scene__link")).find(
+    (link) => link.getAttribute("href") === window.location.hash,
+  );
+
+  if (currentLink) {
+    return currentLink;
+  }
+
+  renderStickerPageForHash(window.location.hash);
+
   return Array.from(document.querySelectorAll(".sticker__link, .scene__link")).find(
     (link) => link.getAttribute("href") === window.location.hash,
   );
@@ -1007,8 +1143,14 @@ const openProductModal = (link, { shouldUpdateUrl = false } = {}) => {
   }
 
   lastFocusedModalTrigger = link;
-  productBasePrice = Number(link.dataset.price || 0);
   const isSceneProduct = link.classList.contains("scene__link");
+  const stickerCategory =
+    link.dataset.category ||
+    getStickerCategoryFromSrc(link.querySelector("img")?.getAttribute("src") || "");
+
+  productBasePrice = isSceneProduct
+    ? Number(link.dataset.price || 0)
+    : getStickerEntryPrice(stickerCategory);
   const linkImage = link.querySelector("img")?.getAttribute("src");
   productModalTitle.textContent =
     link.dataset.title || (isSceneProduct ? "Scene" : "Sticker");
@@ -1032,9 +1174,13 @@ const openProductModal = (link, { shouldUpdateUrl = false } = {}) => {
     productOptionsScene.hidden = !isSceneProduct;
   }
 
-  getActiveProductOptionInputs().forEach((input) => {
-    input.checked = input.defaultChecked;
-  });
+  if (!isSceneProduct) {
+    renderStickerSizeOptions(stickerCategory);
+  } else {
+    getActiveProductOptionInputs().forEach((input) => {
+      input.checked = input.defaultChecked;
+    });
+  }
 
   setProductImage(0);
   updateProductPrice();
@@ -1096,22 +1242,31 @@ productModal?.addEventListener(
   { passive: false },
 );
 
-document.querySelectorAll(".sticker__link").forEach((link) => {
-  link.addEventListener("click", (event) => {
-    event.preventDefault();
-    openProductModal(link, { shouldUpdateUrl: true });
-  });
-});
+document.addEventListener("click", (event) => {
+  const target = event.target;
 
-document.querySelectorAll(".scene__link").forEach((link) => {
-  link.addEventListener("click", (event) => {
-    event.preventDefault();
-    openProductModal(link, { shouldUpdateUrl: true });
-  });
+  if (!(target instanceof Element)) {
+    return;
+  }
+
+  const productLink = target.closest(".sticker__link, .scene__link");
+
+  if (!productLink) {
+    return;
+  }
+
+  event.preventDefault();
+  openProductModal(productLink, { shouldUpdateUrl: true });
 });
 
 productOptionsForm?.addEventListener("change", (event) => {
   if (event.target.matches("input[type='radio']")) {
+    updateProductPrice();
+  }
+});
+
+document.querySelector("[data-sticker-sizes]")?.addEventListener("change", (event) => {
+  if (event.target.matches('input[name="sticker-size"]')) {
     updateProductPrice();
   }
 });
