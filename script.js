@@ -1,6 +1,9 @@
 const track = document.querySelector('[data-gallery-track]');
 const scrollSpace = document.querySelector('[data-scroll-space]');
 const viewCursor = document.querySelector('[data-view-cursor]');
+const pageLoader = document.querySelector('[data-page-loader]');
+const loaderBar = document.querySelector('[data-loader-bar]');
+const loaderPercent = document.querySelector('[data-loader-percent]');
 const projectCaption = document.querySelector('[data-project-caption]');
 const projectName = document.querySelector('[data-project-name]');
 const projectPrice = document.querySelector('[data-project-price]');
@@ -49,6 +52,67 @@ applyRandomPageBackground(getCurrentTheme());
 themeToggle?.addEventListener('click', () => {
   setTheme(getCurrentTheme() === 'dark' ? 'light' : 'dark');
 });
+
+const loadInitialImages = () => {
+  if (!pageLoader || !track || !loaderBar || !loaderPercent) {
+    document.body.classList.remove('is-loading');
+    return;
+  }
+
+  const images = Array.from(track.querySelectorAll('img'));
+  const total = images.length;
+  let loaded = 0;
+  let currentProgress = 0;
+  let targetProgress = total === 0 ? 100 : 0;
+  let isComplete = total === 0;
+
+  const setProgressTarget = () => {
+    targetProgress = total === 0 ? 100 : Math.round((loaded / total) * 100);
+    isComplete = loaded >= total;
+  };
+
+  const hideLoader = () => {
+    pageLoader.classList.add('is-hidden');
+    document.body.classList.remove('is-loading');
+  };
+
+  const renderProgress = () => {
+    currentProgress += (targetProgress - currentProgress) * 0.16;
+
+    if (isComplete && currentProgress > 99.5) {
+      currentProgress = 100;
+    }
+
+    const visibleProgress = Math.round(currentProgress);
+    loaderPercent.textContent = String(visibleProgress);
+    loaderBar.style.width = `${visibleProgress}%`;
+
+    if (visibleProgress < 100) {
+      requestAnimationFrame(renderProgress);
+      return;
+    }
+
+    window.setTimeout(hideLoader, 250);
+  };
+
+  const markLoaded = () => {
+    loaded += 1;
+    setProgressTarget();
+  };
+
+  images.forEach((image) => {
+    if (image.complete) {
+      markLoaded();
+      return;
+    }
+
+    image.addEventListener('load', markLoaded, { once: true });
+    image.addEventListener('error', markLoaded, { once: true });
+  });
+
+  setProgressTarget();
+  requestAnimationFrame(renderProgress);
+};
 
 const setupCardHover = () => {
   if (!track || !viewCursor) return;
@@ -122,6 +186,8 @@ const setupCardHover = () => {
 
 if (track && !reduceMotion.matches) {
   const originalItems = Array.from(track.children);
+
+  loadInitialImages();
 
   originalItems.forEach((item) => {
     const clone = item.cloneNode(true);
@@ -214,5 +280,6 @@ if (track && !reduceMotion.matches) {
   jumpToScroll(scrollCenter);
   requestAnimationFrame(animate);
 } else if (track) {
+  loadInitialImages();
   setupCardHover();
 }
