@@ -25,7 +25,17 @@
       })();
     </script>
   </head>
-  <body>
+  <body class="is-loading">
+    <div class="page-loader" data-page-loader aria-live="polite" aria-label="Loading site">
+      <div class="page-loader__content">
+        <p class="page-loader__brand">Uninstant</p>
+        <div class="page-loader__bar" aria-hidden="true">
+          <span data-loader-bar></span>
+        </div>
+        <p class="page-loader__percent"><span data-loader-percent>0</span>%</p>
+      </div>
+    </div>
+
     <main class="page-shell">
       <nav class="site-nav" aria-label="Main navigation">
         <div class="site-nav__links">
@@ -81,55 +91,90 @@
       <section class="gallery-window" aria-label="Project preview gallery">
         <div class="gallery-track" data-gallery-track>
           <article class="project-card" data-name="Aura" data-price="€ 240">
-            <img src="asset/Minuscules/Aura.png" alt="Aura" />
+            <img
+              src="asset/optimized/Aura.png"
+              alt="Aura"
+              width="900"
+              height="900"
+              decoding="async"
+              fetchpriority="high"
+            />
           </article>
           <article class="project-card" data-name="Bomby" data-price="€ 180">
-            <img src="asset/Minuscules/Bomby.png" alt="Bomby" />
+            <img
+              src="asset/optimized/Bomby.png"
+              alt="Bomby"
+              width="900"
+              height="900"
+              decoding="async"
+              fetchpriority="high"
+            />
           </article>
           <article class="project-card" data-name="Bou" data-price="€ 160">
-            <img src="asset/Le%20Jardin/Bou.png" alt="Bou" />
+            <img src="asset/optimized/Bou.png" alt="Bou" width="900" height="900" decoding="async" />
           </article>
           <article class="project-card" data-name="Braise" data-price="€ 220">
-            <img src="asset/Envol%C3%A9es/Braise.png" alt="Braise" />
+            <img
+              src="asset/optimized/Braise.png"
+              alt="Braise"
+              width="900"
+              height="900"
+              decoding="async"
+            />
           </article>
           <article class="project-card" data-name="Cali" data-price="€ 195">
-            <img src="asset/Minuscules/Cali.png" alt="Cali" />
+            <img src="asset/optimized/Cali.png" alt="Cali" width="900" height="900" decoding="async" />
           </article>
           <article class="project-card" data-name="Celo" data-price="€ 175">
-            <img src="asset/Envol%C3%A9es/Celo.png" alt="Celo" />
+            <img src="asset/optimized/Celo.png" alt="Celo" width="900" height="900" decoding="async" />
           </article>
           <article class="project-card" data-name="Dawa" data-price="€ 210">
-            <img src="asset/Le%20Jardin/DAWA.png" alt="DAWA" />
+            <img src="asset/optimized/DAWA.png" alt="DAWA" width="900" height="900" decoding="async" />
           </article>
           <article class="project-card" data-name="Dusk" data-price="€ 150">
-            <img src="asset/Compagnons/DUSK.png" alt="DUSK" />
+            <img src="asset/optimized/DUSK.png" alt="DUSK" width="900" height="900" decoding="async" />
           </article>
           <article class="project-card" data-name="Ivo" data-price="€ 185">
-            <img src="asset/Envol%C3%A9es/Ivo.png" alt="Ivo" />
+            <img src="asset/optimized/Ivo.png" alt="Ivo" width="900" height="900" decoding="async" />
           </article>
           <article class="project-card" data-name="Kofi &amp; Luca" data-price="€ 260">
             <img
-              src="asset/Le%20Cercle/Kofi%20%26%20Luca.png"
+              src="asset/optimized/Kofi-Luca.png"
               alt="Kofi &amp; Luca"
+              width="900"
+              height="900"
+              decoding="async"
             />
           </article>
           <article class="project-card" data-name="L'Étrange" data-price="€ 230">
-            <img src="asset/Le%20Jardin/LEtrange.png" alt="L'Étrange" />
+            <img
+              src="asset/optimized/LEtrange.png"
+              alt="L'Étrange"
+              width="900"
+              height="900"
+              decoding="async"
+            />
           </article>
           <article class="project-card" data-name="Luno" data-price="€ 165">
-            <img src="asset/Compagnons/LUNO.png" alt="LUNO" />
+            <img src="asset/optimized/LUNO.png" alt="LUNO" width="900" height="900" decoding="async" />
           </article>
           <article class="project-card" data-name="Miso" data-price="€ 140">
-            <img src="asset/Compagnons/MISO.png" alt="MISO" />
+            <img src="asset/optimized/MISO.png" alt="MISO" width="900" height="900" decoding="async" />
           </article>
           <article class="project-card" data-name="Malik" data-price="€ 200">
-            <img src="asset/Le%20Cercle/Malik.png" alt="Malik" />
+            <img
+              src="asset/optimized/Malik.png"
+              alt="Malik"
+              width="900"
+              height="900"
+              decoding="async"
+            />
           </article>
           <article class="project-card" data-name="Mira" data-price="€ 245">
-            <img src="asset/Le%20Cercle/Mira.png" alt="Mira" />
+            <img src="asset/optimized/Mira.png" alt="Mira" width="900" height="900" decoding="async" />
           </article>
           <article class="project-card" data-name="Sylia" data-price="€ 190">
-            <img src="asset/Le%20Cercle/Sylia.png" alt="Sylia" />
+            <img src="asset/optimized/Sylia.png" alt="Sylia" width="900" height="900" decoding="async" />
           </article>
         </div>
       </section>
