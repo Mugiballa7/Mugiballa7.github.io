@@ -1,0 +1,149 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Atelier Un Instant</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap"
+      rel="stylesheet"
+    />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@24,400,0,0"
+      rel="stylesheet"
+    />
+    <link rel="stylesheet" href="styles.css" />
+    <script>
+      (() => {
+        const stored = localStorage.getItem('atelier-theme');
+        const theme =
+          stored ||
+          (window.matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light');
+        document.documentElement.setAttribute('data-theme', theme);
+      })();
+    </script>
+  </head>
+  <body>
+    <main class="page-shell">
+      <nav class="site-nav" aria-label="Main navigation">
+        <div class="site-nav__links">
+          <a href="index.html" aria-current="page">Chapter 1</a>
+          <a href="#">About</a>
+          <a href="#">How it work</a>
+          <a href="#">Contact</a>
+        </div>
+
+        <a class="site-logo" href="index.html" aria-label="Uninstant home">Uninstant</a>
+
+        <div class="site-nav__actions">
+          <a class="icon-link" href="#" aria-label="Cart">
+            <span class="material-symbols-outlined" aria-hidden="true">shopping_bag</span>
+          </a>
+          <a
+            class="icon-link"
+            href="https://www.instagram.com/atelieruninstant/"
+            aria-label="Instagram"
+            target="_blank"
+            rel="noreferrer"
+          >
+            <svg aria-hidden="true" viewBox="0 0 24 24">
+              <path
+                d="M7.8 2h8.4A5.8 5.8 0 0 1 22 7.8v8.4a5.8 5.8 0 0 1-5.8 5.8H7.8A5.8 5.8 0 0 1 2 16.2V7.8A5.8 5.8 0 0 1 7.8 2Zm0 2A3.8 3.8 0 0 0 4 7.8v8.4A3.8 3.8 0 0 0 7.8 20h8.4a3.8 3.8 0 0 0 3.8-3.8V7.8A3.8 3.8 0 0 0 16.2 4H7.8Zm8.95 1.7a1.25 1.25 0 1 1 0 2.5 1.25 1.25 0 0 1 0-2.5ZM12 7.25A4.75 4.75 0 1 1 12 16.75 4.75 4.75 0 0 1 12 7.25Zm0 2A2.75 2.75 0 1 0 12 14.75 2.75 2.75 0 0 0 12 9.25Z"
+              />
+            </svg>
+          </a>
+          <button
+            class="icon-link theme-toggle"
+            type="button"
+            data-theme-toggle
+            aria-label="Toggle dark mode"
+          >
+            <span
+              class="material-symbols-outlined theme-toggle__icon theme-toggle__icon--light"
+              aria-hidden="true"
+              >light_mode</span
+            >
+            <span
+              class="material-symbols-outlined theme-toggle__icon theme-toggle__icon--dark"
+              aria-hidden="true"
+              >dark_mode</span
+            >
+          </button>
+        </div>
+      </nav>
+
+      <section class="hero" aria-labelledby="page-title">
+        <h1 id="page-title">Chapter 1 : Forever Young</h1>
+      </section>
+
+      <section class="gallery-window" aria-label="Project preview gallery">
+        <div class="gallery-track" data-gallery-track>
+          <article class="project-card" data-name="Aura" data-price="€ 240">
+            <img src="assets/Aura.png" alt="Aura" />
+          </article>
+          <article class="project-card" data-name="Bomby" data-price="€ 180">
+            <img src="assets/Bomby.png" alt="Bomby" />
+          </article>
+          <article class="project-card" data-name="Bou" data-price="€ 160">
+            <img src="assets/Bou.png" alt="Bou" />
+          </article>
+          <article class="project-card" data-name="Braise" data-price="€ 220">
+            <img src="assets/Braise.png" alt="Braise" />
+          </article>
+          <article class="project-card" data-name="Cali" data-price="€ 195">
+            <img src="assets/Cali.png" alt="Cali" />
+          </article>
+          <article class="project-card" data-name="Celo" data-price="€ 175">
+            <img src="assets/Celo.png" alt="Celo" />
+          </article>
+          <article class="project-card" data-name="Dawa" data-price="€ 210">
+            <img src="assets/DAWA.png" alt="DAWA" />
+          </article>
+          <article class="project-card" data-name="Dusk" data-price="€ 150">
+            <img src="assets/DUSK.png" alt="DUSK" />
+          </article>
+          <article class="project-card" data-name="Ivo" data-price="€ 185">
+            <img src="assets/Ivo.png" alt="Ivo" />
+          </article>
+          <article class="project-card" data-name="Kofi &amp; Luca" data-price="€ 260">
+            <img src="assets/Kofi%20%26%20Luca.png" alt="Kofi &amp; Luca" />
+          </article>
+          <article class="project-card" data-name="L'Étrange" data-price="€ 230">
+            <img src="assets/LEtrange.png" alt="L'Étrange" />
+          </article>
+          <article class="project-card" data-name="Luno" data-price="€ 165">
+            <img src="assets/LUNO.png" alt="LUNO" />
+          </article>
+          <article class="project-card" data-name="Miso" data-price="€ 140">
+            <img src="assets/MISO.png" alt="MISO" />
+          </article>
+          <article class="project-card" data-name="Malik" data-price="€ 200">
+            <img src="assets/Malik.png" alt="Malik" />
+          </article>
+          <article class="project-card" data-name="Mira" data-price="€ 245">
+            <img src="assets/Mira.png" alt="Mira" />
+          </article>
+          <article class="project-card" data-name="Sylia" data-price="€ 190">
+            <img src="assets/Sylia.png" alt="Sylia" />
+          </article>
+        </div>
+      </section>
+
+      <div class="scroll-space" data-scroll-space aria-hidden="true"></div>
+    </main>
+
+    <button class="view-cursor" type="button" data-view-cursor hidden>
+      <span data-view-label>View</span>
+      <span class="view-cursor__arrow" aria-hidden="true">→</span>
+    </button>
+
+    <aside class="project-caption" data-project-caption aria-hidden="true">
+      <p class="project-caption__name" data-project-name>Name</p>
+      <p class="project-caption__price" data-project-price>Price</p>
+    </aside>
+
+    <script src="script.js"></script>
+  </body>
+</html>
