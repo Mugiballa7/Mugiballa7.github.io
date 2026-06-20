@@ -640,6 +640,7 @@ html.has-custom-cursor .pointer-dot {
 }
 
 .project-modal__sizes button {
+  position: relative;
   min-width: 46px;
   height: 36px;
   padding: 0 16px;
@@ -648,6 +649,56 @@ html.has-custom-cursor .pointer-dot {
   backdrop-filter: blur(10px);
   -webkit-backdrop-filter: blur(10px);
   box-shadow: inset 0 0 0 1px var(--modal-border);
+}
+
+.project-modal__size-tip {
+  position: absolute;
+  bottom: calc(100% + 10px);
+  left: 50%;
+  z-index: 2;
+  width: max-content;
+  max-width: min(240px, 70vw);
+  padding: 8px 12px;
+  border-radius: 10px;
+  color: #ffffff;
+  background: #090909;
+  font-size: 10px;
+  font-weight: 500;
+  letter-spacing: 0.02em;
+  line-height: 1.4;
+  text-transform: none;
+  white-space: normal;
+  pointer-events: none;
+  opacity: 0;
+  transform: translate(-50%, 6px);
+  transition:
+    opacity 0.18s ease,
+    transform 0.18s ease;
+}
+
+.project-modal__size-tip::after {
+  content: '';
+  position: absolute;
+  top: 100%;
+  left: 50%;
+  border: 5px solid transparent;
+  border-top-color: #090909;
+  transform: translateX(-50%);
+}
+
+html[data-theme='dark'] .project-modal__size-tip {
+  color: #090909;
+  background: #f2f0ec;
+}
+
+html[data-theme='dark'] .project-modal__size-tip::after {
+  border-top-color: #f2f0ec;
+}
+
+.project-modal__sizes button:hover .project-modal__size-tip,
+.project-modal__sizes button:focus-visible .project-modal__size-tip {
+  opacity: 1;
+  transform: translate(-50%, 0);
 }
 
 .project-modal__sizes button:hover:not(.is-active) {
