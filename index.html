@@ -26,6 +26,8 @@
     </script>
   </head>
   <body class="is-loading">
+    <canvas class="sky-canvas" data-sky-canvas aria-hidden="true"></canvas>
+
     <div class="page-loader" data-page-loader aria-live="polite" aria-label="Loading site">
       <div class="page-loader__content">
         <p class="page-loader__brand">Uninstant</p>
@@ -168,6 +170,40 @@
       <p class="project-caption__price" data-project-price>Price</p>
     </aside>
 
+    <section class="project-modal" data-project-modal aria-hidden="true">
+      <button class="project-modal__close" type="button" data-modal-close aria-label="Close">
+        <span aria-hidden="true">×</span>
+      </button>
+
+      <div class="project-modal__info">
+        <p class="project-modal__count" data-modal-count>01</p>
+        <h2 class="project-modal__title" data-modal-title>Title</h2>
+        <p class="project-modal__description" data-modal-description>
+          Lorem ipsum dolor sit amet, consectetur adipiscing elit.
+        </p>
+
+        <div class="project-modal__sizes" aria-label="Choose size">
+          <button type="button" class="is-active">S</button>
+          <button type="button">L</button>
+          <button type="button">XL</button>
+          <button type="button">Custom</button>
+        </div>
+
+        <button class="project-modal__cart" type="button">Add to cart</button>
+      </div>
+
+      <div class="project-modal__visual">
+        <div class="project-modal__artwork">
+          <div class="project-modal__artwork-inner">
+            <img data-modal-image src="" alt="" />
+          </div>
+        </div>
+
+        <div class="project-modal__thumbs" data-modal-thumbs aria-label="Other artworks"></div>
+      </div>
+    </section>
+
+    <script src="sky.js"></script>
     <script src="script.js"></script>
   </body>
 </html>
