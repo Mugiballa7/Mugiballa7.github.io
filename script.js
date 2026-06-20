@@ -245,6 +245,8 @@ const setupPointerDot = () => {
   requestAnimationFrame(followDot);
 };
 
+setupPointerDot();
+
 const setupCardHover = () => {
   if (!track || isTouchUI) return;
 
@@ -330,6 +332,8 @@ const setupProjectModal = (items) => {
       index,
       name: item.dataset.name || image?.alt || 'Untitled',
       price: item.dataset.price || 'Price',
+      format: item.dataset.format || '',
+      description: item.dataset.description || '',
       src: image?.getAttribute('src') || '',
       alt: image?.alt || item.dataset.name || 'Artwork',
     };
@@ -352,8 +356,8 @@ const setupProjectModal = (items) => {
     if (modalTitle) modalTitle.textContent = project.name;
     if (modalPrice) modalPrice.textContent = project.price;
     if (modalDescription) {
-      modalDescription.textContent =
-        'Lorem ipsum dolor sit amet, consectetur adipiscing elit, made for a quiet instant.';
+      const details = [project.format, project.description].filter(Boolean).join(' — ');
+      modalDescription.textContent = details || 'Chapter 1 — Forever Young';
     }
 
     modalImage.src = project.src;
@@ -459,7 +463,6 @@ if (track && !reduceMotion.matches) {
     track.appendChild(clone);
   });
 
-  setupPointerDot();
   setupCardHover();
   setupProjectModal(originalItems);
 
@@ -551,7 +554,6 @@ if (track && !reduceMotion.matches) {
     item.dataset.index = String(index);
   });
   loadInitialImages();
-  setupPointerDot();
   setupCardHover();
   setupProjectModal(originalItems);
 }
