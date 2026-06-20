@@ -1,5 +1,6 @@
 const track = document.querySelector('[data-gallery-track]');
 const scrollSpace = document.querySelector('[data-scroll-space]');
+const pointerDot = document.querySelector('[data-pointer-dot]');
 const viewCursor = document.querySelector('[data-view-cursor]');
 const pageLoader = document.querySelector('[data-page-loader]');
 const loaderBar = document.querySelector('[data-loader-bar]');
@@ -9,14 +10,20 @@ const projectName = document.querySelector('[data-project-name]');
 const projectPrice = document.querySelector('[data-project-price]');
 const viewLabel = document.querySelector('[data-view-label]');
 const themeToggle = document.querySelector('[data-theme-toggle]');
+const siteNav = document.querySelector('.site-nav');
+const navToggle = document.querySelector('[data-nav-toggle]');
+const navMenu = document.querySelector('[data-nav-menu]');
+const navCloseTriggers = document.querySelectorAll('[data-nav-close]');
+const mobileNavQuery = window.matchMedia('(max-width: 760px)');
 const projectModal = document.querySelector('[data-project-modal]');
 const modalClose = document.querySelector('[data-modal-close]');
-const modalCount = document.querySelector('[data-modal-count]');
 const modalTitle = document.querySelector('[data-modal-title]');
 const modalDescription = document.querySelector('[data-modal-description]');
+const modalPrice = document.querySelector('[data-modal-price]');
 const modalImage = document.querySelector('[data-modal-image]');
 const modalThumbs = document.querySelector('[data-modal-thumbs]');
 const reduceMotion = window.matchMedia('(prefers-reduced-motion: reduce)');
+const isTouchUI = window.matchMedia('(hover: none), (max-width: 760px)').matches;
 
 const THEME_STORAGE_KEY = 'atelier-theme';
 
@@ -41,6 +48,60 @@ window.Sky?.init(getCurrentTheme());
 themeToggle?.addEventListener('click', () => {
   setTheme(getCurrentTheme() === 'dark' ? 'light' : 'dark');
 });
+
+const setNavMenuOpen = (open) => {
+  if (!siteNav || !navToggle || !navMenu) {
+    return;
+  }
+
+  siteNav.classList.toggle('is-open', open);
+  navToggle.setAttribute('aria-expanded', String(open));
+  navToggle.setAttribute('aria-label', open ? 'Close menu' : 'Open menu');
+  document.body.classList.toggle('is-nav-open', open);
+
+  if (mobileNavQuery.matches) {
+    navMenu.toggleAttribute('hidden', !open);
+  } else {
+    navMenu.removeAttribute('hidden');
+  }
+};
+
+const closeNavMenu = () => setNavMenuOpen(false);
+
+const syncNavMenuMode = () => {
+  if (!navMenu) {
+    return;
+  }
+
+  if (!mobileNavQuery.matches) {
+    closeNavMenu();
+    navMenu.removeAttribute('hidden');
+    return;
+  }
+
+  navMenu.toggleAttribute('hidden', !siteNav?.classList.contains('is-open'));
+};
+
+navToggle?.addEventListener('click', () => {
+  setNavMenuOpen(!siteNav?.classList.contains('is-open'));
+});
+
+navCloseTriggers.forEach((trigger) => {
+  trigger.addEventListener('click', closeNavMenu);
+});
+
+navMenu?.querySelectorAll('.site-nav__links a').forEach((link) => {
+  link.addEventListener('click', closeNavMenu);
+});
+
+document.addEventListener('keydown', (event) => {
+  if (event.key === 'Escape') {
+    closeNavMenu();
+  }
+});
+
+mobileNavQuery.addEventListener('change', syncNavMenuMode);
+syncNavMenuMode();
 
 const loadInitialImages = () => {
   if (!pageLoader || !track || !loaderBar || !loaderPercent) {
@@ -122,8 +183,70 @@ const loadInitialImages = () => {
   requestAnimationFrame(renderProgress);
 };
 
+const setupPointerDot = () => {
+  if (!pointerDot || isTouchUI) return;
+
+  document.documentElement.classList.add('has-custom-cursor');
+
+  let targetX = -100;
+  let targetY = -100;
+  let currentX = -100;
+  let currentY = -100;
+  let isActive = false;
+
+  const moveDot = (x, y) => {
+    targetX = x;
+    targetY = y;
+
+    if (!isActive) {
+      currentX = x;
+      currentY = y;
+      isActive = true;
+      pointerDot.classList.add('is-visible');
+    }
+  };
+
+  const hideDot = () => {
+    isActive = false;
+    pointerDot.classList.remove('is-visible', 'is-link-hover');
+  };
+
+  document.addEventListener('mousemove', (event) => {
+    moveDot(event.clientX, event.clientY);
+  });
+
+  document.documentElement.addEventListener('mouseleave', hideDot);
+
+  document.querySelectorAll('a, button').forEach((element) => {
+    if (element.closest('.project-card') || element.matches('[data-view-cursor]')) {
+      return;
+    }
+
+    element.addEventListener('mouseenter', () => {
+      if (hoveredCard) return;
+      pointerDot.classList.add('is-link-hover');
+    });
+    element.addEventListener('mouseleave', () => {
+      pointerDot.classList.remove('is-link-hover');
+    });
+  });
+
+  const followDot = () => {
+    if (isActive) {
+      const ease = reduceMotion.matches ? 1 : 0.2;
+      currentX += (targetX - currentX) * ease;
+      currentY += (targetY - currentY) * ease;
+      pointerDot.style.transform = `translate3d(${currentX}px, ${currentY}px, 0) translate(-50%, -50%)`;
+    }
+
+    requestAnimationFrame(followDot);
+  };
+
+  requestAnimationFrame(followDot);
+};
+
 const setupCardHover = () => {
-  if (!track || !viewCursor) return;
+  if (!track || isTouchUI) return;
 
   const cards = track.querySelectorAll('.project-card');
   let targetX = 0;
@@ -141,23 +264,27 @@ const setupCardHover = () => {
     viewCursor?.setAttribute('aria-label', `View ${name}`);
   };
 
-  const showCursor = (card) => {
+  const showCardHover = (card) => {
     hoveredCard = card;
     updateCardDetails(card);
     card.classList.add('is-hovered');
-    viewCursor.hidden = false;
-    viewCursor.classList.add('is-visible');
+    pointerDot?.classList.remove('is-visible', 'is-link-hover');
+    if (viewCursor) {
+      viewCursor.hidden = false;
+      viewCursor.classList.add('is-visible');
+    }
     projectCaption?.classList.add('is-visible');
     projectCaption?.setAttribute('aria-hidden', 'false');
   };
 
-  const hideCursor = (card) => {
+  const hideCardHover = (card) => {
     if (hoveredCard !== card) return;
 
     hoveredCard = null;
     card.classList.remove('is-hovered');
-    viewCursor.classList.remove('is-visible');
-    viewCursor.hidden = true;
+    viewCursor?.classList.remove('is-visible');
+    if (viewCursor) viewCursor.hidden = true;
+    pointerDot?.classList.add('is-visible');
     projectCaption?.classList.remove('is-visible');
     projectCaption?.setAttribute('aria-hidden', 'true');
   };
@@ -168,28 +295,29 @@ const setupCardHover = () => {
       targetY = event.clientY;
       currentX = targetX;
       currentY = targetY;
-      showCursor(card);
+      showCardHover(card);
     });
-    card.addEventListener('mouseleave', () => hideCursor(card));
+    card.addEventListener('mouseleave', () => hideCardHover(card));
     card.addEventListener('mousemove', (event) => {
       targetX = event.clientX;
       targetY = event.clientY;
     });
   });
 
-  const followCursor = () => {
-    if (hoveredCard) {
+  const followViewCursor = () => {
+    if (hoveredCard && viewCursor) {
       const ease = reduceMotion.matches ? 1 : 0.18;
       currentX += (targetX - currentX) * ease;
       currentY += (targetY - currentY) * ease;
-
       viewCursor.style.transform = `translate3d(${currentX}px, ${currentY}px, 0) translate(-50%, -50%)`;
     }
 
-    requestAnimationFrame(followCursor);
+    requestAnimationFrame(followViewCursor);
   };
 
-  requestAnimationFrame(followCursor);
+  if (viewCursor) {
+    requestAnimationFrame(followViewCursor);
+  }
 };
 
 const setupProjectModal = (items) => {
@@ -221,8 +349,8 @@ const setupProjectModal = (items) => {
 
     activeIndex = index;
 
-    if (modalCount) modalCount.textContent = String(index + 1).padStart(2, '0');
     if (modalTitle) modalTitle.textContent = project.name;
+    if (modalPrice) modalPrice.textContent = project.price;
     if (modalDescription) {
       modalDescription.textContent =
         'Lorem ipsum dolor sit amet, consectetur adipiscing elit, made for a quiet instant.';
@@ -241,6 +369,7 @@ const setupProjectModal = (items) => {
     renderModal(index);
     projectModal.classList.add('is-open');
     projectModal.setAttribute('aria-hidden', 'false');
+    projectModal.scrollTo({ top: 0, behavior: 'auto' });
     document.body.classList.add('modal-open');
     hoveredCard = null;
     track.querySelectorAll('.project-card.is-hovered').forEach((card) => {
@@ -248,6 +377,7 @@ const setupProjectModal = (items) => {
     });
     viewCursor?.classList.remove('is-visible');
     if (viewCursor) viewCursor.hidden = true;
+    pointerDot?.classList.add('is-visible');
     projectCaption?.classList.remove('is-visible');
     projectCaption?.setAttribute('aria-hidden', 'true');
   };
@@ -329,6 +459,7 @@ if (track && !reduceMotion.matches) {
     track.appendChild(clone);
   });
 
+  setupPointerDot();
   setupCardHover();
   setupProjectModal(originalItems);
 
@@ -386,7 +517,7 @@ if (track && !reduceMotion.matches) {
       lastScrollActivity = time;
     }
 
-    const isHovering = hoveredCard !== null;
+    const isHovering = !isTouchUI && hoveredCard !== null;
     const isScrolling = time - lastScrollActivity < 120;
     const shouldPauseGallery = isHovering && !isScrolling;
 
@@ -420,6 +551,7 @@ if (track && !reduceMotion.matches) {
     item.dataset.index = String(index);
   });
   loadInitialImages();
+  setupPointerDot();
   setupCardHover();
   setupProjectModal(originalItems);
 }
