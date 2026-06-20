@@ -439,10 +439,6 @@ h1 {
   box-shadow: 0 0 0 3px color-mix(in srgb, var(--page-bg) 75%, transparent);
 }
 
-body.is-loading .pointer-dot {
-  opacity: 0 !important;
-}
-
 .view-cursor {
   position: fixed;
   top: 0;
