@@ -123,7 +123,8 @@ void main() {
   float part = clamp(iCloudPart, 0.0, 1.0);
   float clear = part * part * (3.0 - 2.0 * part);
 
-  vec3 sky = mix(uSkyBottom, uSkyTop, pow(uv.y, 0.92));
+  vec3 sky = mix(uSkyBottom, uSkyTop, pow(uv.y, 0.78));
+  sky = mix(sky, mix(uSkyBottom, uSkyTop, 0.42), exp(-pow((uv.y - 0.18) * 4.2, 2.0)) * 0.18);
 
   vec2 cloudUv = uv * 2.0 - 1.0;
   cloudUv.x *= iResolution.x / iResolution.y;
@@ -153,21 +154,54 @@ void main() {
 }`;
 
   const lightBiomes = [
-    { name: 'Forever Blue', top: '#7ec8ff', bottom: '#dff3ff', page: '#c8e8ff', cloudSky: '#8fb5dc' },
-    { name: 'Coral Dawn', top: '#8ec5ff', bottom: '#ffd9c7', page: '#ffe8dc', cloudSky: '#9eb8d8' },
-    { name: 'Lavender Drift', top: '#9eb9ff', bottom: '#f0e6ff', page: '#e8ddff', cloudSky: '#a8b4e0' },
-    { name: 'Golden Hour', top: '#74b7ff', bottom: '#ffe7b0', page: '#fff0c8', cloudSky: '#8eb0d8' },
-    { name: 'Mint Sky', top: '#7fd0e8', bottom: '#e7fff7', page: '#d4f7ee', cloudSky: '#8ec8dc' },
+    { name: 'Rosé Morning', top: '#ff8fa8', bottom: '#fff0e8', page: '#ffe4dc', cloudSky: '#e8a0b0' },
+    { name: 'Verdant Glow', top: '#4ec99a', bottom: '#f0ffd8', page: '#dff5c8', cloudSky: '#88c8a0' },
+    { name: 'Apricot Sky', top: '#ff9a5c', bottom: '#fff4d6', page: '#ffecc4', cloudSky: '#e8b880' },
+    { name: 'Iris Light', top: '#8b6cff', bottom: '#f0e8ff', page: '#e4d8ff', cloudSky: '#b0a0e0' },
+    { name: 'Desert Bloom', top: '#d4886a', bottom: '#faf0d4', page: '#f5e6c8', cloudSky: '#c8a890' },
+    { name: 'Glacier', top: '#3ab8d8', bottom: '#e8f8ff', page: '#d0eef8', cloudSky: '#80c8dc' },
+    { name: 'Honeydew Mist', top: '#c8d86a', bottom: '#f8fff0', page: '#eef8d8', cloudSky: '#b0c888' },
+    { name: 'Blush Horizon', top: '#f07898', bottom: '#ffe8f0', page: '#ffdce8', cloudSky: '#e8a0b8' },
   ];
 
   const darkBiomes = [
-    { name: 'Midnight Garden', top: '#070b1f', bottom: '#1a2348', page: '#10162e', cloudSky: '#1a2848' },
-    { name: 'Starlit Violet', top: '#0a0818', bottom: '#2a1f4f', page: '#151028', cloudSky: '#221a42' },
-    { name: 'Deep Ocean', top: '#030b16', bottom: '#12314f', page: '#0a1c30', cloudSky: '#102840' },
+    { name: 'Bordeaux Night', top: '#2a0f1a', bottom: '#6a2848', page: '#3a1828', cloudSky: '#4a2038' },
+    { name: 'Aurora Deep', top: '#0a2838', bottom: '#1a5848', page: '#143028', cloudSky: '#1a4048' },
+    { name: 'Molten Copper', top: '#1a1008', bottom: '#4a3020', page: '#2a1c14', cloudSky: '#3a2820' },
+    { name: 'Velvet Plum', top: '#1a1028', bottom: '#3a2858', page: '#281838', cloudSky: '#302048' },
+    { name: 'Petrol Haze', top: '#081828', bottom: '#183858', page: '#102838', cloudSky: '#143040' },
+    { name: 'Moss & Ember', top: '#141a10', bottom: '#2a3818', page: '#1c2414', cloudSky: '#243020' },
+    { name: 'Wine & Smoke', top: '#280818', bottom: '#4a1838', page: '#341024', cloudSky: '#401830' },
+    { name: 'Slate Aurora', top: '#101828', bottom: '#284858', page: '#1c3040', cloudSky: '#243848' },
   ];
+
+  const themeUi = {
+    light: {
+      cloudWhite: [1, 1, 1],
+      text: '#111111',
+      muted: '#969696',
+      navActive: '#111111',
+      backBg: '#050505',
+      backFg: '#ffffff',
+    },
+    dark: {
+      cloudWhite: [0.72, 0.76, 0.9],
+      text: '#f2f0ec',
+      muted: '#8f8d88',
+      navActive: '#ffffff',
+      backBg: '#f2f0ec',
+      backFg: '#111111',
+    },
+  };
 
   let theme = 'light';
   let biome = null;
+  let displayColors = null;
+  let targetColors = null;
+  let themeShiftUntil = 0;
+  let skyTime = 0;
+  let skyMotionSpeed = 0;
+  let loadingMotionMode = 'idle';
   let scrollOffset = 0;
   let scrollVelocity = 0;
   let cloudPart = 0;
@@ -190,6 +224,81 @@ void main() {
       parseInt(value.slice(2, 4), 16) / 255,
       parseInt(value.slice(4, 6), 16) / 255,
     ];
+  };
+
+  const rgbToHex = (rgb) =>
+    `#${rgb
+      .map((channel) =>
+        Math.round(Math.max(0, Math.min(1, channel)) * 255)
+          .toString(16)
+          .padStart(2, '0')
+      )
+      .join('')}`;
+
+  const lerp = (from, to, amount) => from + (to - from) * amount;
+
+  const lerpRgb = (from, to, amount) => from.map((channel, index) => lerp(channel, to[index], amount));
+
+  const buildThemeColors = (nextTheme, nextBiome) => {
+    const ui = themeUi[nextTheme];
+
+    return {
+      top: hexToRgb(nextBiome.top),
+      bottom: hexToRgb(nextBiome.bottom),
+      cloudSky: hexToRgb(nextBiome.cloudSky),
+      cloudWhite: [...ui.cloudWhite],
+      page: hexToRgb(nextBiome.page),
+      isDark: nextTheme === 'dark' ? 1 : 0,
+      text: hexToRgb(ui.text),
+      muted: hexToRgb(ui.muted),
+      navActive: hexToRgb(ui.navActive),
+      backBg: hexToRgb(ui.backBg),
+      backFg: hexToRgb(ui.backFg),
+    };
+  };
+
+  const cloneColors = (colors) => ({
+    top: [...colors.top],
+    bottom: [...colors.bottom],
+    cloudSky: [...colors.cloudSky],
+    cloudWhite: [...colors.cloudWhite],
+    page: [...colors.page],
+    isDark: colors.isDark,
+    text: [...colors.text],
+    muted: [...colors.muted],
+    navActive: [...colors.navActive],
+    backBg: [...colors.backBg],
+    backFg: [...colors.backFg],
+  });
+
+  const colorsAreClose = (from, to) =>
+    Math.abs(from.isDark - to.isDark) < 0.002 &&
+    ['top', 'bottom', 'cloudSky', 'cloudWhite', 'page', 'text', 'muted', 'navActive', 'backBg', 'backFg']
+      .every((key) => {
+        if (key === 'isDark') return true;
+        return from[key].every((channel, index) => Math.abs(channel - to[key][index]) < 0.002);
+      });
+
+  const stepThemeColors = (amount) => {
+    if (!displayColors || !targetColors) return;
+
+    displayColors = {
+      top: lerpRgb(displayColors.top, targetColors.top, amount),
+      bottom: lerpRgb(displayColors.bottom, targetColors.bottom, amount),
+      cloudSky: lerpRgb(displayColors.cloudSky, targetColors.cloudSky, amount),
+      cloudWhite: lerpRgb(displayColors.cloudWhite, targetColors.cloudWhite, amount),
+      page: lerpRgb(displayColors.page, targetColors.page, amount),
+      isDark: lerp(displayColors.isDark, targetColors.isDark, amount),
+      text: lerpRgb(displayColors.text, targetColors.text, amount),
+      muted: lerpRgb(displayColors.muted, targetColors.muted, amount),
+      navActive: lerpRgb(displayColors.navActive, targetColors.navActive, amount),
+      backBg: lerpRgb(displayColors.backBg, targetColors.backBg, amount),
+      backFg: lerpRgb(displayColors.backFg, targetColors.backFg, amount),
+    };
+
+    if (colorsAreClose(displayColors, targetColors)) {
+      displayColors = cloneColors(targetColors);
+    }
   };
 
   const compileShader = (type, source) => {
@@ -252,25 +361,37 @@ void main() {
     gl.viewport(0, 0, canvas.width, canvas.height);
   };
 
-  const applyPageColor = () => {
-    document.documentElement.style.setProperty('--page-bg', biome.page);
+  const applyThemeColors = () => {
+    if (!displayColors) return;
+
+    const root = document.documentElement.style;
+    root.setProperty('--page-bg', rgbToHex(displayColors.page));
+    root.setProperty('--text', rgbToHex(displayColors.text));
+    root.setProperty('--muted', rgbToHex(displayColors.muted));
+    root.setProperty('--nav-active', rgbToHex(displayColors.navActive));
+    root.setProperty('--back-bg', rgbToHex(displayColors.backBg));
+    root.setProperty('--back-fg', rgbToHex(displayColors.backFg));
+  };
+
+  const getSkyMotionTarget = () => {
+    if (loadingMotionMode === 'loading') return 2;
+    if (loadingMotionMode === 'winding') return 1.25;
+    return 0;
   };
 
   const drawSky = (now = 0) => {
-    if (!program || !biome) return;
-
-    const seconds = reduceMotion.matches ? 0 : now * 0.00028 * motionSpeed;
+    if (!program || !displayColors) return;
 
     gl.useProgram(program);
-    gl.uniform1f(uniforms.iTime, seconds);
+    gl.uniform1f(uniforms.iTime, reduceMotion.matches ? 0 : skyTime);
     gl.uniform2f(uniforms.iResolution, canvas.width, canvas.height);
     gl.uniform1f(uniforms.iScroll, scrollOffset);
     gl.uniform1f(uniforms.iCloudPart, cloudPart);
-    gl.uniform1f(uniforms.iIsDark, theme === 'dark' ? 1 : 0);
-    gl.uniform3fv(uniforms.uSkyTop, hexToRgb(biome.top));
-    gl.uniform3fv(uniforms.uSkyBottom, hexToRgb(biome.bottom));
-    gl.uniform3fv(uniforms.uCloudSky, hexToRgb(biome.cloudSky));
-    gl.uniform3fv(uniforms.uCloudWhite, theme === 'dark' ? [0.72, 0.76, 0.9] : [1, 1, 1]);
+    gl.uniform1f(uniforms.iIsDark, displayColors.isDark);
+    gl.uniform3fv(uniforms.uSkyTop, displayColors.top);
+    gl.uniform3fv(uniforms.uSkyBottom, displayColors.bottom);
+    gl.uniform3fv(uniforms.uCloudSky, displayColors.cloudSky);
+    gl.uniform3fv(uniforms.uCloudWhite, displayColors.cloudWhite);
 
     gl.drawArrays(gl.TRIANGLES, 0, 6);
   };
@@ -279,8 +400,22 @@ void main() {
     const delta = lastFrame ? Math.min(32, now - lastFrame) : 16;
     lastFrame = now;
 
+    const motionTarget = getSkyMotionTarget();
+    const motionEase = motionTarget > skyMotionSpeed ? 0.05 : 0.013;
+    skyMotionSpeed += (motionTarget - skyMotionSpeed) * motionEase;
+
     motionSpeed += (targetMotionSpeed - motionSpeed) * 0.035;
     idleDriftRate += (targetIdleDriftRate - idleDriftRate) * 0.035;
+
+    if (!reduceMotion.matches && skyMotionSpeed > 0.0005) {
+      skyTime += delta * 0.000032 * motionSpeed * skyMotionSpeed;
+    }
+
+    if (!reduceMotion.matches && displayColors && targetColors) {
+      const transitionAmount = themeShiftUntil > now ? 0.02 : 0.035;
+      stepThemeColors(transitionAmount);
+      applyThemeColors();
+    }
 
     scrollVelocity *= 0.975;
     scrollOffset += scrollVelocity + idleDriftRate * delta;
@@ -291,7 +426,16 @@ void main() {
   const setTheme = (nextTheme) => {
     theme = nextTheme;
     biome = pickBiome(theme);
-    applyPageColor();
+    targetColors = buildThemeColors(theme, biome);
+
+    if (!displayColors || reduceMotion.matches) {
+      displayColors = cloneColors(targetColors);
+      applyThemeColors();
+      drawSky(performance.now());
+      return;
+    }
+
+    themeShiftUntil = performance.now() + 4200;
     drawSky(performance.now());
   };
 
@@ -394,6 +538,8 @@ void main() {
     },
 
     setLoadingMotion(mode = 'idle') {
+      loadingMotionMode = mode;
+
       if (mode === 'loading') {
         targetMotionSpeed = 2.4;
         targetIdleDriftRate = 0.0002;
