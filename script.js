@@ -451,7 +451,16 @@ const setupProjectModal = (items) => {
       return;
     }
 
-    window.history[replace ? 'replaceState' : 'pushState'](null, '', nextHash);
+    if (replace) {
+      window.history.replaceState(
+        null,
+        '',
+        `${window.location.pathname}${window.location.search}${nextHash}`
+      );
+      return;
+    }
+
+    window.location.hash = nextHash.slice(1);
   };
 
   const clearModalUrl = () => {
@@ -459,8 +468,12 @@ const setupProjectModal = (items) => {
       return;
     }
 
-    const cleanUrl = `${window.location.pathname}${window.location.search}`;
-    window.history.pushState(null, '', cleanUrl);
+    if (window.history.length > 1) {
+      window.history.back();
+      return;
+    }
+
+    window.history.replaceState(null, '', `${window.location.pathname}${window.location.search}`);
   };
 
   const openModal = (index, options = {}) => {
@@ -567,6 +580,7 @@ const setupProjectModal = (items) => {
   });
 
   window.addEventListener('hashchange', syncModalWithUrl);
+  window.addEventListener('popstate', syncModalWithUrl);
   syncModalWithUrl();
 };
 
