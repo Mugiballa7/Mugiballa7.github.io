@@ -23,12 +23,19 @@ const modalPrice = document.querySelector('[data-modal-price]');
 const modalImage = document.querySelector('[data-modal-image]');
 const modalThumbs = document.querySelector('[data-modal-thumbs]');
 const reduceMotion = window.matchMedia('(prefers-reduced-motion: reduce)');
-const isTouchUI = window.matchMedia('(hover: none), (max-width: 760px)').matches;
+const touchUiQuery = window.matchMedia('(hover: none), (max-width: 760px)');
+const customCursorQuery = window.matchMedia(
+  '(hover: hover) and (pointer: fine) and (min-width: 761px)'
+);
 
 const THEME_STORAGE_KEY = 'atelier-theme';
 
 let hoveredCard = null;
 let lastScrollActivity = 0;
+let pointerDotReady = false;
+
+const isTouchUI = () => touchUiQuery.matches;
+const supportsCustomCursor = () => customCursorQuery.matches;
 
 const getCurrentTheme = () =>
   document.documentElement.getAttribute('data-theme') === 'dark' ? 'dark' : 'light';
@@ -183,9 +190,14 @@ const loadInitialImages = () => {
   requestAnimationFrame(renderProgress);
 };
 
-const setupPointerDot = () => {
-  if (!pointerDot || isTouchUI) return;
+const setPointerDotPosition = (x, y) => {
+  pointerDot.style.transform = `translate3d(${x}px, ${y}px, 0) translate(-50%, -50%)`;
+};
 
+const setupPointerDot = () => {
+  if (!pointerDot || !supportsCustomCursor() || pointerDotReady) return;
+
+  pointerDotReady = true;
   document.documentElement.classList.add('has-custom-cursor');
 
   let targetX = -100;
@@ -202,6 +214,7 @@ const setupPointerDot = () => {
       currentX = x;
       currentY = y;
       isActive = true;
+      setPointerDotPosition(currentX, currentY);
       pointerDot.classList.add('is-visible');
     }
   };
@@ -211,9 +224,13 @@ const setupPointerDot = () => {
     pointerDot.classList.remove('is-visible', 'is-link-hover');
   };
 
-  document.addEventListener('mousemove', (event) => {
+  const trackPointer = (event) => {
+    if (event.pointerType && event.pointerType !== 'mouse') return;
     moveDot(event.clientX, event.clientY);
-  });
+  };
+
+  document.addEventListener('mousemove', trackPointer, { passive: true });
+  document.addEventListener('pointermove', trackPointer, { passive: true });
 
   document.documentElement.addEventListener('mouseleave', hideDot);
 
@@ -236,7 +253,7 @@ const setupPointerDot = () => {
       const ease = reduceMotion.matches ? 1 : 0.2;
       currentX += (targetX - currentX) * ease;
       currentY += (targetY - currentY) * ease;
-      pointerDot.style.transform = `translate3d(${currentX}px, ${currentY}px, 0) translate(-50%, -50%)`;
+      setPointerDotPosition(currentX, currentY);
     }
 
     requestAnimationFrame(followDot);
@@ -245,10 +262,33 @@ const setupPointerDot = () => {
   requestAnimationFrame(followDot);
 };
 
-setupPointerDot();
+const syncPointerDot = () => {
+  if (!pointerDot) return;
+
+  if (supportsCustomCursor()) {
+    setupPointerDot();
+    return;
+  }
+
+  document.documentElement.classList.remove('has-custom-cursor');
+  pointerDot.classList.remove('is-visible', 'is-link-hover');
+};
+
+const bindMediaQueryChange = (query, handler) => {
+  if (query.addEventListener) {
+    query.addEventListener('change', handler);
+    return;
+  }
+
+  query.addListener?.(handler);
+};
+
+syncPointerDot();
+bindMediaQueryChange(customCursorQuery, syncPointerDot);
+window.addEventListener('load', syncPointerDot, { once: true });
 
 const setupCardHover = () => {
-  if (!track || isTouchUI) return;
+  if (!track || isTouchUI()) return;
 
   const cards = track.querySelectorAll('.project-card');
   let targetX = 0;
@@ -286,7 +326,9 @@ const setupCardHover = () => {
     card.classList.remove('is-hovered');
     viewCursor?.classList.remove('is-visible');
     if (viewCursor) viewCursor.hidden = true;
-    pointerDot?.classList.add('is-visible');
+    if (pointerDotReady) {
+      pointerDot?.classList.add('is-visible');
+    }
     projectCaption?.classList.remove('is-visible');
     projectCaption?.setAttribute('aria-hidden', 'true');
   };
@@ -381,7 +423,9 @@ const setupProjectModal = (items) => {
     });
     viewCursor?.classList.remove('is-visible');
     if (viewCursor) viewCursor.hidden = true;
-    pointerDot?.classList.add('is-visible');
+    if (pointerDotReady) {
+      pointerDot?.classList.add('is-visible');
+    }
     projectCaption?.classList.remove('is-visible');
     projectCaption?.setAttribute('aria-hidden', 'true');
   };
@@ -520,7 +564,7 @@ if (track && !reduceMotion.matches) {
       lastScrollActivity = time;
     }
 
-    const isHovering = !isTouchUI && hoveredCard !== null;
+    const isHovering = !isTouchUI() && hoveredCard !== null;
     const isScrolling = time - lastScrollActivity < 120;
     const shouldPauseGallery = isHovering && !isScrolling;
 
