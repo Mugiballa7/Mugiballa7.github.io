@@ -22,6 +22,7 @@ const modalDescription = document.querySelector('[data-modal-description]');
 const modalPrice = document.querySelector('[data-modal-price]');
 const modalImage = document.querySelector('[data-modal-image]');
 const modalThumbs = document.querySelector('[data-modal-thumbs]');
+const modalSizes = document.querySelector('[data-modal-sizes]');
 const reduceMotion = window.matchMedia('(prefers-reduced-motion: reduce)');
 const touchUiQuery = window.matchMedia('(hover: none), (max-width: 760px)');
 const customCursorQuery = window.matchMedia(
@@ -366,6 +367,49 @@ const setupCardHover = () => {
 
 const PRODUCT_HASH_PREFIX = '#product/';
 
+const PRODUCT_COPY = {
+  Amara: 'Amara drifts away with a light step, carried by a childhood daydream.',
+  Lucie: 'Lucie disappears behind a bouquet too big for her, a gentle spring offering.',
+  Malik: 'Malik blows a soap bubble, suspended between dream and reality.',
+  Mariama: 'Mariama captures the world through her camera, already an artist at heart.',
+  Mila: 'Mila spins, dress in the wind, in a moment of pure lightness.',
+  Tiago: 'Tiago poses, proud and relaxed, in a style all his own.',
+  Bou: 'Bou blooms in a thousand pink and golden petals, waiting only to be admired.',
+  'La Fière': 'La Fière tilts her head back, flaming petals unfurled without a care.',
+  Nila: 'Nila unfolds her deep blue, a wild star fallen from the sky.',
+  Sol: 'Sol glows in yellow and blue, a little sun caught on the wall.',
+  Yuki: 'Yuki opens softly, mauve and white, fragile as a snowflake.',
+  Cali: 'Cali spreads mosaic wings, blue, green and orange woven like living stained glass.',
+  Cocca: 'Cocca, a little red ladybug, wears her black spots like lucky charms.',
+  Jade: 'Jade opens a speckled jade wing, light and luminous.',
+  Lazuli:
+    'Lazuli flies in deep blue, orange flashes at the edges, a precious stone turned butterfly.',
+  Macha: 'Macha blends her colors without restraint, blue, yellow and flame in a single flight.',
+  Mona: 'Mona shines in fiery orange, a great traveler on wings of fire.',
+  Pink: 'Pink settles in electric rose and violet, a quiet extravagance.',
+  Spira: 'Spira moves slowly, her spiral shell like a well-kept secret.',
+  Soli: 'Soli gleams in black and bronze, a sacred scarab carrying light.',
+};
+
+const INSECT_PRODUCTS = new Set(['Cocca', 'Spira', 'Soli']);
+const BUTTERFLY_PRODUCTS = new Set(['Lazuli', 'Cali', 'Mona', 'Macha', 'Jade', 'Pink']);
+const NO_XL_PRODUCTS = new Set([...INSECT_PRODUCTS, ...BUTTERFLY_PRODUCTS]);
+
+const getProductCategory = (name) => {
+  if (INSECT_PRODUCTS.has(name)) return 'insect';
+  if (BUTTERFLY_PRODUCTS.has(name)) return 'butterfly';
+  return 'default';
+};
+
+const SIZE_OPTIONS = [
+  { id: 's', label: 'S', tooltip: 'A4 format (21 × 29.7 cm)', price: 19 },
+  { id: 'm', label: 'M', tooltip: 'A3 format (29.7 × 42 cm)', price: 34 },
+  { id: 'l', label: 'L', tooltip: 'Adaptable format (e.g. 40 × 60 cm)', price: 49 },
+  { id: 'xl', label: 'XL', tooltip: 'Height: 100 cm', price: 79 },
+];
+
+const formatEuro = (amount) => `€ ${amount}`;
+
 const getProductSlug = (value) => {
   const slug = String(value || '')
     .normalize('NFD')
@@ -405,9 +449,9 @@ const setupProjectModal = (items) => {
       index,
       slug,
       name,
-      price: item.dataset.price || 'Price',
-      format: item.dataset.format || '',
-      description: item.dataset.description || '',
+      category: getProductCategory(name),
+      price: item.dataset.price || formatEuro(SIZE_OPTIONS[0].price),
+      description: PRODUCT_COPY[name] || item.dataset.description || '',
       src: image?.getAttribute('src') || '',
       alt: image?.alt || item.dataset.name || 'Artwork',
     };
@@ -415,11 +459,63 @@ const setupProjectModal = (items) => {
 
   const projectIndexBySlug = new Map(projects.map((project, index) => [project.slug, index]));
   let activeIndex = 0;
+  let activeSizeId = 's';
 
-  const setActiveSize = (button) => {
-    projectModal
-      .querySelectorAll('.project-modal__sizes button')
-      .forEach((sizeButton) => sizeButton.classList.toggle('is-active', sizeButton === button));
+  const getAvailableSizes = (project) =>
+    SIZE_OPTIONS.filter((size) => !(NO_XL_PRODUCTS.has(project.name) && size.id === 'xl'));
+
+  const updateModalPrice = (project) => {
+    const sizes = getAvailableSizes(project);
+    const size = sizes.find((entry) => entry.id === activeSizeId) || sizes[0];
+
+    if (!size) return;
+
+    activeSizeId = size.id;
+
+    if (modalPrice) {
+      modalPrice.textContent = formatEuro(size.price);
+    }
+  };
+
+  const selectSize = (sizeId, project) => {
+    activeSizeId = sizeId;
+    updateModalPrice(project);
+
+    modalSizes?.querySelectorAll('button[data-size-id]').forEach((button) => {
+      button.classList.toggle('is-active', button.dataset.sizeId === sizeId);
+    });
+  };
+
+  const renderSizeButtons = (project) => {
+    if (!modalSizes) return;
+
+    const sizes = getAvailableSizes(project);
+
+    if (!sizes.some((size) => size.id === activeSizeId)) {
+      activeSizeId = sizes[0]?.id || 's';
+    }
+
+    modalSizes.innerHTML = '';
+
+    sizes.forEach((size) => {
+      const button = document.createElement('button');
+      const tip = document.createElement('span');
+
+      button.type = 'button';
+      button.dataset.sizeId = size.id;
+      button.classList.toggle('is-active', size.id === activeSizeId);
+      button.setAttribute('aria-label', `${size.label} — ${size.tooltip}`);
+      button.textContent = size.label;
+
+      tip.className = 'project-modal__size-tip';
+      tip.textContent = size.tooltip;
+      button.appendChild(tip);
+
+      button.addEventListener('click', () => selectSize(size.id, project));
+      modalSizes.appendChild(button);
+    });
+
+    updateModalPrice(project);
   };
 
   const renderModal = (index) => {
@@ -427,13 +523,14 @@ const setupProjectModal = (items) => {
     if (!project) return;
 
     activeIndex = index;
+    activeSizeId = 's';
 
     if (modalTitle) modalTitle.textContent = project.name;
-    if (modalPrice) modalPrice.textContent = project.price;
     if (modalDescription) {
-      const details = [project.format, project.description].filter(Boolean).join(' — ');
-      modalDescription.textContent = details || 'Chapter 1 — Forever Young';
+      modalDescription.textContent = project.description || 'Chapter 1 — Forever Young';
     }
+
+    renderSizeButtons(project);
 
     modalImage.src = project.src;
     modalImage.alt = project.alt;
@@ -559,10 +656,6 @@ const setupProjectModal = (items) => {
 
     openModal(index, { updateUrl: false });
   };
-
-  projectModal.querySelectorAll('.project-modal__sizes button').forEach((button) => {
-    button.addEventListener('click', () => setActiveSize(button));
-  });
 
   modalClose?.addEventListener('click', closeModal);
   projectModal.addEventListener('click', (event) => {
