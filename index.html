@@ -40,12 +40,16 @@
 
     <main class="page-shell">
       <nav class="site-nav" aria-label="Main navigation">
-        <div class="site-nav__links">
-          <a href="index.html" aria-current="page">Chapter 1</a>
-          <a href="#">About</a>
-          <a href="#">How it work</a>
-          <a href="#">Contact</a>
-        </div>
+        <button
+          class="site-nav__burger icon-link"
+          type="button"
+          data-nav-toggle
+          aria-expanded="false"
+          aria-controls="site-nav-menu"
+          aria-label="Open menu"
+        >
+          <span class="material-symbols-outlined" aria-hidden="true">menu</span>
+        </button>
 
         <a class="site-logo" href="index.html" aria-label="Uninstant home">Uninstant</a>
 
@@ -54,7 +58,7 @@
             <span class="material-symbols-outlined" aria-hidden="true">shopping_bag</span>
           </a>
           <a
-            class="icon-link"
+            class="icon-link site-nav__instagram"
             href="https://www.instagram.com/atelieruninstant/"
             aria-label="Instagram"
             target="_blank"
@@ -83,6 +87,40 @@
               >dark_mode</span
             >
           </button>
+        </div>
+
+        <div class="site-nav__panel" id="site-nav-menu" data-nav-menu hidden>
+          <button
+            class="site-nav__backdrop"
+            type="button"
+            data-nav-close
+            aria-label="Close menu"
+            tabindex="-1"
+          ></button>
+          <div class="site-nav__panel-inner">
+            <button
+              class="site-nav__close icon-link"
+              type="button"
+              data-nav-close
+              aria-label="Close menu"
+            >
+              <span class="material-symbols-outlined" aria-hidden="true">close</span>
+            </button>
+            <div class="site-nav__links">
+              <a href="index.html" aria-current="page">Chapter 1</a>
+              <a href="#">About</a>
+              <a href="#">How it work</a>
+              <a href="#">Contact</a>
+              <a
+                class="site-nav__menu-instagram"
+                href="https://www.instagram.com/atelieruninstant/"
+                target="_blank"
+                rel="noreferrer"
+              >
+                Instagram
+              </a>
+            </div>
+          </div>
         </div>
       </nav>
 
@@ -160,6 +198,8 @@
       <div class="scroll-space" data-scroll-space aria-hidden="true"></div>
     </main>
 
+    <div class="pointer-dot" data-pointer-dot aria-hidden="true"></div>
+
     <button class="view-cursor" type="button" data-view-cursor hidden>
       <span data-view-label>View</span>
       <span class="view-cursor__arrow" aria-hidden="true">→</span>
@@ -171,13 +211,13 @@
     </aside>
 
     <section class="project-modal" data-project-modal aria-hidden="true">
-      <button class="project-modal__close" type="button" data-modal-close aria-label="Close">
-        <span aria-hidden="true">×</span>
+      <button class="project-modal__close icon-link" type="button" data-modal-close aria-label="Close">
+        <span class="material-symbols-outlined" aria-hidden="true">close</span>
       </button>
 
       <div class="project-modal__info">
-        <p class="project-modal__count" data-modal-count>01</p>
         <h2 class="project-modal__title" data-modal-title>Title</h2>
+        <p class="project-modal__price" data-modal-price>€ 240</p>
         <p class="project-modal__description" data-modal-description>
           Lorem ipsum dolor sit amet, consectetur adipiscing elit.
         </p>
