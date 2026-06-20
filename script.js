@@ -364,15 +364,47 @@ const setupCardHover = () => {
   }
 };
 
+const PRODUCT_HASH_PREFIX = '#product/';
+
+const getProductSlug = (value) => {
+  const slug = String(value || '')
+    .normalize('NFD')
+    .replace(/[\u0300-\u036f]/g, '')
+    .toLowerCase()
+    .trim()
+    .replace(/[^a-z0-9]+/g, '-')
+    .replace(/^-+|-+$/g, '');
+
+  return slug || 'product';
+};
+
+const getProductSlugFromHash = () => {
+  const hash = window.location.hash;
+
+  if (!hash.startsWith(PRODUCT_HASH_PREFIX)) {
+    return '';
+  }
+
+  return decodeURIComponent(hash.slice(PRODUCT_HASH_PREFIX.length));
+};
+
 const setupProjectModal = (items) => {
   if (!track || !projectModal || !modalImage || !modalThumbs) return;
 
+  const slugCounts = new Map();
   const projects = items.map((item, index) => {
     const image = item.querySelector('img');
+    const name = item.dataset.name || image?.alt || 'Untitled';
+    const baseSlug = getProductSlug(name);
+    const count = slugCounts.get(baseSlug) || 0;
+    const slug = count === 0 ? baseSlug : `${baseSlug}-${count + 1}`;
+
+    slugCounts.set(baseSlug, count + 1);
 
     return {
       index,
-      name: item.dataset.name || image?.alt || 'Untitled',
+      slug,
+      name,
       price: item.dataset.price || 'Price',
       format: item.dataset.format || '',
       description: item.dataset.description || '',
@@ -381,6 +413,7 @@ const setupProjectModal = (items) => {
     };
   });
 
+  const projectIndexBySlug = new Map(projects.map((project, index) => [project.slug, index]));
   let activeIndex = 0;
 
   const setActiveSize = (button) => {
@@ -411,8 +444,34 @@ const setupProjectModal = (items) => {
     });
   };
 
-  const openModal = (index) => {
+  const updateModalUrl = (project, replace = false) => {
+    const nextHash = `${PRODUCT_HASH_PREFIX}${encodeURIComponent(project.slug)}`;
+
+    if (window.location.hash === nextHash) {
+      return;
+    }
+
+    window.history[replace ? 'replaceState' : 'pushState'](null, '', nextHash);
+  };
+
+  const clearModalUrl = () => {
+    if (!window.location.hash.startsWith(PRODUCT_HASH_PREFIX)) {
+      return;
+    }
+
+    const cleanUrl = `${window.location.pathname}${window.location.search}`;
+    window.history.pushState(null, '', cleanUrl);
+  };
+
+  const openModal = (index, options = {}) => {
+    const project = projects[index];
+    if (!project) return;
+
     renderModal(index);
+    if (options.updateUrl !== false) {
+      updateModalUrl(project, options.replaceUrl);
+    }
+
     projectModal.classList.add('is-open');
     projectModal.setAttribute('aria-hidden', 'false');
     projectModal.scrollTo({ top: 0, behavior: 'auto' });
@@ -430,10 +489,14 @@ const setupProjectModal = (items) => {
     projectCaption?.setAttribute('aria-hidden', 'true');
   };
 
-  const closeModal = () => {
+  const closeModal = (options = {}) => {
     projectModal.classList.remove('is-open');
     projectModal.setAttribute('aria-hidden', 'true');
     document.body.classList.remove('modal-open');
+
+    if (options.updateUrl !== false) {
+      clearModalUrl();
+    }
   };
 
   modalThumbs.innerHTML = '';
@@ -443,7 +506,7 @@ const setupProjectModal = (items) => {
 
     button.type = 'button';
     button.setAttribute('aria-label', `View ${project.name}`);
-    button.addEventListener('click', () => renderModal(index));
+    button.addEventListener('click', () => openModal(index));
 
     image.src = project.src;
     image.alt = '';
@@ -467,6 +530,23 @@ const setupProjectModal = (items) => {
     });
   });
 
+  const syncModalWithUrl = () => {
+    const slug = getProductSlugFromHash();
+
+    if (!slug) {
+      closeModal({ updateUrl: false });
+      return;
+    }
+
+    const index = projectIndexBySlug.get(slug);
+
+    if (index === undefined) {
+      return;
+    }
+
+    openModal(index, { updateUrl: false });
+  };
+
   projectModal.querySelectorAll('.project-modal__sizes button').forEach((button) => {
     button.addEventListener('click', () => setActiveSize(button));
   });
@@ -480,11 +560,14 @@ const setupProjectModal = (items) => {
     if (!projectModal.classList.contains('is-open')) return;
 
     if (event.key === 'Escape') closeModal();
-    if (event.key === 'ArrowRight') renderModal((activeIndex + 1) % projects.length);
+    if (event.key === 'ArrowRight') openModal((activeIndex + 1) % projects.length);
     if (event.key === 'ArrowLeft') {
-      renderModal((activeIndex - 1 + projects.length) % projects.length);
+      openModal((activeIndex - 1 + projects.length) % projects.length);
     }
   });
+
+  window.addEventListener('hashchange', syncModalWithUrl);
+  syncModalWithUrl();
 };
 
 if (track && !reduceMotion.matches) {
