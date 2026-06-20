@@ -403,14 +403,13 @@ h1 {
   pointer-events: none;
 }
 
-@media (hover: hover) and (pointer: fine) {
-  html.has-custom-cursor,
-  html.has-custom-cursor * {
-    cursor: none !important;
-  }
+html.has-custom-cursor,
+html.has-custom-cursor * {
+  cursor: none !important;
 }
 
 .pointer-dot {
+  display: none;
   position: fixed;
   top: 0;
   left: 0;
@@ -422,11 +421,16 @@ h1 {
   box-shadow: 0 0 0 2px color-mix(in srgb, var(--page-bg) 75%, transparent);
   pointer-events: none;
   opacity: 0;
+  transform: translate3d(-100px, -100px, 0) translate(-50%, -50%);
   transition:
     opacity 0.18s ease,
     width 0.24s cubic-bezier(0.22, 1, 0.36, 1),
     height 0.24s cubic-bezier(0.22, 1, 0.36, 1);
   will-change: transform;
+}
+
+html.has-custom-cursor .pointer-dot {
+  display: block;
 }
 
 .pointer-dot.is-visible {
