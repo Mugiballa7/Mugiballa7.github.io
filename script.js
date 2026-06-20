@@ -9,6 +9,13 @@ const projectName = document.querySelector('[data-project-name]');
 const projectPrice = document.querySelector('[data-project-price]');
 const viewLabel = document.querySelector('[data-view-label]');
 const themeToggle = document.querySelector('[data-theme-toggle]');
+const projectModal = document.querySelector('[data-project-modal]');
+const modalClose = document.querySelector('[data-modal-close]');
+const modalCount = document.querySelector('[data-modal-count]');
+const modalTitle = document.querySelector('[data-modal-title]');
+const modalDescription = document.querySelector('[data-modal-description]');
+const modalImage = document.querySelector('[data-modal-image]');
+const modalThumbs = document.querySelector('[data-modal-thumbs]');
 const reduceMotion = window.matchMedia('(prefers-reduced-motion: reduce)');
 
 const THEME_STORAGE_KEY = 'atelier-theme';
@@ -19,24 +26,6 @@ let lastScrollActivity = 0;
 const getCurrentTheme = () =>
   document.documentElement.getAttribute('data-theme') === 'dark' ? 'dark' : 'light';
 
-const randomPageColor = (theme) => {
-  const hue = Math.floor(Math.random() * 360);
-
-  if (theme === 'dark') {
-    const saturation = 22 + Math.random() * 28;
-    const lightness = 2 + Math.random() * 5;
-    return `hsl(${hue} ${saturation.toFixed(1)}% ${lightness.toFixed(1)}%)`;
-  }
-
-  const saturation = 62 + Math.random() * 26;
-  const lightness = 82 + Math.random() * 7;
-  return `hsl(${hue} ${saturation.toFixed(1)}% ${lightness.toFixed(1)}%)`;
-};
-
-const applyRandomPageBackground = (theme = getCurrentTheme()) => {
-  document.documentElement.style.setProperty('--page-bg', randomPageColor(theme));
-};
-
 const setTheme = (theme) => {
   document.documentElement.setAttribute('data-theme', theme);
   localStorage.setItem(THEME_STORAGE_KEY, theme);
@@ -44,10 +33,10 @@ const setTheme = (theme) => {
     'aria-label',
     theme === 'dark' ? 'Switch to light mode' : 'Switch to dark mode'
   );
-  applyRandomPageBackground(theme);
+  window.Sky?.setTheme(theme);
 };
 
-applyRandomPageBackground(getCurrentTheme());
+window.Sky?.init(getCurrentTheme());
 
 themeToggle?.addEventListener('click', () => {
   setTheme(getCurrentTheme() === 'dark' ? 'light' : 'dark');
@@ -56,8 +45,11 @@ themeToggle?.addEventListener('click', () => {
 const loadInitialImages = () => {
   if (!pageLoader || !track || !loaderBar || !loaderPercent) {
     document.body.classList.remove('is-loading');
+    window.Sky?.setLoadingMotion('idle');
     return;
   }
+
+  window.Sky?.setLoadingMotion('loading');
 
   const images = Array.from(track.querySelectorAll('img'));
   const total = images.length;
@@ -71,9 +63,24 @@ const loadInitialImages = () => {
     isComplete = loaded >= total;
   };
 
+  const showPage = () => {
+    document.body.classList.remove('is-loading');
+  };
+
   const hideLoader = () => {
     pageLoader.classList.add('is-hidden');
-    document.body.classList.remove('is-loading');
+  };
+
+  const finishLoading = () => {
+    window.Sky?.setLoadingMotion('winding');
+    pageLoader.classList.add('is-parting');
+    window.Sky?.playCloudReveal(2200, () => {
+      hideLoader();
+      window.setTimeout(() => {
+        window.Sky?.setLoadingMotion('idle');
+        showPage();
+      }, 120);
+    });
   };
 
   const renderProgress = () => {
@@ -86,13 +93,14 @@ const loadInitialImages = () => {
     const visibleProgress = Math.round(currentProgress);
     loaderPercent.textContent = String(visibleProgress);
     loaderBar.style.width = `${visibleProgress}%`;
+    window.Sky?.setLoaderProgress(visibleProgress);
 
     if (visibleProgress < 100) {
       requestAnimationFrame(renderProgress);
       return;
     }
 
-    window.setTimeout(hideLoader, 250);
+    window.setTimeout(finishLoading, 300);
   };
 
   const markLoaded = () => {
@@ -184,10 +192,136 @@ const setupCardHover = () => {
   requestAnimationFrame(followCursor);
 };
 
+const setupProjectModal = (items) => {
+  if (!track || !projectModal || !modalImage || !modalThumbs) return;
+
+  const projects = items.map((item, index) => {
+    const image = item.querySelector('img');
+
+    return {
+      index,
+      name: item.dataset.name || image?.alt || 'Untitled',
+      price: item.dataset.price || 'Price',
+      src: image?.getAttribute('src') || '',
+      alt: image?.alt || item.dataset.name || 'Artwork',
+    };
+  });
+
+  let activeIndex = 0;
+
+  const setActiveSize = (button) => {
+    projectModal
+      .querySelectorAll('.project-modal__sizes button')
+      .forEach((sizeButton) => sizeButton.classList.toggle('is-active', sizeButton === button));
+  };
+
+  const renderModal = (index) => {
+    const project = projects[index];
+    if (!project) return;
+
+    activeIndex = index;
+
+    if (modalCount) modalCount.textContent = String(index + 1).padStart(2, '0');
+    if (modalTitle) modalTitle.textContent = project.name;
+    if (modalDescription) {
+      modalDescription.textContent =
+        'Lorem ipsum dolor sit amet, consectetur adipiscing elit, made for a quiet instant.';
+    }
+
+    modalImage.src = project.src;
+    modalImage.alt = project.alt;
+
+    modalThumbs.querySelectorAll('button').forEach((button, thumbIndex) => {
+      button.classList.toggle('is-active', thumbIndex === index);
+      button.setAttribute('aria-current', thumbIndex === index ? 'true' : 'false');
+    });
+  };
+
+  const openModal = (index) => {
+    renderModal(index);
+    projectModal.classList.add('is-open');
+    projectModal.setAttribute('aria-hidden', 'false');
+    document.body.classList.add('modal-open');
+    hoveredCard = null;
+    track.querySelectorAll('.project-card.is-hovered').forEach((card) => {
+      card.classList.remove('is-hovered');
+    });
+    viewCursor?.classList.remove('is-visible');
+    if (viewCursor) viewCursor.hidden = true;
+    projectCaption?.classList.remove('is-visible');
+    projectCaption?.setAttribute('aria-hidden', 'true');
+  };
+
+  const closeModal = () => {
+    projectModal.classList.remove('is-open');
+    projectModal.setAttribute('aria-hidden', 'true');
+    document.body.classList.remove('modal-open');
+  };
+
+  modalThumbs.innerHTML = '';
+  projects.forEach((project, index) => {
+    const button = document.createElement('button');
+    const image = document.createElement('img');
+
+    button.type = 'button';
+    button.setAttribute('aria-label', `View ${project.name}`);
+    button.addEventListener('click', () => renderModal(index));
+
+    image.src = project.src;
+    image.alt = '';
+    image.loading = 'lazy';
+
+    button.appendChild(image);
+    modalThumbs.appendChild(button);
+  });
+
+  track.querySelectorAll('.project-card').forEach((card) => {
+    card.tabIndex = 0;
+    card.addEventListener('click', () => {
+      const index = Number(card.dataset.index || 0);
+      openModal(index);
+    });
+    card.addEventListener('keydown', (event) => {
+      if (event.key !== 'Enter' && event.key !== ' ') return;
+      event.preventDefault();
+      const index = Number(card.dataset.index || 0);
+      openModal(index);
+    });
+  });
+
+  projectModal.querySelectorAll('.project-modal__sizes button').forEach((button) => {
+    button.addEventListener('click', () => setActiveSize(button));
+  });
+
+  modalClose?.addEventListener('click', closeModal);
+  projectModal.addEventListener('click', (event) => {
+    if (event.target === projectModal) closeModal();
+  });
+
+  window.addEventListener('keydown', (event) => {
+    if (!projectModal.classList.contains('is-open')) return;
+
+    if (event.key === 'Escape') closeModal();
+    if (event.key === 'ArrowRight') renderModal((activeIndex + 1) % projects.length);
+    if (event.key === 'ArrowLeft') {
+      renderModal((activeIndex - 1 + projects.length) % projects.length);
+    }
+  });
+};
+
 if (track && !reduceMotion.matches) {
   const originalItems = Array.from(track.children);
+  const scrollLoopHeight = scrollSpace?.offsetHeight || 14000;
+  const scrollCenter = scrollLoopHeight / 2;
+  const scrollEdge = Math.min(1800, scrollLoopHeight * 0.18);
+
+  window.scrollTo(0, scrollCenter);
 
   loadInitialImages();
+
+  originalItems.forEach((item, index) => {
+    item.dataset.index = String(index);
+  });
 
   originalItems.forEach((item) => {
     const clone = item.cloneNode(true);
@@ -196,6 +330,7 @@ if (track && !reduceMotion.matches) {
   });
 
   setupCardHover();
+  setupProjectModal(originalItems);
 
   let x = 0;
   let width = 1;
@@ -203,10 +338,6 @@ if (track && !reduceMotion.matches) {
   let scrollBoost = 0;
   let lastTime = performance.now();
   let isRepositioning = false;
-
-  const scrollLoopHeight = scrollSpace?.offsetHeight || 14000;
-  const scrollCenter = scrollLoopHeight / 2;
-  const scrollEdge = Math.min(1800, scrollLoopHeight * 0.18);
 
   const measure = () => {
     width = track.scrollWidth / 2;
@@ -269,6 +400,10 @@ if (track && !reduceMotion.matches) {
       scrollBoost *= 0.88;
     }
 
+    if (scrollDelta !== 0) {
+      window.Sky?.setScrollDelta(scrollDelta);
+    }
+
     track.style.transform = `translate3d(${x}px, 0, 0)`;
     requestAnimationFrame(animate);
   };
@@ -280,6 +415,11 @@ if (track && !reduceMotion.matches) {
   jumpToScroll(scrollCenter);
   requestAnimationFrame(animate);
 } else if (track) {
+  const originalItems = Array.from(track.children);
+  originalItems.forEach((item, index) => {
+    item.dataset.index = String(index);
+  });
   loadInitialImages();
   setupCardHover();
+  setupProjectModal(originalItems);
 }
