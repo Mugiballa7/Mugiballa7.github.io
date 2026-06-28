@@ -5,6 +5,7 @@
   --atelier-muted: #6f6a68;
   --atelier-lavender: #7d7a9d;
   --atelier-card: #ffffff;
+  --atelier-card-image: #f8f8f8;
   --atelier-shadow: rgb(35 31 28 / 0.06);
   --font-display: "Cormorant Garamond", Georgia, serif;
   --font-body: "Inter", system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
@@ -115,9 +116,9 @@ img {
   grid-template-rows: minmax(0, 1fr) auto;
   min-height: clamp(190px, 35vw, 250px);
   padding: clamp(0.45rem, 1.2vw, 0.7rem);
-  border: 0;
+  border: 1px solid #ffffff;
   border-radius: 0.35rem;
-  background: var(--atelier-card);
+  background: #ffffff;
   box-shadow: 0 0.35rem 1.2rem var(--atelier-shadow);
   cursor: pointer;
   transform-origin: center center;
@@ -144,7 +145,7 @@ img {
   height: clamp(145px, 27vw, 198px);
   border-radius: 0.2rem;
   object-fit: contain;
-  background: transparent;
+  background: var(--atelier-card-image);
 }
 
 .atelier-card h2 {
@@ -160,13 +161,14 @@ img {
   grid-template-columns: repeat(2, minmax(0, 1fr));
   align-items: center;
   gap: 0.2rem;
-  background: transparent;
+  background: var(--atelier-card-image);
+  border-radius: 0.2rem;
 }
 
 .atelier-card__duo-images img {
   height: clamp(145px, 27vw, 198px);
   border-radius: 0.2rem;
-  background: transparent;
+  background: var(--atelier-card-image);
 }
 
 .atelier-card--feature {
@@ -199,13 +201,12 @@ img {
   border-radius: 999px;
   background: #2d2d2c;
   color: #ffffff;
-  font-size: 0.8rem;
-  font-weight: 600;
   text-decoration: none;
 }
 
-.atelier-social .material-symbols-outlined {
-  font-size: 1.08rem;
+.atelier-social__icon {
+  width: 1.05rem;
+  height: 1.05rem;
 }
 
 .atelier-social a:hover,
@@ -305,6 +306,23 @@ img {
   font-size: clamp(1.05rem, 2vw, 1.28rem);
   font-weight: 600;
   line-height: 1.2;
+}
+
+.atelier-modal__botanical {
+  margin: 0.35rem 0 0;
+  color: var(--atelier-muted);
+  font-family: var(--font-body);
+  font-size: clamp(0.78rem, 1.5vw, 0.88rem);
+  font-weight: 500;
+  line-height: 1.35;
+}
+
+.atelier-modal__botanical[hidden] {
+  display: none;
+}
+
+.atelier-modal__addons[hidden] {
+  display: none;
 }
 
 .atelier-modal__price {
