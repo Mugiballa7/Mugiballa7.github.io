@@ -1,536 +1,449 @@
-:root {
-  color-scheme: light;
-  --atelier-page: #f8f8f8;
-  --atelier-text: #242322;
-  --atelier-muted: #6f6a68;
-  --atelier-lavender: #7d7a9d;
-  --atelier-card: #ffffff;
-  --atelier-card-image: #f8f8f8;
-  --atelier-shadow: rgb(35 31 28 / 0.06);
-  --font-display: "Cormorant Garamond", Georgia, serif;
-  --font-body: "Inter", system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
-}
-
-* {
-  box-sizing: border-box;
-}
-
-html {
-  min-height: 100%;
-  background: var(--atelier-page);
-}
-
-body {
-  min-height: 100svh;
-  margin: 0;
-  color: var(--atelier-text);
-  background: var(--atelier-page);
-  font-family: var(--font-body);
-}
-
-html.atelier-modal-open,
-body.atelier-modal-open {
-  overflow: hidden;
-}
-
-body.atelier-modal-open .atelier-page {
-  touch-action: none;
-}
-
-img {
-  max-width: 100%;
-}
-
-.atelier-page {
-  width: min(100%, 760px);
-  margin: 0 auto;
-  padding: clamp(2rem, 5vw, 4.5rem) clamp(1.1rem, 4vw, 2.25rem) clamp(2.5rem, 7vw, 5rem);
-}
-
-.atelier-hero {
-  display: grid;
-  justify-items: center;
-  text-align: center;
-  overflow: visible;
-}
-
-.atelier-kicker {
-  margin: 0;
-  font-family: var(--font-display);
-  font-size: clamp(3.1rem, 9vw, 4.85rem);
-  font-weight: 600;
-  line-height: 0.92;
-  letter-spacing: -0.07em;
-}
-
-.atelier-title {
-  margin: clamp(0.45rem, 1.5vw, 0.75rem) 0 0;
-  padding-bottom: 0.12em;
-  background: linear-gradient(to right, #3b4a81 0%, #8b93c4 55%, #c4c9e4 100%);
-  -webkit-background-clip: text;
-  background-clip: text;
-  color: transparent;
-  -webkit-text-fill-color: transparent;
-  font-family: var(--font-display);
-  font-size: clamp(1.9rem, 5.8vw, 3rem);
-  font-weight: 600;
-  line-height: 1.08;
-  letter-spacing: -0.075em;
-}
-
-.atelier-mascot {
-  width: clamp(2.35rem, 6vw, 3.2rem);
-  height: clamp(2.35rem, 6vw, 3.2rem);
-  margin-top: clamp(0.55rem, 1.5vw, 0.85rem);
-  object-fit: contain;
-  mix-blend-mode: multiply;
-}
-
-.atelier-intro {
-  max-width: min(100%, 52rem);
-  margin: clamp(0.75rem, 2vw, 1.1rem) 0 0;
-  color: #545150;
-  font-family: var(--font-display);
-  font-size: clamp(0.78rem, 1.6vw, 0.92rem);
-  font-style: italic;
-  font-weight: 700;
-  line-height: 1.45;
-}
-
-@media (min-width: 720px) {
-  .atelier-intro {
-    white-space: nowrap;
-  }
-}
-
-.atelier-grid {
-  display: grid;
-  grid-template-columns: repeat(2, minmax(0, 1fr));
-  gap: clamp(0.8rem, 2vw, 1.25rem);
-  width: min(100%, 440px);
-  margin: clamp(1.6rem, 4vw, 2.4rem) auto 0;
-}
-
-.atelier-card {
-  display: grid;
-  grid-template-rows: minmax(0, 1fr) auto;
-  min-height: clamp(190px, 35vw, 250px);
-  padding: clamp(0.45rem, 1.2vw, 0.7rem);
-  border: 1px solid #ffffff;
-  border-radius: 0.35rem;
-  background: #ffffff;
-  box-shadow: 0 0.35rem 1.2rem var(--atelier-shadow);
-  cursor: pointer;
-  content-visibility: auto;
-  contain-intrinsic-size: 250px 210px;
-  transform-origin: center center;
-  transition:
-    box-shadow 0.25s ease,
-    transform 0.25s ease;
-}
-
-.atelier-card:hover,
-.atelier-card:focus-visible {
-  box-shadow: 0 0.55rem 1.6rem rgb(35 31 28 / 0.1);
-  outline: none;
-  transform: rotate(-2.5deg);
-}
-
-.atelier-card:nth-child(even):hover,
-.atelier-card:nth-child(even):focus-visible {
-  transform: rotate(2.5deg);
-}
-
-.atelier-card img {
-  display: block;
-  width: 100%;
-  height: clamp(145px, 27vw, 198px);
-  border-radius: 0.2rem;
-  object-fit: contain;
-  background: var(--atelier-card-image);
-}
-
-.atelier-card h2 {
-  margin: clamp(0.45rem, 1.2vw, 0.7rem) 0 0.15rem;
-  font-size: clamp(0.74rem, 1.4vw, 0.88rem);
-  font-weight: 500;
-  line-height: 1.2;
-  text-align: center;
-}
-
-.atelier-card__duo-images {
-  display: grid;
-  grid-template-columns: repeat(2, minmax(0, 1fr));
-  align-items: center;
-  gap: 0.2rem;
-  background: var(--atelier-card-image);
-  border-radius: 0.2rem;
-}
-
-.atelier-card__duo-images img {
-  height: clamp(145px, 27vw, 198px);
-  border-radius: 0.2rem;
-  background: var(--atelier-card-image);
-}
-
-.atelier-card--feature {
-  grid-column: 1 / -1;
-  justify-self: center;
-  width: min(100%, 220px);
-  margin-top: clamp(0.6rem, 2vw, 1rem);
-}
-
-.atelier-footer {
-  position: relative;
-  display: grid;
-  justify-items: center;
-  margin-top: clamp(1.4rem, 4vw, 2.5rem);
-  padding-bottom: clamp(2.5rem, 8vw, 5rem);
-}
-
-.atelier-social {
-  display: flex;
-  flex-wrap: wrap;
-  justify-content: center;
-  gap: 0.45rem;
-}
-
-.atelier-social a {
-  display: inline-grid;
-  width: 2rem;
-  height: 2rem;
-  place-items: center;
-  border-radius: 999px;
-  background: #2d2d2c;
-  color: #ffffff;
-  text-decoration: none;
-}
-
-.atelier-social__icon {
-  width: 1.05rem;
-  height: 1.05rem;
-}
-
-.atelier-social a:hover,
-.atelier-social a:focus-visible {
-  background: var(--atelier-lavender);
-  outline: none;
-}
-
-.atelier-floating {
-  position: absolute;
-  right: max(0.5rem, 8vw);
-  bottom: 0;
-  width: clamp(2.2rem, 6vw, 3rem);
-  height: clamp(2.2rem, 6vw, 3rem);
-  object-fit: contain;
-  transform: rotate(18deg);
-}
-
-.atelier-modal {
-  width: min(1180px, calc(100vw - 1.5rem));
-  max-width: none;
-  height: min(820px, calc(100svh - 1.5rem));
-  margin: auto;
-  padding: 0;
-  border: 0;
-  border-radius: 1.35rem;
-  background: #ffffff;
-  color: #1f1d1b;
-  overflow: hidden;
-}
-
-.atelier-modal::backdrop {
-  background: rgb(18 18 18 / 0.56);
-  backdrop-filter: blur(4px);
-}
-
-.atelier-modal__panel {
-  position: relative;
-  display: grid;
-  grid-template-columns: minmax(0, 1.9fr) minmax(300px, 0.95fr);
-  height: 100%;
-}
-
-.atelier-modal__close {
-  position: absolute;
-  top: 1rem;
-  right: 1rem;
-  z-index: 2;
-  display: inline-grid;
-  width: 2.1rem;
-  height: 2.1rem;
-  place-items: center;
-  padding: 0;
-  border: 0;
-  border-radius: 999px;
-  background: rgb(255 255 255 / 0.82);
-  color: #1f1d1b;
-  cursor: pointer;
-  font-size: 1.8rem;
-  line-height: 1;
-}
-
-.atelier-modal__visual {
-  display: block;
-  min-height: 0;
-  height: 100%;
-  overflow: hidden;
-  background: #ececea;
-}
-
-.atelier-modal__image {
-  display: block;
-  width: 100%;
-  height: 100%;
-  object-fit: contain;
-}
-
-.atelier-modal__details {
-  display: grid;
-  align-content: start;
-  gap: clamp(0.65rem, 1.7vw, 1rem);
-  min-height: 0;
-  overflow-y: auto;
-  padding: clamp(2rem, 4vw, 3rem) clamp(1.5rem, 3vw, 2rem);
-}
-
-.atelier-modal__title {
-  margin: 0;
-  font-family: var(--font-display);
-  font-size: clamp(2.45rem, 5vw, 3.8rem);
-  font-weight: 700;
-  line-height: 0.92;
-  letter-spacing: 0.02em;
-}
-
-.atelier-modal__quote {
-  margin: 0;
-  font-family: var(--font-display);
-  font-size: clamp(1.05rem, 2vw, 1.28rem);
-  font-weight: 600;
-  line-height: 1.2;
-}
-
-.atelier-modal__botanical {
-  margin: 0.35rem 0 0;
-  color: var(--atelier-muted);
-  font-family: var(--font-body);
-  font-size: clamp(0.78rem, 1.5vw, 0.88rem);
-  font-weight: 500;
-  line-height: 1.35;
-}
-
-.atelier-modal__botanical[hidden] {
-  display: none;
-}
-
-.atelier-modal__addons[hidden] {
-  display: none;
-}
-
-.atelier-modal__price {
-  margin: 0;
-  font-family: var(--font-display);
-  font-size: clamp(2.2rem, 4vw, 3.15rem);
-  font-weight: 600;
-  line-height: 0.9;
-}
-
-.atelier-modal__addons {
-  display: grid;
-  gap: 0.65rem;
-}
-
-.atelier-modal__addons-title {
-  margin: 0;
-  font-family: var(--font-display);
-  font-size: clamp(1rem, 2vw, 1.2rem);
-  font-weight: 600;
-}
-
-.atelier-modal__addon-grid {
-  display: grid;
-  grid-template-columns: repeat(4, minmax(0, 1fr));
-  gap: 0.65rem;
-}
-
-.atelier-addon {
-  display: grid;
-  place-items: center;
-  padding: 0 0.35rem;
-  border: 1px solid transparent;
-  background: #f6f4f0;
-  cursor: pointer;
-}
-
-.atelier-addon.is-selected,
-.atelier-addon[aria-pressed="true"] {
-  border-color: #4b176f;
-  box-shadow: inset 0 0 0 1px #4b176f;
-}
-
-.atelier-addon:focus-visible {
-  outline: 2px solid #4b176f;
-  outline-offset: 2px;
-}
-
-.atelier-addon__images {
-  display: grid;
-  grid-template-columns: 1fr;
-  align-items: center;
-  justify-items: center;
-  width: 100%;
-}
-
-.atelier-addon__images:has(img:nth-child(2)) {
-  grid-template-columns: repeat(2, minmax(0, 1fr));
-  gap: 0.1rem;
-}
-
-.atelier-addon__images img {
-  width: 100%;
-  height: clamp(4.2rem, 8vw, 5.4rem);
-  object-fit: contain;
-}
-
-.atelier-modal__addon-lines {
-  min-height: 2.3rem;
-  font-family: var(--font-display);
-  font-size: 0.98rem;
-  font-weight: 600;
-  line-height: 1.25;
-}
-
-.atelier-modal__addon-lines p {
-  margin: 0;
-}
-
-.atelier-modal__specs {
-  display: grid;
-  gap: 0.7rem;
-  margin: 0.3rem 0 0;
-}
-
-.atelier-modal__specs div {
-  display: grid;
-  grid-template-columns: 2rem 1fr;
-  align-items: center;
-  gap: 0.9rem;
-}
-
-.atelier-modal__specs dt,
-.atelier-modal__specs dd {
-  margin: 0;
-}
-
-.atelier-modal__specs dt {
-  display: grid;
-  place-items: center;
-}
-
-.atelier-modal__specs dd {
-  font-family: var(--font-display);
-  font-size: 1.05rem;
-  font-weight: 600;
-}
-
-.atelier-modal__flag {
-  display: inline-block;
-  width: 1.6rem;
-  height: 1.6rem;
-  background:
-    linear-gradient(to right, #0055a4 0 33%, #ffffff 33% 66%, #ef4135 66% 100%);
-}
-
-.atelier-modal__icon {
-  font-size: 1.45rem;
-  line-height: 1;
-}
-
-.atelier-modal__diamond {
-  color: #36c7e8;
-  font-size: 1.45rem;
-  line-height: 1;
-}
-
-.atelier-modal__cart {
-  justify-self: start;
-  margin-top: 0.4rem;
-  padding: 0.95rem 1.8rem;
-  border: 0;
-  border-radius: 0.2rem;
-  background: #4b0f83;
-  color: #ffffff;
-  cursor: pointer;
-  font-family: var(--font-display);
-  font-size: clamp(1.15rem, 2.2vw, 1.55rem);
-  font-weight: 600;
-  line-height: 1;
-}
-
-.atelier-modal__cart:hover,
-.atelier-modal__cart:focus-visible {
-  background: #5d18a0;
-  outline: none;
-}
-
-.atelier-modal__total {
-  margin: 0;
-  text-align: center;
-  font-family: var(--font-display);
-  font-size: clamp(1.65rem, 3vw, 2.3rem);
-  font-weight: 600;
-}
-
-@media (max-width: 520px) {
-  .atelier-page {
-    padding-inline: 1rem;
+const ATELIER_CHILDREN_PRICE = 89;
+const ATELIER_FLOWER_PRICE = 79;
+const ATELIER_PACK_STANDALONE_PRICE = 39;
+const ATELIER_ADDON_PRICE = 29;
+const ATELIER_FREE_SHIPPING_THRESHOLD = 150;
+const MODAL_ASSET = "asset/modal_asset";
+
+const atelierModalImages = {
+  Amara: `${MODAL_ASSET}/Amara.png`,
+  Lucie: `${MODAL_ASSET}/Lucie.png`,
+  Malik: `${MODAL_ASSET}/Malik.png`,
+  Mariama: `${MODAL_ASSET}/Mariama.png`,
+  Tiago: `${MODAL_ASSET}/Tiago.png`,
+  Mila: `${MODAL_ASSET}/Mila.png`,
+  Bou: `${MODAL_ASSET}/Bou.png`,
+  LaFière: `${MODAL_ASSET}/Lafiere.png`,
+  Nila: `${MODAL_ASSET}/Nila.png`,
+  Sol: `${MODAL_ASSET}/Sol.png`,
+  Yuki: `${MODAL_ASSET}/Yuki.png`,
+  "Cali & Macha": `${MODAL_ASSET}/Machaet.png`,
+  "Pink et Jade": `${MODAL_ASSET}/PinketRubis.png`,
+  "Lazuli & Mona": `${MODAL_ASSET}/Lazuli%26Mona.png`,
+  "Habitants du Jardin": `${MODAL_ASSET}/3%20insectes.png`,
+};
+
+const shippingOptions = [
+  {
+    id: "relais",
+    name: "Mondial Relay",
+    price: 4.5,
+    note: "Livraison sous 3 à 5 jours ouvrés en point relais.",
+  },
+  {
+    id: "domicile",
+    name: "Colissimo",
+    price: 6.9,
+    note: "Livraison à domicile avec suivi sous 48h-72h.",
+  },
+];
+
+const atelierAddons = [
+  {
+    id: "macha-cali",
+    label: "Macha & Cali",
+    price: ATELIER_ADDON_PRICE,
+    standalonePrice: ATELIER_PACK_STANDALONE_PRICE,
+    images: ["asset/CaliandMacha.jpg"],
+    details:
+      "Macha : Swallowtail (Asie du Sud-Est) · Cali : Morpho (Amérique centrale & Sud)",
+  },
+  {
+    id: "pink-jade",
+    label: "Pink & Jade",
+    price: ATELIER_ADDON_PRICE,
+    standalonePrice: ATELIER_PACK_STANDALONE_PRICE,
+    images: ["asset/JadeandPink.jpg"],
+    details: "Pink : Cattleheartia (Amazonie) · Jade : Papilio palinurus (Asie du Sud-Est)",
+  },
+  {
+    id: "mona-lazuli",
+    label: "Mona & Lazuli",
+    price: ATELIER_ADDON_PRICE,
+    standalonePrice: ATELIER_PACK_STANDALONE_PRICE,
+    images: ["asset/LazuliandMona.jpg"],
+    details:
+      "Mona : Danaus plexippus (Amérique du Nord) · Lazuli : Morpho didius (Amérique centrale & Sud)",
+  },
+  {
+    id: "habitants-jardin",
+    label: "Les habitants du jardin",
+    price: ATELIER_ADDON_PRICE,
+    standalonePrice: ATELIER_PACK_STANDALONE_PRICE,
+    images: ["asset/Habitants%20du%20jardin.jpg"],
+    details:
+      "Rubis : Coccinella septempunctata (Europe) · Emera : Chrysomelidae (Europe, Turquie) · Spira : Cornu aspersum (Bassin méditerranéen)",
+  },
+];
+
+const atelierCatalog = {
+  Amara: {
+    id: "ENF-001",
+    type: "enfant",
+    price: ATELIER_CHILDREN_PRICE,
+    quote:
+      "J'avance, je sais pas trop où, mais j'ai l'impression que c'est exactement là qu'il faut aller.",
+    addonIds: ["pink-jade", "habitants-jardin"],
+    specs: ["100cm", "Fabriqué en France", "Finition premium"],
+  },
+  Lucie: {
+    id: "ENF-004",
+    type: "enfant",
+    price: ATELIER_CHILDREN_PRICE,
+    quote: "Quand on est trop heureuse, on se cache un peu",
+    addonIds: ["pink-jade", "habitants-jardin"],
+    specs: ["100cm", "Fabriqué en France", "Finition premium"],
+  },
+  Malik: {
+    id: "ENF-005",
+    type: "enfant",
+    price: ATELIER_CHILDREN_PRICE,
+    quote: "Une bulle dans l'air, le soleil dans le dos. Ça suffit.",
+    addonIds: ["pink-jade", "habitants-jardin"],
+    specs: ["100cm", "Fabriqué en France", "Finition premium"],
+  },
+  Mariama: {
+    id: "ENF-006",
+    type: "enfant",
+    price: ATELIER_CHILDREN_PRICE,
+    quote:
+      "Attendez, bougez plus ! Non en fait bougez, c'est plus joli en mouvement.",
+    addonIds: ["pink-jade", "habitants-jardin"],
+    specs: ["100cm", "Fabriqué en France", "Finition premium"],
+  },
+  Tiago: {
+    id: "ENF-003",
+    type: "enfant",
+    price: ATELIER_CHILDREN_PRICE,
+    quote: "Ouais c'est moi le patron ici. Enfin… jusqu'à la sieste",
+    addonIds: ["pink-jade", "habitants-jardin"],
+    specs: ["100cm", "Fabriqué en France", "Finition premium"],
+  },
+  Mila: {
+    id: "ENF-002",
+    type: "enfant",
+    price: ATELIER_CHILDREN_PRICE,
+    quote: "Tout le monde peut voler. Faut juste pas regarder en bas",
+    addonIds: ["pink-jade", "habitants-jardin"],
+    specs: ["100cm", "Fabriqué en France", "Finition premium"],
+  },
+  Bou: {
+    type: "fleur",
+    price: ATELIER_FLOWER_PRICE,
+    quote: "Je m'ouvre lentement, comme un secret qu'on partage.",
+    addonIds: ["macha-cali", "pink-jade", "mona-lazuli", "habitants-jardin"],
+    specs: ["Fabriqué en France", "Finition premium"],
+  },
+  LaFière: {
+    id: "FLR-001",
+    type: "fleur",
+    price: ATELIER_FLOWER_PRICE,
+    quote: "Je tiens ma place avec grâce, sans jamais crier.",
+    botanical:
+      "Echinacea · Osteospermum · Dahlia (Amérique du Nord, Afrique, Mexique)",
+    addonIds: ["macha-cali", "pink-jade", "mona-lazuli", "habitants-jardin"],
+    specs: ["Fabriqué en France", "Finition premium"],
+  },
+  Nila: {
+    id: "FLR-003",
+    type: "fleur",
+    price: ATELIER_FLOWER_PRICE,
+    quote: "Je brille doucement, entre ciel et eau.",
+    botanical: "Aquilegia / Ancolie (Europe, Asie et Amérique du Nord)",
+    addonIds: ["macha-cali", "pink-jade", "mona-lazuli", "habitants-jardin"],
+    specs: ["Fabriqué en France", "Finition premium"],
+  },
+  Sol: {
+    type: "fleur",
+    price: ATELIER_FLOWER_PRICE,
+    quote: "Je pousse là où l'instant me trouve.",
+    addonIds: ["macha-cali", "pink-jade", "mona-lazuli", "habitants-jardin"],
+    specs: ["Fabriqué en France", "Finition premium"],
+  },
+  Yuki: {
+    id: "FLR-002",
+    type: "fleur",
+    price: ATELIER_FLOWER_PRICE,
+    quote: "Je garde une trace verte de mon passage.",
+    botanical: "Aquilegia / Ancolie double (Europe centrale et occidentale)",
+    addonIds: ["macha-cali", "pink-jade", "mona-lazuli", "habitants-jardin"],
+    specs: ["Fabriqué en France", "Finition premium"],
+  },
+  "Cali & Macha": {
+    type: "pack",
+    price: ATELIER_PACK_STANDALONE_PRICE,
+    quote: "Nous volons ensemble, légers comme un souffle.",
+    addonIds: [],
+    specs: ["20 cm", "Fabriqué en France", "Finition premium"],
+  },
+  "Pink et Jade": {
+    type: "pack",
+    price: ATELIER_PACK_STANDALONE_PRICE,
+    quote: "Deux ailes, deux couleurs, un même élan.",
+    addonIds: [],
+    specs: ["20 cm", "Fabriqué en France", "Finition premium"],
+  },
+  "Lazuli & Mona": {
+    type: "pack",
+    price: ATELIER_PACK_STANDALONE_PRICE,
+    quote: "Nous dansons au rythme de l'été.",
+    addonIds: [],
+    specs: ["20 cm", "Fabriqué en France", "Finition premium"],
+  },
+  "Habitants du Jardin": {
+    type: "pack",
+    price: ATELIER_PACK_STANDALONE_PRICE,
+    quote: "Petits compagnons d'un monde tout doux.",
+    addonIds: [],
+    specs: ["20 cm", "Fabriqué en France", "Finition premium"],
+  },
+};
+
+let activeAtelierAddons = new Set();
+let lastAtelierTrigger = null;
+let currentProduct = null;
+
+const formatAtelierPrice = (price) =>
+  Number.isInteger(price) ? `${price}€` : `${price.toFixed(2).replace(".", ",")}€`;
+
+const getShippingCost = (cartTotal, selectedId) => {
+  if (cartTotal >= ATELIER_FREE_SHIPPING_THRESHOLD) {
+    return 0;
   }
 
-  .atelier-grid {
-    width: min(100%, 360px);
+  const option = shippingOptions.find((entry) => entry.id === selectedId);
+  return option ? option.price : 0;
+};
+
+const getProductFromCard = (card) => {
+  const title = card.querySelector("h2")?.textContent.trim() || "Uninstant";
+  const image = card.querySelector("img");
+  const catalogEntry = atelierCatalog[title] || {
+    type: "enfant",
+    price: ATELIER_CHILDREN_PRICE,
+    quote: "Un instant doux, prêt à rejoindre votre intérieur.",
+    addonIds: ["pink-jade", "habitants-jardin"],
+    specs: ["100cm", "Fabriqué en France", "Finition premium"],
+  };
+
+  return {
+    title,
+    imageSrc: image?.getAttribute("src") || "",
+    modalImageSrc: atelierModalImages[title] || image?.getAttribute("src") || "",
+    imageAlt: image?.getAttribute("alt") || title,
+    ...catalogEntry,
+  };
+};
+
+const modalMarkup = `
+  <dialog class="atelier-modal" aria-labelledby="atelier-modal-title">
+    <div class="atelier-modal__panel">
+      <button class="atelier-modal__close" type="button" aria-label="Fermer">
+        <span aria-hidden="true">×</span>
+      </button>
+
+      <section class="atelier-modal__visual" aria-label="Aperçu">
+        <img class="atelier-modal__image" src="" alt="" decoding="async" />
+      </section>
+
+      <section class="atelier-modal__details">
+        <h2 class="atelier-modal__title" id="atelier-modal-title">AMARA</h2>
+        <p class="atelier-modal__quote"></p>
+        <p class="atelier-modal__botanical"></p>
+        <p class="atelier-modal__price">89€</p>
+
+        <div class="atelier-modal__addons">
+          <p class="atelier-modal__addons-title">compléter ma scène</p>
+          <div class="atelier-modal__addon-grid" aria-label="Options à ajouter"></div>
+          <div class="atelier-modal__addon-lines" aria-live="polite"></div>
+        </div>
+
+        <dl class="atelier-modal__specs" aria-label="Caractéristiques"></dl>
+
+        <button class="atelier-modal__cart" type="button">ajouter au panier</button>
+        <p class="atelier-modal__total" aria-live="polite">Total : 89€</p>
+      </section>
+    </div>
+  </dialog>
+`;
+
+document.body.insertAdjacentHTML("beforeend", modalMarkup);
+
+const atelierModal = document.querySelector(".atelier-modal");
+const atelierModalClose = document.querySelector(".atelier-modal__close");
+const atelierModalImage = document.querySelector(".atelier-modal__image");
+const atelierModalTitle = document.querySelector(".atelier-modal__title");
+const atelierModalQuote = document.querySelector(".atelier-modal__quote");
+const atelierModalBotanical = document.querySelector(".atelier-modal__botanical");
+const atelierModalPrice = document.querySelector(".atelier-modal__price");
+const atelierModalAddons = document.querySelector(".atelier-modal__addons");
+const atelierModalAddonGrid = document.querySelector(".atelier-modal__addon-grid");
+const atelierModalAddonLines = document.querySelector(".atelier-modal__addon-lines");
+const atelierModalSpecs = document.querySelector(".atelier-modal__specs");
+const atelierModalTotal = document.querySelector(".atelier-modal__total");
+
+const renderAtelierSpecs = (specs) => {
+  const specIcons = {
+    "100cm": "↕",
+    "20 cm": "↕",
+    "Fabriqué en France": "flag",
+    "Finition premium": "◆",
+  };
+
+  atelierModalSpecs.innerHTML = specs
+    .map((spec) => {
+      if (spec === "Fabriqué en France") {
+        return `
+          <div>
+            <dt><span class="atelier-modal__flag" aria-hidden="true"></span></dt>
+            <dd>${spec}</dd>
+          </div>
+        `;
+      }
+
+      const icon = specIcons[spec] || "check";
+      const iconClass = spec === "Finition premium" ? "atelier-modal__diamond" : "atelier-modal__icon";
+
+      return `
+        <div>
+          <dt><span class="${iconClass}" aria-hidden="true">${icon}</span></dt>
+          <dd>${spec}</dd>
+        </div>
+      `;
+    })
+    .join("");
+};
+
+const getAvailableAddons = () => {
+  if (!currentProduct?.addonIds?.length) {
+    return [];
   }
 
-  .atelier-card {
-    min-height: 170px;
+  return atelierAddons.filter((addon) => currentProduct.addonIds.includes(addon.id));
+};
+
+const renderAtelierAddonButtons = () => {
+  const availableAddons = getAvailableAddons();
+
+  atelierModalAddons.hidden = availableAddons.length === 0;
+  atelierModalAddonGrid.innerHTML = availableAddons
+    .map(
+      (addon) => `
+        <button
+          class="atelier-addon"
+          type="button"
+          data-addon-id="${addon.id}"
+          aria-pressed="${activeAtelierAddons.has(addon.id)}"
+          aria-label="Ajouter ${addon.label}"
+          title="${addon.details}"
+        >
+          <span class="atelier-addon__images">
+            ${addon.images.map((src) => `<img src="${src}" alt="" loading="lazy" decoding="async" />`).join("")}
+          </span>
+        </button>
+      `,
+    )
+    .join("");
+};
+
+const updateAtelierTotal = () => {
+  if (!currentProduct) {
+    return;
   }
 
-  .atelier-card img,
-  .atelier-card__duo-images img {
-    height: 128px;
-  }
-}
+  const selectedAddons = getAvailableAddons().filter((addon) => activeAtelierAddons.has(addon.id));
+  const total = selectedAddons.reduce((sum, addon) => sum + addon.price, currentProduct.price);
 
-@media (max-width: 760px) {
-  .atelier-grid {
-    grid-template-columns: 1fr;
-    width: min(100%, 320px);
+  atelierModalPrice.textContent = formatAtelierPrice(currentProduct.price);
+  atelierModalTotal.textContent = `Total : ${formatAtelierPrice(total)}`;
+  atelierModalAddonLines.innerHTML = selectedAddons
+    .map((addon) => `<p>${addon.label} : + ${formatAtelierPrice(addon.price)}</p>`)
+    .join("");
+};
+
+const lockPageScroll = () => {
+  document.documentElement.classList.add("atelier-modal-open");
+  document.body.classList.add("atelier-modal-open");
+};
+
+const unlockPageScroll = () => {
+  document.documentElement.classList.remove("atelier-modal-open");
+  document.body.classList.remove("atelier-modal-open");
+};
+
+const openAtelierModal = (card) => {
+  currentProduct = getProductFromCard(card);
+  activeAtelierAddons = new Set();
+  lastAtelierTrigger = card;
+
+  atelierModalImage.src = currentProduct.modalImageSrc;
+  atelierModalImage.alt = currentProduct.imageAlt;
+  atelierModalTitle.textContent = currentProduct.title.toLocaleUpperCase("fr");
+  atelierModalQuote.textContent = `"${currentProduct.quote}"`;
+  atelierModalBotanical.textContent = currentProduct.botanical || "";
+  atelierModalBotanical.hidden = !currentProduct.botanical;
+
+  renderAtelierSpecs(currentProduct.specs);
+  renderAtelierAddonButtons();
+  updateAtelierTotal();
+  lockPageScroll();
+  atelierModal.showModal();
+};
+
+document.querySelectorAll(".atelier-card").forEach((card) => {
+  card.tabIndex = 0;
+  card.setAttribute("role", "button");
+  card.setAttribute("aria-label", `Voir ${card.querySelector("h2")?.textContent.trim() || "ce produit"}`);
+
+  card.addEventListener("click", () => openAtelierModal(card));
+  card.addEventListener("keydown", (event) => {
+    if (event.key !== "Enter" && event.key !== " ") {
+      return;
+    }
+
+    event.preventDefault();
+    openAtelierModal(card);
+  });
+});
+
+atelierModalAddonGrid.addEventListener("click", (event) => {
+  const target = event.target;
+  if (!(target instanceof Element)) {
+    return;
   }
 
-  .atelier-card--feature {
-    grid-column: auto;
-    width: 100%;
-    margin-top: 0;
+  const button = target.closest("[data-addon-id]");
+  if (!button) {
+    return;
   }
 
-  .atelier-modal {
-    width: calc(100vw - 1rem);
-    height: calc(100svh - 1rem);
-    border-radius: 1rem;
+  const addonId = button.dataset.addonId;
+  if (activeAtelierAddons.has(addonId)) {
+    activeAtelierAddons.delete(addonId);
+  } else {
+    activeAtelierAddons.add(addonId);
   }
 
-  .atelier-modal__panel {
-    grid-template-columns: 1fr;
-    grid-template-rows: minmax(260px, 42svh) minmax(0, 1fr);
-  }
+  button.classList.toggle("is-selected", activeAtelierAddons.has(addonId));
+  button.setAttribute("aria-pressed", String(activeAtelierAddons.has(addonId)));
+  updateAtelierTotal();
+});
 
-  .atelier-modal__details {
-    padding: 1.35rem;
-  }
+atelierModalClose.addEventListener("click", () => {
+  atelierModal.close();
+});
 
-  .atelier-modal__addon-grid {
-    grid-template-columns: repeat(4, minmax(3.6rem, 1fr));
-    overflow-x: auto;
+atelierModal.addEventListener("click", (event) => {
+  if (event.target === atelierModal) {
+    atelierModal.close();
   }
-}
+});
+
+atelierModal.addEventListener("close", () => {
+  unlockPageScroll();
+  lastAtelierTrigger?.focus();
+});
+
+document.querySelector(".atelier-modal__cart").addEventListener("click", () => {
+  atelierModal.close();
+});
