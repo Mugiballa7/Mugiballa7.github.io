@@ -121,6 +121,8 @@ img {
   background: #ffffff;
   box-shadow: 0 0.35rem 1.2rem var(--atelier-shadow);
   cursor: pointer;
+  content-visibility: auto;
+  contain-intrinsic-size: 250px 210px;
   transform-origin: center center;
   transition:
     box-shadow 0.25s ease,
@@ -265,6 +267,8 @@ img {
   background: rgb(255 255 255 / 0.82);
   color: #1f1d1b;
   cursor: pointer;
+  font-size: 1.8rem;
+  line-height: 1;
 }
 
 .atelier-modal__visual {
@@ -439,9 +443,15 @@ img {
     linear-gradient(to right, #0055a4 0 33%, #ffffff 33% 66%, #ef4135 66% 100%);
 }
 
+.atelier-modal__icon {
+  font-size: 1.45rem;
+  line-height: 1;
+}
+
 .atelier-modal__diamond {
   color: #36c7e8;
-  font-size: 2rem;
+  font-size: 1.45rem;
+  line-height: 1;
 }
 
 .atelier-modal__cart {
