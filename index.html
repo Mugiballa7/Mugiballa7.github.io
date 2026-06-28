@@ -1,158 +1,449 @@
-<!DOCTYPE html>
-<html lang="fr">
-  <head>
-    <meta charset="UTF-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>Atelier Uninstant — Saison 1</title>
-    <link rel="preconnect" href="https://fonts.googleapis.com" />
-    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
-    <link
-      href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@500;600;700&family=Inter:wght@400;500;600&family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@24,400,1,0"
-      rel="stylesheet"
-    />
-    <link rel="stylesheet" href="atelier.css" />
-    <script src="atelier.js" defer></script>
-  </head>
-  <body>
-    <main class="atelier-page">
-      <section class="atelier-hero" aria-labelledby="atelier-title">
-        <p class="atelier-kicker">Atelier Uninstant</p>
-        <h1 class="atelier-title" id="atelier-title">Saison 1 : Forever Young</h1>
-        <img
-          class="atelier-mascot"
-          src="asset/Spira.png"
-          alt=""
-          width="52"
-          height="52"
-          loading="eager"
-          decoding="async"
-        />
-        <p class="atelier-intro">
-          Des silhouettes à l’encre, nées d’un instant de rêverie, pour apporter douceur et nostalgie à votre intérieur.
-        </p>
+const ATELIER_CHILDREN_PRICE = 89;
+const ATELIER_FLOWER_PRICE = 79;
+const ATELIER_PACK_STANDALONE_PRICE = 39;
+const ATELIER_ADDON_PRICE = 29;
+const ATELIER_FREE_SHIPPING_THRESHOLD = 150;
+const MODAL_ASSET = "asset/modal_asset";
+
+const atelierModalImages = {
+  Amara: `${MODAL_ASSET}/Amara.png`,
+  Lucie: `${MODAL_ASSET}/Lucie.png`,
+  Malik: `${MODAL_ASSET}/Malik.png`,
+  Mariama: `${MODAL_ASSET}/Mariama.png`,
+  Tiago: `${MODAL_ASSET}/Tiago.png`,
+  Mila: `${MODAL_ASSET}/Mila.png`,
+  Bou: `${MODAL_ASSET}/Bou.png`,
+  LaFière: `${MODAL_ASSET}/Lafiere.png`,
+  Nila: `${MODAL_ASSET}/Nila.png`,
+  Sol: `${MODAL_ASSET}/Sol.png`,
+  Yuki: `${MODAL_ASSET}/Yuki.png`,
+  "Cali & Macha": `${MODAL_ASSET}/Machaet.png`,
+  "Pink et Jade": `${MODAL_ASSET}/PinketRubis.png`,
+  "Lazuli & Mona": `${MODAL_ASSET}/Lazuli%26Mona.png`,
+  "Habitants du Jardin": `${MODAL_ASSET}/3%20insectes.png`,
+};
+
+const shippingOptions = [
+  {
+    id: "relais",
+    name: "Mondial Relay",
+    price: 4.5,
+    note: "Livraison sous 3 à 5 jours ouvrés en point relais.",
+  },
+  {
+    id: "domicile",
+    name: "Colissimo",
+    price: 6.9,
+    note: "Livraison à domicile avec suivi sous 48h-72h.",
+  },
+];
+
+const atelierAddons = [
+  {
+    id: "macha-cali",
+    label: "Macha & Cali",
+    price: ATELIER_ADDON_PRICE,
+    standalonePrice: ATELIER_PACK_STANDALONE_PRICE,
+    images: ["asset/CaliandMacha.jpg"],
+    details:
+      "Macha : Swallowtail (Asie du Sud-Est) · Cali : Morpho (Amérique centrale & Sud)",
+  },
+  {
+    id: "pink-jade",
+    label: "Pink & Jade",
+    price: ATELIER_ADDON_PRICE,
+    standalonePrice: ATELIER_PACK_STANDALONE_PRICE,
+    images: ["asset/JadeandPink.jpg"],
+    details: "Pink : Cattleheartia (Amazonie) · Jade : Papilio palinurus (Asie du Sud-Est)",
+  },
+  {
+    id: "mona-lazuli",
+    label: "Mona & Lazuli",
+    price: ATELIER_ADDON_PRICE,
+    standalonePrice: ATELIER_PACK_STANDALONE_PRICE,
+    images: ["asset/LazuliandMona.jpg"],
+    details:
+      "Mona : Danaus plexippus (Amérique du Nord) · Lazuli : Morpho didius (Amérique centrale & Sud)",
+  },
+  {
+    id: "habitants-jardin",
+    label: "Les habitants du jardin",
+    price: ATELIER_ADDON_PRICE,
+    standalonePrice: ATELIER_PACK_STANDALONE_PRICE,
+    images: ["asset/Habitants%20du%20jardin.jpg"],
+    details:
+      "Rubis : Coccinella septempunctata (Europe) · Emera : Chrysomelidae (Europe, Turquie) · Spira : Cornu aspersum (Bassin méditerranéen)",
+  },
+];
+
+const atelierCatalog = {
+  Amara: {
+    id: "ENF-001",
+    type: "enfant",
+    price: ATELIER_CHILDREN_PRICE,
+    quote:
+      "J'avance, je sais pas trop où, mais j'ai l'impression que c'est exactement là qu'il faut aller.",
+    addonIds: ["pink-jade", "habitants-jardin"],
+    specs: ["100cm", "Fabriqué en France", "Finition premium"],
+  },
+  Lucie: {
+    id: "ENF-004",
+    type: "enfant",
+    price: ATELIER_CHILDREN_PRICE,
+    quote: "Quand on est trop heureuse, on se cache un peu",
+    addonIds: ["pink-jade", "habitants-jardin"],
+    specs: ["100cm", "Fabriqué en France", "Finition premium"],
+  },
+  Malik: {
+    id: "ENF-005",
+    type: "enfant",
+    price: ATELIER_CHILDREN_PRICE,
+    quote: "Une bulle dans l'air, le soleil dans le dos. Ça suffit.",
+    addonIds: ["pink-jade", "habitants-jardin"],
+    specs: ["100cm", "Fabriqué en France", "Finition premium"],
+  },
+  Mariama: {
+    id: "ENF-006",
+    type: "enfant",
+    price: ATELIER_CHILDREN_PRICE,
+    quote:
+      "Attendez, bougez plus ! Non en fait bougez, c'est plus joli en mouvement.",
+    addonIds: ["pink-jade", "habitants-jardin"],
+    specs: ["100cm", "Fabriqué en France", "Finition premium"],
+  },
+  Tiago: {
+    id: "ENF-003",
+    type: "enfant",
+    price: ATELIER_CHILDREN_PRICE,
+    quote: "Ouais c'est moi le patron ici. Enfin… jusqu'à la sieste",
+    addonIds: ["pink-jade", "habitants-jardin"],
+    specs: ["100cm", "Fabriqué en France", "Finition premium"],
+  },
+  Mila: {
+    id: "ENF-002",
+    type: "enfant",
+    price: ATELIER_CHILDREN_PRICE,
+    quote: "Tout le monde peut voler. Faut juste pas regarder en bas",
+    addonIds: ["pink-jade", "habitants-jardin"],
+    specs: ["100cm", "Fabriqué en France", "Finition premium"],
+  },
+  Bou: {
+    type: "fleur",
+    price: ATELIER_FLOWER_PRICE,
+    quote: "Je m'ouvre lentement, comme un secret qu'on partage.",
+    addonIds: ["macha-cali", "pink-jade", "mona-lazuli", "habitants-jardin"],
+    specs: ["Fabriqué en France", "Finition premium"],
+  },
+  LaFière: {
+    id: "FLR-001",
+    type: "fleur",
+    price: ATELIER_FLOWER_PRICE,
+    quote: "Je tiens ma place avec grâce, sans jamais crier.",
+    botanical:
+      "Echinacea · Osteospermum · Dahlia (Amérique du Nord, Afrique, Mexique)",
+    addonIds: ["macha-cali", "pink-jade", "mona-lazuli", "habitants-jardin"],
+    specs: ["Fabriqué en France", "Finition premium"],
+  },
+  Nila: {
+    id: "FLR-003",
+    type: "fleur",
+    price: ATELIER_FLOWER_PRICE,
+    quote: "Je brille doucement, entre ciel et eau.",
+    botanical: "Aquilegia / Ancolie (Europe, Asie et Amérique du Nord)",
+    addonIds: ["macha-cali", "pink-jade", "mona-lazuli", "habitants-jardin"],
+    specs: ["Fabriqué en France", "Finition premium"],
+  },
+  Sol: {
+    type: "fleur",
+    price: ATELIER_FLOWER_PRICE,
+    quote: "Je pousse là où l'instant me trouve.",
+    addonIds: ["macha-cali", "pink-jade", "mona-lazuli", "habitants-jardin"],
+    specs: ["Fabriqué en France", "Finition premium"],
+  },
+  Yuki: {
+    id: "FLR-002",
+    type: "fleur",
+    price: ATELIER_FLOWER_PRICE,
+    quote: "Je garde une trace verte de mon passage.",
+    botanical: "Aquilegia / Ancolie double (Europe centrale et occidentale)",
+    addonIds: ["macha-cali", "pink-jade", "mona-lazuli", "habitants-jardin"],
+    specs: ["Fabriqué en France", "Finition premium"],
+  },
+  "Cali & Macha": {
+    type: "pack",
+    price: ATELIER_PACK_STANDALONE_PRICE,
+    quote: "Nous volons ensemble, légers comme un souffle.",
+    addonIds: [],
+    specs: ["20 cm", "Fabriqué en France", "Finition premium"],
+  },
+  "Pink et Jade": {
+    type: "pack",
+    price: ATELIER_PACK_STANDALONE_PRICE,
+    quote: "Deux ailes, deux couleurs, un même élan.",
+    addonIds: [],
+    specs: ["20 cm", "Fabriqué en France", "Finition premium"],
+  },
+  "Lazuli & Mona": {
+    type: "pack",
+    price: ATELIER_PACK_STANDALONE_PRICE,
+    quote: "Nous dansons au rythme de l'été.",
+    addonIds: [],
+    specs: ["20 cm", "Fabriqué en France", "Finition premium"],
+  },
+  "Habitants du Jardin": {
+    type: "pack",
+    price: ATELIER_PACK_STANDALONE_PRICE,
+    quote: "Petits compagnons d'un monde tout doux.",
+    addonIds: [],
+    specs: ["20 cm", "Fabriqué en France", "Finition premium"],
+  },
+};
+
+let activeAtelierAddons = new Set();
+let lastAtelierTrigger = null;
+let currentProduct = null;
+
+const formatAtelierPrice = (price) =>
+  Number.isInteger(price) ? `${price}€` : `${price.toFixed(2).replace(".", ",")}€`;
+
+const getShippingCost = (cartTotal, selectedId) => {
+  if (cartTotal >= ATELIER_FREE_SHIPPING_THRESHOLD) {
+    return 0;
+  }
+
+  const option = shippingOptions.find((entry) => entry.id === selectedId);
+  return option ? option.price : 0;
+};
+
+const getProductFromCard = (card) => {
+  const title = card.querySelector("h2")?.textContent.trim() || "Uninstant";
+  const image = card.querySelector("img");
+  const catalogEntry = atelierCatalog[title] || {
+    type: "enfant",
+    price: ATELIER_CHILDREN_PRICE,
+    quote: "Un instant doux, prêt à rejoindre votre intérieur.",
+    addonIds: ["pink-jade", "habitants-jardin"],
+    specs: ["100cm", "Fabriqué en France", "Finition premium"],
+  };
+
+  return {
+    title,
+    imageSrc: image?.getAttribute("src") || "",
+    modalImageSrc: atelierModalImages[title] || image?.getAttribute("src") || "",
+    imageAlt: image?.getAttribute("alt") || title,
+    ...catalogEntry,
+  };
+};
+
+const modalMarkup = `
+  <dialog class="atelier-modal" aria-labelledby="atelier-modal-title">
+    <div class="atelier-modal__panel">
+      <button class="atelier-modal__close" type="button" aria-label="Fermer">
+        <span class="material-symbols-outlined" aria-hidden="true">close</span>
+      </button>
+
+      <section class="atelier-modal__visual" aria-label="Aperçu">
+        <img class="atelier-modal__image" src="" alt="" />
       </section>
 
-      <section class="atelier-grid" aria-label="Collection Forever Young">
-        <article class="atelier-card">
-          <img src="asset/Amara.png" alt="Amara" />
-          <h2>Amara</h2>
-        </article>
+      <section class="atelier-modal__details">
+        <h2 class="atelier-modal__title" id="atelier-modal-title">AMARA</h2>
+        <p class="atelier-modal__quote"></p>
+        <p class="atelier-modal__botanical"></p>
+        <p class="atelier-modal__price">89€</p>
 
-        <article class="atelier-card">
-          <img src="asset/Lucie.png" alt="Lucie" />
-          <h2>Lucie</h2>
-        </article>
+        <div class="atelier-modal__addons">
+          <p class="atelier-modal__addons-title">compléter ma scène</p>
+          <div class="atelier-modal__addon-grid" aria-label="Options à ajouter"></div>
+          <div class="atelier-modal__addon-lines" aria-live="polite"></div>
+        </div>
 
-        <article class="atelier-card">
-          <img src="asset/Malik.png" alt="Malik" />
-          <h2>Malik</h2>
-        </article>
+        <dl class="atelier-modal__specs" aria-label="Caractéristiques"></dl>
 
-        <article class="atelier-card">
-          <img src="asset/Mariama.png" alt="Mariama" />
-          <h2>Mariama</h2>
-        </article>
-
-        <article class="atelier-card">
-          <img src="asset/Tiago.png" alt="Tiago" />
-          <h2>Tiago</h2>
-        </article>
-
-        <article class="atelier-card">
-          <img src="asset/Mila.png" alt="Mila" />
-          <h2>Mila</h2>
-        </article>
-
-        <article class="atelier-card">
-          <img src="asset/Bou.png" alt="Bou" />
-          <h2>Bou</h2>
-        </article>
-
-        <article class="atelier-card">
-          <img src="asset/LaFi%C3%A8re.png" alt="LaFière" />
-          <h2>LaFière</h2>
-        </article>
-
-        <article class="atelier-card">
-          <img src="asset/NILA.png" alt="Nila" />
-          <h2>Nila</h2>
-        </article>
-
-        <article class="atelier-card">
-          <img src="asset/SOL.png" alt="Sol" />
-          <h2>Sol</h2>
-        </article>
-
-        <article class="atelier-card">
-          <img src="asset/YUKI.png" alt="Yuki" />
-          <h2>Yuki</h2>
-        </article>
-
-        <article class="atelier-card">
-          <img src="asset/CaliandMacha.jpg" alt="Cali et Macha" />
-          <h2>Cali &amp; Macha</h2>
-        </article>
-
-        <article class="atelier-card">
-          <img src="asset/JadeandPink.jpg" alt="Pink et Jade" />
-          <h2>Pink et Jade</h2>
-        </article>
-
-        <article class="atelier-card">
-          <img src="asset/LazuliandMona.jpg" alt="Lazuli et Mona" />
-          <h2>Lazuli &amp; Mona</h2>
-        </article>
-
-        <article class="atelier-card atelier-card--feature">
-          <img src="asset/Habitants%20du%20jardin.jpg" alt="Habitants du Jardin" />
-          <h2>Habitants du Jardin</h2>
-        </article>
+        <button class="atelier-modal__cart" type="button">ajouter au panier</button>
+        <p class="atelier-modal__total" aria-live="polite">Total : 89€</p>
       </section>
+    </div>
+  </dialog>
+`;
 
-      <footer class="atelier-footer">
-        <nav class="atelier-social" aria-label="Réseaux sociaux">
-          <a
-            href="https://www.instagram.com/atelieruninstant/"
-            target="_blank"
-            rel="noopener noreferrer"
-            aria-label="Instagram @atelieruninstant"
-          >
-            <svg class="atelier-social__icon" viewBox="0 0 24 24" aria-hidden="true">
-              <path
-                fill="currentColor"
-                d="M12 2.163c3.204 0 3.584.012 4.85.07 3.252.148 4.771 1.691 4.919 4.919.058 1.265.069 1.645.069 4.849 0 3.205-.012 3.584-.069 4.849-.149 3.225-1.664 4.771-4.919 4.919-1.266.058-1.644.07-4.85.07-3.204 0-3.584-.012-4.849-.07-3.26-.149-4.771-1.699-4.919-4.92-.058-1.265-.07-1.644-.07-4.849 0-3.204.013-3.583.07-4.849.149-3.227 1.664-4.771 4.919-4.919 1.266-.057 1.645-.069 4.849-.069zM12 0C8.741 0 8.333.014 7.053.072 2.695.272.273 2.69.073 7.052.014 8.333 0 8.741 0 12c0 3.259.014 3.668.072 4.948.2 4.358 2.618 6.78 6.98 6.98 1.281.058 1.689.072 4.948.072 3.259 0 3.668-.014 4.948-.072 4.354-.2 6.782-2.618 6.979-6.98.059-1.28.073-1.689.073-4.948 0-3.259-.014-3.667-.072-4.947-.196-4.354-2.617-6.78-6.979-6.98C15.668.014 15.259 0 12 0zm0 5.838a6.162 6.162 0 1 0 0 12.324 6.162 6.162 0 0 0 0-12.324zM12 16a4 4 0 1 1 0-8 4 4 0 0 1 0 8zm6.406-11.845a1.44 1.44 0 1 0 0 2.881 1.44 1.44 0 0 0 0-2.881z"
-              />
-            </svg>
-          </a>
-          <a
-            href="https://www.tiktok.com/@atelieruninstant?is_from_webapp=1&sender_device=pc"
-            target="_blank"
-            rel="noopener noreferrer"
-            aria-label="TikTok @atelieruninstant"
-          >
-            <svg class="atelier-social__icon" viewBox="0 0 24 24" aria-hidden="true">
-              <path
-                fill="currentColor"
-                d="M19.59 6.69a4.83 4.83 0 0 1-3.77-4.25V2h-3.45v13.67a2.89 2.89 0 0 1-5.2 1.74 2.89 2.89 0 0 1 2.31-4.64 2.93 2.93 0 0 1 .88.13V9.4a6.84 6.84 0 0 0-1-.05A6.33 6.33 0 0 0 5 20.1a6.34 6.34 0 0 0 10.86-4.43v-7a8.16 8.16 0 0 0 4.77 1.52v-3.4a4.85 4.85 0 0 1-1-.1z"
-              />
-            </svg>
-          </a>
-          <a
-            href="https://pin.it/678PVS8xt"
-            target="_blank"
-            rel="noopener noreferrer"
-            aria-label="Pinterest atelieruninstant"
-          >
-            <svg class="atelier-social__icon" viewBox="0 0 24 24" aria-hidden="true">
-              <path
-                fill="currentColor"
-                d="M12 0C5.373 0 0 5.372 0 12c0 5.084 3.163 9.426 7.627 11.174-.105-.949-.2-2.403.042-3.441.218-.937 1.407-5.965 1.407-5.965s-.359-.719-.359-1.782c0-1.668.967-2.914 2.171-2.914 1.023 0 1.518.769 1.518 1.69 0 1.029-.655 2.568-.994 3.995-.283 1.194.599 2.169 1.777 2.169 2.133 0 3.772-2.249 3.772-5.495 0-2.873-2.064-4.882-5.012-4.882-3.414 0-5.418 2.561-5.418 5.207 0 1.031.397 2.138.893 2.738a.36.36 0 0 1 .083.345l-.333 1.36c-.053.22-.174.267-.402.161-1.499-.698-2.436-2.889-2.436-4.649 0-3.785 2.75-7.262 7.929-7.262 4.163 0 7.398 2.967 7.398 6.931 0 4.136-2.607 7.464-6.227 7.464-1.216 0-2.359-.631-2.75-1.378l-.748 2.853c-.271 1.043-1.002 2.35-1.492 3.146C9.57 23.812 10.763 24 12 24c6.627 0 12-5.373 12-12S18.627 0 12 0z"
-              />
-            </svg>
-          </a>
-        </nav>
+document.body.insertAdjacentHTML("beforeend", modalMarkup);
 
-      </footer>
-    </main>
-  </body>
-</html>
+const atelierModal = document.querySelector(".atelier-modal");
+const atelierModalClose = document.querySelector(".atelier-modal__close");
+const atelierModalImage = document.querySelector(".atelier-modal__image");
+const atelierModalTitle = document.querySelector(".atelier-modal__title");
+const atelierModalQuote = document.querySelector(".atelier-modal__quote");
+const atelierModalBotanical = document.querySelector(".atelier-modal__botanical");
+const atelierModalPrice = document.querySelector(".atelier-modal__price");
+const atelierModalAddons = document.querySelector(".atelier-modal__addons");
+const atelierModalAddonGrid = document.querySelector(".atelier-modal__addon-grid");
+const atelierModalAddonLines = document.querySelector(".atelier-modal__addon-lines");
+const atelierModalSpecs = document.querySelector(".atelier-modal__specs");
+const atelierModalTotal = document.querySelector(".atelier-modal__total");
+
+const renderAtelierSpecs = (specs) => {
+  const specIcons = {
+    "100cm": "straighten",
+    "20 cm": "straighten",
+    "Fabriqué en France": "flag",
+    "Finition premium": "diamond",
+  };
+
+  atelierModalSpecs.innerHTML = specs
+    .map((spec) => {
+      if (spec === "Fabriqué en France") {
+        return `
+          <div>
+            <dt><span class="atelier-modal__flag" aria-hidden="true"></span></dt>
+            <dd>${spec}</dd>
+          </div>
+        `;
+      }
+
+      const icon = specIcons[spec] || "check";
+      const iconClass = spec === "Finition premium" ? "material-symbols-outlined atelier-modal__diamond" : "material-symbols-outlined";
+
+      return `
+        <div>
+          <dt><span class="${iconClass}" aria-hidden="true">${icon}</span></dt>
+          <dd>${spec}</dd>
+        </div>
+      `;
+    })
+    .join("");
+};
+
+const getAvailableAddons = () => {
+  if (!currentProduct?.addonIds?.length) {
+    return [];
+  }
+
+  return atelierAddons.filter((addon) => currentProduct.addonIds.includes(addon.id));
+};
+
+const renderAtelierAddonButtons = () => {
+  const availableAddons = getAvailableAddons();
+
+  atelierModalAddons.hidden = availableAddons.length === 0;
+  atelierModalAddonGrid.innerHTML = availableAddons
+    .map(
+      (addon) => `
+        <button
+          class="atelier-addon"
+          type="button"
+          data-addon-id="${addon.id}"
+          aria-pressed="${activeAtelierAddons.has(addon.id)}"
+          aria-label="Ajouter ${addon.label}"
+          title="${addon.details}"
+        >
+          <span class="atelier-addon__images">
+            ${addon.images.map((src) => `<img src="${src}" alt="" />`).join("")}
+          </span>
+        </button>
+      `,
+    )
+    .join("");
+};
+
+const updateAtelierTotal = () => {
+  if (!currentProduct) {
+    return;
+  }
+
+  const selectedAddons = getAvailableAddons().filter((addon) => activeAtelierAddons.has(addon.id));
+  const total = selectedAddons.reduce((sum, addon) => sum + addon.price, currentProduct.price);
+
+  atelierModalPrice.textContent = formatAtelierPrice(currentProduct.price);
+  atelierModalTotal.textContent = `Total : ${formatAtelierPrice(total)}`;
+  atelierModalAddonLines.innerHTML = selectedAddons
+    .map((addon) => `<p>${addon.label} : + ${formatAtelierPrice(addon.price)}</p>`)
+    .join("");
+};
+
+const lockPageScroll = () => {
+  document.documentElement.classList.add("atelier-modal-open");
+  document.body.classList.add("atelier-modal-open");
+};
+
+const unlockPageScroll = () => {
+  document.documentElement.classList.remove("atelier-modal-open");
+  document.body.classList.remove("atelier-modal-open");
+};
+
+const openAtelierModal = (card) => {
+  currentProduct = getProductFromCard(card);
+  activeAtelierAddons = new Set();
+  lastAtelierTrigger = card;
+
+  atelierModalImage.src = currentProduct.imageSrc;
+  atelierModalImage.alt = currentProduct.imageAlt;
+  atelierModalTitle.textContent = currentProduct.title.toLocaleUpperCase("fr");
+  atelierModalQuote.textContent = `"${currentProduct.quote}"`;
+  atelierModalBotanical.textContent = currentProduct.botanical || "";
+  atelierModalBotanical.hidden = !currentProduct.botanical;
+
+  renderAtelierSpecs(currentProduct.specs);
+  renderAtelierAddonButtons();
+  updateAtelierTotal();
+  lockPageScroll();
+  atelierModal.showModal();
+};
+
+document.querySelectorAll(".atelier-card").forEach((card) => {
+  card.tabIndex = 0;
+  card.setAttribute("role", "button");
+  card.setAttribute("aria-label", `Voir ${card.querySelector("h2")?.textContent.trim() || "ce produit"}`);
+
+  card.addEventListener("click", () => openAtelierModal(card));
+  card.addEventListener("keydown", (event) => {
+    if (event.key !== "Enter" && event.key !== " ") {
+      return;
+    }
+
+    event.preventDefault();
+    openAtelierModal(card);
+  });
+});
+
+atelierModalAddonGrid.addEventListener("click", (event) => {
+  const target = event.target;
+  if (!(target instanceof Element)) {
+    return;
+  }
+
+  const button = target.closest("[data-addon-id]");
+  if (!button) {
+    return;
+  }
+
+  const addonId = button.dataset.addonId;
+  if (activeAtelierAddons.has(addonId)) {
+    activeAtelierAddons.delete(addonId);
+  } else {
+    activeAtelierAddons.add(addonId);
+  }
+
+  button.classList.toggle("is-selected", activeAtelierAddons.has(addonId));
+  button.setAttribute("aria-pressed", String(activeAtelierAddons.has(addonId)));
+  updateAtelierTotal();
+});
+
+atelierModalClose.addEventListener("click", () => {
+  atelierModal.close();
+});
+
+atelierModal.addEventListener("click", (event) => {
+  if (event.target === atelierModal) {
+    atelierModal.close();
+  }
+});
+
+atelierModal.addEventListener("close", () => {
+  unlockPageScroll();
+  lastAtelierTrigger?.focus();
+});
+
+document.querySelector(".atelier-modal__cart").addEventListener("click", () => {
+  atelierModal.close();
+});
