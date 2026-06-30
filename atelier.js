@@ -6,21 +6,21 @@ const ATELIER_FREE_SHIPPING_THRESHOLD = 150;
 const MODAL_ASSET = "asset/modal_asset";
 
 const atelierModalImages = {
-  Amara: `${MODAL_ASSET}/Amara.png`,
-  Lucie: `${MODAL_ASSET}/Lucie.png`,
-  Malik: `${MODAL_ASSET}/Malik.png`,
-  Mariama: `${MODAL_ASSET}/Mariama.png`,
-  Tiago: `${MODAL_ASSET}/Tiago.png`,
-  Mila: `${MODAL_ASSET}/Mila.png`,
-  Bou: `${MODAL_ASSET}/Bou.png`,
-  LaFière: `${MODAL_ASSET}/Lafiere.png`,
-  Nila: `${MODAL_ASSET}/Nila.png`,
-  Sol: `${MODAL_ASSET}/Sol.png`,
-  Yuki: `${MODAL_ASSET}/Yuki.png`,
-  "Cali & Macha": `${MODAL_ASSET}/Machaet.png`,
-  "Pink et Jade": `${MODAL_ASSET}/PinketRubis.png`,
-  "Lazuli & Mona": `${MODAL_ASSET}/Lazuli%26Mona.png`,
-  "Habitants du Jardin": `${MODAL_ASSET}/3%20insectes.png`,
+  Amara: `${MODAL_ASSET}/Amara.jpg`,
+  Lucie: `${MODAL_ASSET}/Lucie.jpg`,
+  Malik: `${MODAL_ASSET}/Malik.jpg`,
+  Mariama: `${MODAL_ASSET}/Mariama.jpg`,
+  Tiago: `${MODAL_ASSET}/Tiago.jpg`,
+  Mila: `${MODAL_ASSET}/Mila.jpg`,
+  Bou: `${MODAL_ASSET}/Bou.jpg`,
+  LaFière: `${MODAL_ASSET}/Lafiere.jpg`,
+  Nila: `${MODAL_ASSET}/Nila.jpg`,
+  Sol: `${MODAL_ASSET}/Sol.jpg`,
+  Yuki: `${MODAL_ASSET}/Yuki.jpg`,
+  "Cali & Macha": `${MODAL_ASSET}/MachaetCali.jpg`,
+  "Pink et Jade": `${MODAL_ASSET}/PinketJade.jpg`,
+  "Lazuli & Mona": `${MODAL_ASSET}/Monaetlazuli.jpg`,
+  "Habitants du Jardin": `${MODAL_ASSET}/RubisSpiraEmera.jpg`,
 };
 
 const shippingOptions = [
