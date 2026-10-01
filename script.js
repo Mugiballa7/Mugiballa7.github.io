@@ -29,7 +29,7 @@ const projects = {
             result: "How many people create an account, instead of using the software without one.",
           },
           {
-            title: "Your plan at a glance",
+            title: "User's plan at a glance",
             before: "To see what they owned and when it ended, people had to dig around.",
             after: "One panel on the right shows it all.",
           },
