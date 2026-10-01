@@ -11,16 +11,7 @@
   --underline-shadow-hero: #00000047;
 }
 
-@media (prefers-color-scheme: dark) {
-  :root {
-    --text: #f0f0f0;
-    --bg: #111;
-    --underline-color: #ffffff73;
-    --underline-color-hover: #ffffffd9;
-    --underline-shadow: #fff6;
-    --underline-shadow-hero: #ffffff73;
-  }
-}
+
 
 @keyframes pageFadeIn {
   from { opacity: 0; }
@@ -390,26 +381,4 @@ footer > div { flex: 1 1 0%; }
   #peek-expand { visibility: hidden; }
   .peek-minimap { display: none; }
   .peek-compare { grid-template-columns: 1fr; }
-}
-
-@media (prefers-color-scheme: dark) {
-  .peek { background: #191919; color: rgba(255,255,255,.81); }
-  .peek-title { color: rgba(255,255,255,.81); }
-  .peek-toolbar { background: linear-gradient(#191919 60%, rgba(25,25,25,0)); }
-  .peek-btn { color: rgba(255,255,255,.45); }
-  .peek-btn:hover { background: rgba(255,255,255,.06); }
-  .peek-figure { background: #252525; }
-  .peek-sub, .peek-props span, .peek-details dt, .peek-figure { color: rgba(255,255,255,.45); }
-  .peek-body a { text-decoration-color: rgba(255,255,255,.3); }
-  .tag, .ver { background: rgba(255,255,255,.1); }
-  .peek-minimap a { color: rgba(255,255,255,.45); }
-  .peek-minimap a:hover, .peek-minimap a.active { color: rgba(255,255,255,.9); }
-  .peek-minimap i { background: rgba(255,255,255,.15); }
-  .peek-minimap a.active i { background: rgba(255,255,255,.9); }
-  .peek-minimap:hover { background: #252525; }
-  .ver, .ba-label { color: rgba(255,255,255,.45); }
-  .peek-body p.ba-before, .peek-body p.ba-tracked { color: rgba(255,255,255,.55); }
-  .peek-props { border-bottom-color: rgba(255,255,255,.09); }
-  .peek-ublo { background: #2a2440; color: rgba(255,255,255,.85); }
-  .peek-ublo span { color: #b794f6; }
 }
